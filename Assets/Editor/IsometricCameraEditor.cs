@@ -56,7 +56,7 @@ public class IsometricAngleButton: EditorToolbarButton
         var sceneView = SceneView.lastActiveSceneView;
         if (sceneView != null)
         {
-            sceneView.LookAt(sceneView.pivot, Quaternion.Euler(45, -135, 0), sceneView.size, true);
+            sceneView.LookAt(sceneView.pivot, Quaternion.Euler(45, 45, 0), sceneView.size, true);
         }
     }
 }

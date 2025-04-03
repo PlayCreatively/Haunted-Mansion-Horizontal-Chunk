@@ -29,7 +29,6 @@ public class Player : MonoBehaviour
 
     void Jump(InputAction.CallbackContext context)
     {
-        Debug.Log("Jump");
         rb.linearVelocity += new Vector3(0, GameSettings.Instance.playerJumpForce, 0);
     }
 

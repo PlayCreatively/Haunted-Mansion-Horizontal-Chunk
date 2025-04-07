@@ -205,6 +205,7 @@ public class PathEditor : Editor
             currentIndex = (currentIndex - 1 + values.Length) % values.Length;
             con.LineType = (LineType)values.GetValue(currentIndex);
             EditorUtility.SetDirty(path);
+            path.dirty = true;
             e.Use();
         }
         else if (e.keyCode == KeyCode.RightArrow || e.keyCode == KeyCode.DownArrow)
@@ -212,6 +213,7 @@ public class PathEditor : Editor
             currentIndex = (currentIndex + 1) % values.Length;
             con.LineType = (LineType)values.GetValue(currentIndex);
             EditorUtility.SetDirty(path);
+            path.dirty = true;
             e.Use();
         }
     }
@@ -240,6 +242,7 @@ public class PathEditor : Editor
                         Undo.RecordObject(path, "Create Connection");
                         path.connections.Add(new Connection(selectedNode, hoveredNode, LineType.Normal));
                         EditorUtility.SetDirty(path);
+                        path.dirty = true;
                     }
                     e.Use();
                     return;

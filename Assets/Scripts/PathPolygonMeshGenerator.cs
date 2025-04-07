@@ -7,6 +7,7 @@ using System.Linq;
 [RequireComponent(typeof(MeshRenderer))]
 public class PathPolygonMeshGenerator : MonoBehaviour
 {
+#if UNITY_EDITOR
     public Material meshMaterial;
 
     [Header("Connection Settings")]
@@ -487,7 +488,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             if (child.gameObject.name.StartsWith("ConnectionInstance"))
             {
 #if UNITY_EDITOR
-                UnityEditor.Undo.DestroyObjectImmediate(child.gameObject);
+                DestroyImmediate(child.gameObject);
 #else
                 Destroy(child.gameObject);
 #endif
@@ -534,7 +535,13 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 // Stretch the prefab along its local X axis (the connection direction) to match the connection length.
                 Vector3 originalScale = instance.transform.localScale;
                 instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z) * .1f;
+
+                instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
+
             }
         }
+
+        UnityEditor.EditorApplication.RepaintHierarchyWindow();
     }
+#endif
 }

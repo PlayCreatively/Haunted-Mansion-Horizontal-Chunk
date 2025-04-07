@@ -141,21 +141,6 @@ public class PathEditor : Editor
             sceneView.LookAt(path.GetPos(selectedNode), sceneView.rotation, Mathf.Max(sceneView.size, 3));
             e.Use();
         }
-        else if (e.keyCode == KeyCode.C && selectedNode != -1)
-        {
-            // Copy the selected node's position to the clipboard.
-            EditorGUIUtility.systemCopyBuffer = path.GetPos(selectedNode).ToString();
-            e.Use();
-        }
-        else if (e.keyCode == KeyCode.V && selectedNode != -1)
-        {
-            // Paste a new node at the copied position.
-            Vector3 pastePos = new Vector3(float.Parse(EditorGUIUtility.systemCopyBuffer.Split(',')[0]),
-                                            0,
-                                            float.Parse(EditorGUIUtility.systemCopyBuffer.Split(',')[1]));
-            AddNodeConnectedToSelected(pastePos);
-            e.Use();
-        }
         //undo
         else if (e.keyCode == KeyCode.Z && e.control)
         {

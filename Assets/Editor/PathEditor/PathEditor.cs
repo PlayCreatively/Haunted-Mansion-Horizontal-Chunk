@@ -245,7 +245,7 @@ public class PathEditor : Editor
                     return;
                 }
                 // If selecting the already selected node, delete it.
-                else if (hoveredNode == selectedNode)
+                else if (selectedNode != -1 && hoveredNode == selectedNode)
                 {
                     DeleteNode(selectedNode);
                     e.Use();

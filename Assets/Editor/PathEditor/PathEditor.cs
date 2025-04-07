@@ -242,7 +242,8 @@ public class PathEditor : Editor
         {
             if(selectedNode != -1)
                 previewNodePos = snapMousePos;
-            CheckForLineInsertion(mousePos);
+            if(hoveredNode == -1)
+                CheckForLineInsertion(mousePos);
         }
 
         if (e.type == EventType.MouseDown && e.button == 0)
@@ -250,7 +251,7 @@ public class PathEditor : Editor
             if (e.control)
             {
                 // If hovering a node that is not the selected node, create a connection.
-                if (hoveredNode != -1 && hoveredNode != selectedNode)
+                if (hoveredNode != -1 && selectedNode != -1 && hoveredNode != selectedNode)
                 {
                     if (!ConnectionExists(selectedNode, hoveredNode))
                     {
@@ -266,11 +267,13 @@ public class PathEditor : Editor
                 else if (insertingNode)
                 {
                     InsertNodeOnLine();
+                    e.Use();
                 }
                 // Otherwise, if a node is selected, add a new node connected to the selected node.
                 else if (selectedNode != -1 && hoveredNode != selectedNode)
                 {
                     AddNodeConnectedToSelected(snapMousePos);
+                    e.Use();
                 }
             }
             else if(e.shift)
@@ -410,6 +413,10 @@ public class PathEditor : Editor
                 Vector3 closest = ClosestPointOnSegment(a, b, mousePos);
                 if (Vector3.Distance(mousePos, closest) < minDistance)
                 {
+                    // check if the closest point is not too close to the nodes
+                    if (Vector3.Distance(mousePos, a) < 0.5f || Vector3.Distance(mousePos, b) < 0.5f)
+                        return;
+
                     insertTargetNodeA = con.nodeA;
                     insertTargetNodeB = con.nodeB;
                     hoveredConnection = i;

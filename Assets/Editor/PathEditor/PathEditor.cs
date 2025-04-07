@@ -13,7 +13,6 @@ public class PathEditor : Editor
     private int hoveredConnection = -1;      // Connection under mouse pointer
 
     private Vector3 previewNodePos;          // Preview position for new node
-    private bool previewingNode = false;     // Whether we are in preview mode (holding CTRL)
     private bool insertingNode = false;      // Whether we’re previewing an insertion on an existing connection
     private int insertTargetNodeA = -1, insertTargetNodeB = -1; // The nodes of the connection to split
 
@@ -49,7 +48,7 @@ public class PathEditor : Editor
         {
             // Show the Scene view and set the camera to the path's position.
             SceneView sceneView = SceneView.lastActiveSceneView;
-            sceneView.LookAt(path.transform.position);
+            sceneView.LookAt(path.transform.position, sceneView.rotation, Mathf.Max(sceneView.size, 5));
             sceneView.Repaint();
         }
         else
@@ -67,10 +66,17 @@ public class PathEditor : Editor
         if (path.editMode && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
         {
             SetEditMode(false);
+            Event.current.Use();
         }
         else if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.E)
         {
             SetEditMode(!path.editMode);
+            Event.current.Use();
+        }
+        // eat R and T keys to prevent them from being used by the editor.
+        else if ((path.editMode && Event.current.type == EventType.KeyDown) && Event.current.keyCode == KeyCode.R || Event.current.keyCode == KeyCode.T)
+        {
+            Event.current.Use();
         }
 
         if (!path.editMode) return;
@@ -124,13 +130,15 @@ public class PathEditor : Editor
         {
             // Focus on the selected connection if any.
             var con = path.connections[selectedConnection];
-            SceneView.lastActiveSceneView.Frame(new Bounds((path.GetPos(con.nodeA) + path.GetPos(con.nodeB)) / 2, Vector3.one), false);
+            var sceneView = SceneView.lastActiveSceneView;
+            sceneView.LookAt((path.GetPos(con.nodeA) + path.GetPos(con.nodeB)) / 2, sceneView.rotation, Mathf.Max(sceneView.size, 3));
             e.Use();
         }
         else if (e.keyCode == KeyCode.F && selectedNode != -1)
         {
             // Focus on the selected node if any.
-            SceneView.lastActiveSceneView.Frame(new Bounds(path.GetPos(selectedNode), Vector3.one), false);
+            var sceneView = SceneView.lastActiveSceneView;
+            sceneView.LookAt(path.GetPos(selectedNode), sceneView.rotation, Mathf.Max(sceneView.size, 3));
             e.Use();
         }
         else if (e.keyCode == KeyCode.C && selectedNode != -1)
@@ -155,6 +163,11 @@ public class PathEditor : Editor
             Undo.PerformUndo();
             path.dirty = true;
             e.Use();
+        }
+        else
+        {
+            e.Use();
+            Tools.current = Tool.None;
         }
     }
 
@@ -221,12 +234,14 @@ public class PathEditor : Editor
     // Process mouse events (clicks, drags, CTRL-based additions, etc.)
     private void HandleMouseInput(Event e, Vector3 mousePos)
     {
-        // If CTRL is held and a node is selected, show preview.
-        previewingNode = e.control && selectedNode != -1;
+        Vector3 snapMousePos = Snapping.Snap(mousePos, EditorSnapSettings.move, SnapAxis.X | SnapAxis.Z);
+
+        // If CTRL is held, show preview.
         insertingNode = false;
-        if (previewingNode)
+        if (e.control)
         {
-            previewNodePos = mousePos;
+            if(selectedNode != -1)
+                previewNodePos = snapMousePos;
             CheckForLineInsertion(mousePos);
         }
 
@@ -247,22 +262,34 @@ public class PathEditor : Editor
                     e.Use();
                     return;
                 }
-                // If selecting the already selected node, delete it.
-                else if (selectedNode != -1 && hoveredNode == selectedNode)
-                {
-                    DeleteNode(selectedNode);
-                    e.Use();
-                    return;
-                }
                 // CTRL+Click on a connection insertion preview.
                 else if (insertingNode)
                 {
                     InsertNodeOnLine();
                 }
                 // Otherwise, if a node is selected, add a new node connected to the selected node.
-                else if (selectedNode != -1)
+                else if (selectedNode != -1 && hoveredNode != selectedNode)
                 {
-                    AddNodeConnectedToSelected(mousePos);
+                    AddNodeConnectedToSelected(snapMousePos);
+                }
+            }
+            else if(e.shift)
+            {
+                // If selecting the already selected node, delete it.
+                if (hoveredNode != -1)
+                {
+                    DeleteNode(hoveredNode);
+                    e.Use();
+                    return;
+                }
+                else if (hoveredConnection != -1)
+                {
+                    // If a connection is selected, delete it.
+                    Undo.RecordObject(path, "Delete Connection");
+                    path.connections.RemoveAt(hoveredConnection);
+                    selectedConnection = -1;
+                    EditorUtility.SetDirty(path);
+                    path.dirty = true;
                 }
             }
             else
@@ -290,16 +317,9 @@ public class PathEditor : Editor
         }
         else if (e.type == EventType.MouseDrag && e.button == 0 && selectedNode != -1 && !e.control)
         {
-            // Apply snapping using the editor's snap setting.
-            Vector3 snapPos = mousePos;
-            float snapX = EditorSnapSettings.move.x; // the grid snap value set in the editor
-            float snapZ = EditorSnapSettings.move.z; // the grid snap value set in the editor
-            snapPos.x = Mathf.Round(snapPos.x / snapX) * snapX;
-            snapPos.z = Mathf.Round(snapPos.z / snapZ) * snapZ;
-
             // Drag to move the selected node.
             Undo.RecordObject(path, "Move Node");
-            path.SetPos(selectedNode, snapPos);
+            path.SetPos(selectedNode, snapMousePos);
             EditorUtility.SetDirty(path);
             path.dirty = true;
             e.Use();
@@ -347,11 +367,15 @@ public class PathEditor : Editor
     // Converts the current mouse ray to a world point.
     private Vector3 GetMouseWorldPosition(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit))
-            return hit.point;
+        Plane plane = new (Vector3.up, Vector3.up * path.transform.position.y);
+        var mousePos = plane.Raycast(ray, out float distance) ? ray.GetPoint(distance) : Vector3.zero;
 
-        Plane plane = new Plane(Vector3.up, Vector3.up * path.transform.position.y);
-        return plane.Raycast(ray, out float distance) ? ray.GetPoint(distance) : Vector3.zero;
+        //debug draw mouse pos
+        Handles.color = Color.red;
+        Handles.DrawSolidDisc(mousePos, Vector3.up, 0.1f);
+        Handles.DrawLine(mousePos, mousePos + Vector3.up * 0.5f);
+
+        return mousePos;
     }
 
     // Add a new node connected to the currently selected node.
@@ -375,7 +399,7 @@ public class PathEditor : Editor
     // When holding CTRL, check if the mouse is near a connection for node insertion.
     private void CheckForLineInsertion(Vector3 mousePos)
     {
-        float minDistance = 0.3f;
+        float minDistance = 0.5f;
         for (int i = 0; i < path.connections.Count; i++)
         {
             var con = path.connections[i];
@@ -388,7 +412,9 @@ public class PathEditor : Editor
                 {
                     insertTargetNodeA = con.nodeA;
                     insertTargetNodeB = con.nodeB;
-                    previewNodePos = closest;
+                    hoveredConnection = i;
+
+                    previewNodePos = Snapping.Snap(closest, EditorSnapSettings.move, SnapAxis.X | SnapAxis.Z);
                     insertingNode = true;
                     return;
                 }
@@ -486,11 +512,11 @@ public class PathEditor : Editor
             Handles.DrawSolidDisc(nodePos, Vector3.up, 0.2f);
         }
 
-        // If CTRL is held and a node is selected, handle preview drawing.
-        if (Event.current.control && selectedNode != -1)
+        // If CTRL is held, handle preview drawing.
+        if (Event.current.control)
         {
             // If another node is hovered (and it's not the selected node), draw a preview connection.
-            if (hoveredNode != -1 && hoveredNode != selectedNode)
+            if (hoveredNode != -1 && hoveredNode != selectedNode && selectedNode != -1)
             {
                 Vector3 start = path.GetPos(selectedNode);
                 Vector3 end = path.GetPos(hoveredNode);
@@ -498,7 +524,7 @@ public class PathEditor : Editor
                 Handles.DrawLine(start, end);
             }
             // Otherwise, do the regular preview (for adding a new node) if applicable.
-            else
+            else if((insertingNode || selectedNode != -1) && hoveredNode == -1)
             {
                 Handles.color = Color.cyan;
                 Handles.DrawSolidDisc(previewNodePos, Vector3.up, 0.2f);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [RequireComponent(typeof(Path))]
 [RequireComponent(typeof(MeshFilter))]
@@ -40,9 +41,14 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         if (!pathComponent.dirty) return;
         if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
         if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
-        if (pathComponent == null || pathComponent.nodes == null || pathComponent.nodes.Count < 3)
+        if (pathComponent == null)
         {
-            Debug.LogError("Path component not found or not enough nodes to form a polygon.", this);
+            Debug.LogError("Path component not found.", this);
+            return;
+        }
+        if (pathComponent.nodes == null || pathComponent.nodes.Count < 3)
+        {
+            //Debug.LogError("Not enough path nodes to form a polygon.", this);
             return;
         }
         Generate2DPolygonMesh();
@@ -73,19 +79,24 @@ public class PathPolygonMeshGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Gathers the Path nodes (in 2D), runs 2D ear-clipping, then produces a 3D mesh by placing
-    /// local2D.x -> x, y=0, local2D.y -> z.
+    /// Gathers the Path nodes (in 2D) by traversing the connections, runs 2D ear-clipping,
+    /// then produces a 3D mesh by placing local2D.x -> x, y=0, local2D.y -> z.
     /// </summary>
     public void Generate2DPolygonMesh()
     {
-        // 1. Collect 2D vertices
-        List<Vector2> vertices2D = new List<Vector2>();
-        for (int i = 0; i < pathComponent.nodes.Count; i++)
+        // 1. Build an ordered list of vertices by traversing the connections.
+        List<int> orderedIndices = BuildOrderedIndicesFromConnections();
+        if (orderedIndices == null || orderedIndices.Count < 3)
         {
-            // Each node is already a Vector2
-            vertices2D.Add(pathComponent.nodes[i]);
+            Debug.LogError("Not enough connected nodes to form a polygon.");
+            return;
         }
-        if (enableDebugLogging) Debug.Log($"--- Starting 2D Mesh Generation: {vertices2D.Count} Nodes ---", this);
+        List<Vector2> vertices2D = new List<Vector2>();
+        foreach (int idx in orderedIndices)
+        {
+            vertices2D.Add(pathComponent.nodes[idx]);
+        }
+        if (enableDebugLogging) Debug.Log($"--- Starting 2D Mesh Generation: {vertices2D.Count} Nodes (ordered via connections) ---", this);
 
         // 2. Ear clipping in 2D
         if (enableDebugLogging) Debug.Log("--- Starting 2D Triangulation ---", this);
@@ -132,6 +143,87 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         pathComponent.dirty = false;
 
         SpawnConnectionPrefabs();
+    }
+
+    /// <summary>
+    /// Builds an ordered list of node indices by traversing the connections.
+    /// Assumes that the connections form a continuous loop (or chain).
+    /// </summary>
+    private List<int> BuildOrderedIndicesFromConnections()
+    {
+        // Build a connectivity dictionary: each node index maps to a list of its connected nodes.
+        Dictionary<int, List<int>> connectivity = new Dictionary<int, List<int>>();
+        for (int i = 0; i < pathComponent.connections.Count; i++)
+        {
+            var con = pathComponent.connections[i];
+            // Only consider valid connections.
+            if (con.nodeA < 0 || con.nodeA >= pathComponent.nodes.Count ||
+                con.nodeB < 0 || con.nodeB >= pathComponent.nodes.Count)
+                continue;
+            if (!connectivity.ContainsKey(con.nodeA))
+                connectivity[con.nodeA] = new List<int>();
+            if (!connectivity.ContainsKey(con.nodeB))
+                connectivity[con.nodeB] = new List<int>();
+            connectivity[con.nodeA].Add(con.nodeB);
+            connectivity[con.nodeB].Add(con.nodeA);
+        }
+
+        if (connectivity.Count == 0)
+            return null;
+
+        // Find a starting node.
+        // For a proper polygon, every node would have degree 2.
+        // If an endpoint exists (degree 1), start there; otherwise, choose any node.
+        int startNode = -1;
+        foreach (var kv in connectivity)
+        {
+            if (kv.Value.Count == 1)
+            {
+                startNode = kv.Key;
+                break;
+            }
+        }
+        if (startNode == -1)
+        {
+            // None has degree 1; pick any node.
+            startNode = connectivity.Keys.First();
+        }
+
+        List<int> orderedIndices = new List<int>();
+        orderedIndices.Add(startNode);
+        int current = startNode;
+        int previous = -1;
+
+        // Traverse the connections.
+        while (true)
+        {
+            List<int> neighbors = connectivity[current];
+            int next = -1;
+            foreach (int neighbor in neighbors)
+            {
+                if (neighbor != previous)
+                {
+                    next = neighbor;
+                    break;
+                }
+            }
+            if (next == -1)
+            {
+                break; // dead end
+            }
+            // If next equals start and we already have more than 2 nodes, we've completed the loop.
+            if (next == startNode && orderedIndices.Count > 2)
+            {
+                break;
+            }
+            orderedIndices.Add(next);
+            previous = current;
+            current = next;
+            // Safety break to prevent infinite loops.
+            if (orderedIndices.Count > connectivity.Count)
+                break;
+        }
+        return orderedIndices;
     }
 
     #region 2D Ear Clipping
@@ -348,7 +440,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         Debug.Log("Room trigger generated.");
     }
 
-
     #region UV Calculation
     private Vector2[] CalculatePlanarUVs2D(List<Vector2> vertices2D)
     {
@@ -398,7 +489,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 #if UNITY_EDITOR
                 UnityEditor.Undo.DestroyObjectImmediate(child.gameObject);
 #else
-            Destroy(child.gameObject);
+                Destroy(child.gameObject);
 #endif
             }
         }
@@ -435,7 +526,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 #if UNITY_EDITOR
                 GameObject instance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(connectionPrefab, transform);
 #else
-            GameObject instance = Instantiate(connectionPrefab, transform);
+                GameObject instance = Instantiate(connectionPrefab, transform);
 #endif
                 instance.name = $"ConnectionInstance {con.nodeA}-{con.nodeB}";
                 instance.transform.SetPositionAndRotation(midpoint + Vector3.up * .5f, finalRotation);

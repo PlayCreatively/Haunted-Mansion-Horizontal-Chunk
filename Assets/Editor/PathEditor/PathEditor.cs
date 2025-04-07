@@ -481,15 +481,6 @@ public class PathEditor : Editor
                 Handles.color = Color.green;
 
             Handles.DrawSolidDisc(nodePos, Vector3.up, 0.2f);
-
-            // Label the node with its index.
-            Handles.Label(nodePos + Vector3.up * 0.2f, i.ToString(), new GUIStyle
-            {
-                fontSize = 10,
-                normal = new GUIStyleState { textColor = Color.white },
-                alignment = TextAnchor.MiddleCenter,
-                fontStyle = FontStyle.Bold
-            });
         }
 
         // If CTRL is held and a node is selected, handle preview drawing.

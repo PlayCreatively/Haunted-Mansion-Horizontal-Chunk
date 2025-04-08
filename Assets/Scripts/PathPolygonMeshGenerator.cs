@@ -6,6 +6,7 @@ using System.Linq;
 [RequireComponent(typeof(Path))]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 public class PathPolygonMeshGenerator : MonoBehaviour
 {
 #if UNITY_EDITOR
@@ -28,6 +29,8 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         pathComponent = GetComponent<Path>();
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+        MeshCollider meshCollider = GetComponent<MeshCollider>();
+        meshCollider.sharedMesh = meshFilter.sharedMesh;
 
         meshRenderer.staticShadowCaster = true;
     }
@@ -341,7 +344,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             Vector2 v2 = vertices2D[(i + 1) % vertices2D.Count];
             area += (v2.x - v1.x) * (v2.y + v1.y);
         }
-        return (area > 0f);
+        return area > 0f;
     }
 
     private float CrossProduct2D(Vector2 a, Vector2 b, Vector2 c)
@@ -517,20 +520,23 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 float length = direction.magnitude;
                 if (length <= Mathf.Epsilon) continue;
 
+                var connectionPrefabs = GameSettings.Instance.wallPrefabs;
+                int wallIndex = (int)con.WallType;
+                float baseXRotation = connectionPrefabs[wallIndex] ? connectionPrefabs[wallIndex].transform.localEulerAngles.x : 0;
+
                 // First, create a base rotation that rotates the prefab’s local X (Vector3.right)
                 // to align with the connection direction.
-                Quaternion baseRotation = Quaternion.FromToRotation(Vector3.right, direction.normalized);
+                Quaternion baseRotation =
+                     Quaternion.FromToRotation(Vector3.right, direction.normalized);
                 // At this point, the prefab’s default normal (assumed to be Vector3.up) becomes:
                 // currentNormal = baseRotation * Vector3.up.
                 Vector3 currentNormal = baseRotation * Vector3.up;
                 // Compute how much to rotate about the connection direction so that the wall’s normal becomes Vector3.forward.
-                float correctionAngle = Vector3.SignedAngle(currentNormal, -(Vector3.forward + Vector3.right), direction.normalized);
-                Quaternion correction = Quaternion.AngleAxis(correctionAngle, direction.normalized);
-                Quaternion finalRotation = correction * baseRotation;
+                float correctionAngle = Vector3.SignedAngle(currentNormal, Vector3.forward + Vector3.right, direction.normalized);
+                Quaternion correction = Quaternion.AngleAxis(correctionAngle, Vector3.up);
+                Quaternion finalRotation = correction * baseRotation * Quaternion.Euler(baseXRotation, -90, 0);
 
 #if UNITY_EDITOR
-                var connectionPrefabs = GameSettings.Instance.wallPrefabs;
-                int wallIndex = (int)con.WallType;
                 if (wallIndex >= connectionPrefabs.Length || connectionPrefabs[wallIndex] == null)
                 {
                     Debug.LogWarning($"Connection prefab for ID {wallIndex} is not assigned!", this);
@@ -545,7 +551,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
                 // Stretch the prefab along its local X axis (the connection direction) to match the connection length.
                 Vector3 originalScale = instance.transform.localScale;
-                instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z) * .1f;
+                instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z);
 
                 instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
 

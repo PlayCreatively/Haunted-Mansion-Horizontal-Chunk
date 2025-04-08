@@ -304,11 +304,11 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             currentIndex = (currentIndex + 1) % remainingIndices.Count;
         }
 
-        if (loopCount >= loopSafetyBreak)
-        {
-            Debug.LogError($"Ear Clipping failed: Safety break triggered. Remaining: [{string.Join(", ", remainingIndices)}]. Ears clipped: {earsClipped}.", this);
-            return null;
-        }
+        //if (loopCount >= loopSafetyBreak)
+        //{
+        //    Debug.LogError($"Ear Clipping failed: Safety break triggered. Remaining: [{string.Join(", ", remainingIndices)}]. Ears clipped: {earsClipped}.", this);
+        //    return null;
+        //}
 
         if (remainingIndices.Count == 3)
         {

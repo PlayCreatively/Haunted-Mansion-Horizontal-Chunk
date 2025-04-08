@@ -23,7 +23,7 @@ public class SnapButton : EditorToolbarButton
         clicked += SetSnapSettings;
     }
 
-    [MenuItem("Isometric/Default snap settings")]
+    [MenuItem("Game/Isometric/Default snap settings")]
     static void SetSnapSettings()
     {
         EditorSnapSettings.gridSize
@@ -50,7 +50,7 @@ public class IsometricAngleButton: EditorToolbarButton
         clicked += SetCameraOrientation;
     }
 
-    [MenuItem("Isometric/Set to Isometric Angle %#i")]
+    [MenuItem("Game/Isometric/Set to Isometric Angle %#i")]
     static void SetCameraOrientation()
     {
         var sceneView = SceneView.lastActiveSceneView;

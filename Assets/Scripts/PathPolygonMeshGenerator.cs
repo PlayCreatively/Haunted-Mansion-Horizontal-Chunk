@@ -39,8 +39,8 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
         // only if in edit mode
         if (!pathComponent.editMode) return;
-        if (!pathComponent.dirty) return;
         if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
+        if (!pathComponent.dirty && meshFilter.sharedMesh != null) return;
         if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
         if (pathComponent == null)
         {
@@ -190,8 +190,10 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             startNode = connectivity.Keys.First();
         }
 
-        List<int> orderedIndices = new List<int>();
-        orderedIndices.Add(startNode);
+        List<int> orderedIndices = new List<int>
+        {
+            startNode
+        };
         int current = startNode;
         int previous = -1;
 

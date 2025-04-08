@@ -27,6 +27,8 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         pathComponent = GetComponent<Path>();
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+
+        meshRenderer.staticShadowCaster = true;
     }
 
     void OnDrawGizmosSelected()

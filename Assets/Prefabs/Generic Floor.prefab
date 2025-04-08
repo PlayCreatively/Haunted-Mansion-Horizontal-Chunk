@@ -19,7 +19,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2045917213375893975
 Transform:
@@ -53,7 +53,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshMaterial: {fileID: 2100000, guid: 7db5b6151f6326c47b5b057888bceedf, type: 2}
-  connectionPrefab: {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   enableDebugLogging: 0
   visualizeTriangles: 1
   triangleGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

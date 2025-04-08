@@ -5,6 +5,7 @@ public class GameSettings : ScriptableObject
 {
     public float playerSpeed = 5f;
     public float playerJumpForce = 5f;
+    public GameObject[] wallPrefabs = new GameObject[3];
 
     public static GameSettings Instance { get; private set; }
 

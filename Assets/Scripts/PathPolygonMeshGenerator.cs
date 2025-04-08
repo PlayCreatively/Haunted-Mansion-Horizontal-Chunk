@@ -10,10 +10,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 #if UNITY_EDITOR
     public Material meshMaterial;
 
-    [Header("Connection Settings")]
-    // Assign your plane prefab here.
-    public GameObject connectionPrefab;
-
     private Path pathComponent;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
@@ -497,12 +493,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             }
         }
 
-        if (connectionPrefab == null)
-        {
-            Debug.LogError("Connection prefab is not assigned!", this);
-            return;
-        }
-
         // Spawn a prefab instance for each connection.
         foreach (var con in pathComponent.connections)
         {
@@ -527,7 +517,14 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 Quaternion finalRotation = correction * baseRotation;
 
 #if UNITY_EDITOR
-                GameObject instance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(connectionPrefab, transform);
+                var connectionPrefabs = GameSettings.Instance.wallPrefabs;
+                int wallIndex = (int)con.WallType;
+                if (wallIndex >= connectionPrefabs.Length || connectionPrefabs[wallIndex] == null)
+                {
+                    Debug.LogWarning($"Connection prefab for ID {wallIndex} is not assigned!", this);
+                    continue;
+                }
+                GameObject instance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(connectionPrefabs[wallIndex], transform);
 #else
                 GameObject instance = Instantiate(connectionPrefab, transform);
 #endif

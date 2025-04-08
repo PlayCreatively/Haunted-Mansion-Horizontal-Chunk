@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(Path))]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -29,6 +30,15 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
 
         meshRenderer.staticShadowCaster = true;
+    }
+
+    void Update()
+    {
+        if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
+        if (meshFilter.sharedMesh == null)
+        {
+            Generate2DPolygonMesh();
+        }
     }
 
     void OnDrawGizmosSelected()

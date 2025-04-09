@@ -42,12 +42,14 @@ public class Player : MonoBehaviour
         //rb.rotation = Quaternion.LookRotation(new Vector3(input.x, 0, input.y));
     }
 
-    void OnCollisionEnter(Collision collision)
+
+
+    void OnCollisionStay(Collision collision)
     {
         grounded = false;
         foreach (var contact in collision.contacts)
         {
-            grounded |= contact.normal.y > 0;
+            grounded |= contact.normal.y > 0 && Physics.Raycast(transform.position, Vector3.down, 1);
         }
     }
 }

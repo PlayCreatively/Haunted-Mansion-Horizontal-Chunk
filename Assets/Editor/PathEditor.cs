@@ -346,6 +346,7 @@ public class PathEditor : Editor
             {
                 if (con.nodeA > nodeIndex) con.nodeA--;
                 if (con.nodeB > nodeIndex) con.nodeB--;
+                path.connections[i] = con;
             }
         }
         // Deselect if needed.

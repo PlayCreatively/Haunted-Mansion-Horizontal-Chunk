@@ -2,38 +2,55 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
+[Serializable]
 public enum LineType { Normal, Path, Shortcut }
+[Serializable]
 public enum WallType { Wall, Door, Handrail}
 
 [Serializable]
-public class Connection
+public struct Connection
 {
     public int nodeA;
     public int nodeB;
-    public float width = 1f; // Default width for the connection
-    public bool isCardinal = true; // If true, the connection is a straight line (cardinal direction)
+    public float width; // Default width for the connection
+    public bool isCardinal; // If true, the connection is a straight line (cardinal direction)
 
-    int lineType = 0;
+    public int lineType;
+
+    public Connection(int a, int b, float width = 0.5f, bool isCardinal = false)
+    {
+        nodeA = a;
+        nodeB = b;
+        this.width = width;
+        this.isCardinal = isCardinal;
+        lineType = 0; // Default to Normal
+    }
+
+    public void SetLineType(int lineType)
+    {
+        this.lineType = lineType;
+    }
+
     public WallType WallType 
     {
-        get => (WallType)lineType;
+        readonly get => (WallType)lineType;
         set => lineType = (int)value;
     }
 
     public LineType LineType
     {
-        get => (LineType)lineType;
+        readonly get => (LineType)lineType;
         set => lineType = (int)value;
     }
 
-    public Connection(int a, int b, LineType type = default)
+    public Connection(int a, int b, LineType type = default): this()
     {
         nodeA = a;
         nodeB = b;
         LineType = type;
     }
 
-    public Connection(int a, int b, WallType type = default)
+    public Connection(int a, int b, WallType type = default): this()
     {
         nodeA = a;
         nodeB = b;

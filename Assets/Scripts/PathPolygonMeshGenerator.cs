@@ -539,7 +539,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 #if UNITY_EDITOR
                 if (wallIndex >= connectionPrefabs.Length || connectionPrefabs[wallIndex] == null)
                 {
-                    Debug.LogWarning($"Connection prefab for ID {wallIndex} is not assigned!", this);
+                    //Debug.LogWarning($"Connection prefab for ID {wallIndex} is not assigned!", this);
                     continue;
                 }
                 GameObject instance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(connectionPrefabs[wallIndex], transform);

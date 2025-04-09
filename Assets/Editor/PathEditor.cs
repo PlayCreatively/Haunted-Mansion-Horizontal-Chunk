@@ -119,7 +119,7 @@ public class PathEditor : Editor
         else if (e.keyCode == KeyCode.Delete && selectedConnection != -1)
         {
             // Delete the selected connection if any.
-            Undo.RecordObject(path, "Delete Connection");
+            Undo.RegisterCompleteObjectUndo(path, "Delete Connection");
             path.connections.RemoveAt(selectedConnection);
             selectedConnection = -1;
             EditorUtility.SetDirty(path);
@@ -195,21 +195,24 @@ public class PathEditor : Editor
     // Cycle through the enum value for the selected connection using arrow keys.
     private void ProcessArrowKeys(Event e)
     {
-        var con = path.connections[selectedConnection];
         Array values = Enum.GetValues(typeof(LineType));
-        int currentIndex = (int)con.LineType;
+        var con = path.connections[selectedConnection];
+        Debug.Log(con.lineType);
         if (e.keyCode == KeyCode.LeftArrow || e.keyCode == KeyCode.UpArrow)
         {
-            currentIndex = (currentIndex - 1 + values.Length) % values.Length;
-            con.LineType = (LineType)values.GetValue(currentIndex);
+            Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
+            con.lineType = (con.lineType - 1 + values.Length) % values.Length;
+
+            path.connections[selectedConnection] = con;
             EditorUtility.SetDirty(path);
             path.dirty = true;
             e.Use();
         }
         else if (e.keyCode == KeyCode.RightArrow || e.keyCode == KeyCode.DownArrow)
         {
-            currentIndex = (currentIndex + 1) % values.Length;
-            con.LineType = (LineType)values.GetValue(currentIndex);
+            Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
+            con.lineType = (con.lineType + 1) % values.Length;
+            path.connections[selectedConnection] = con;
             EditorUtility.SetDirty(path);
             path.dirty = true;
             e.Use();
@@ -240,7 +243,7 @@ public class PathEditor : Editor
                 {
                     if (!ConnectionExists(selectedNode, hoveredNode))
                     {
-                        Undo.RecordObject(path, "Create Connection");
+                        Undo.RegisterCompleteObjectUndo(path, "Create Connection");
                         path.connections.Add(new Connection(selectedNode, hoveredNode, LineType.Normal));
                         EditorUtility.SetDirty(path);
                         path.dirty = true;
@@ -273,7 +276,7 @@ public class PathEditor : Editor
                 else if (hoveredConnection != -1)
                 {
                     // If a connection is selected, delete it.
-                    Undo.RecordObject(path, "Delete Connection");
+                    Undo.RegisterCompleteObjectUndo(path, "Delete Connection");
                     path.connections.RemoveAt(hoveredConnection);
                     selectedConnection = -1;
                     EditorUtility.SetDirty(path);
@@ -306,7 +309,7 @@ public class PathEditor : Editor
         else if (e.type == EventType.MouseDrag && e.button == 0 && selectedNode != -1 && !e.control)
         {
             // Drag to move the selected node.
-            Undo.RecordObject(path, "Move Node");
+            Undo.RegisterCompleteObjectUndo(path, "Move Node");
             path.SetPos(selectedNode, snapMousePos);
             EditorUtility.SetDirty(path);
             path.dirty = true;
@@ -328,7 +331,7 @@ public class PathEditor : Editor
     // Deletes a node and updates connections accordingly.
     private void DeleteNode(int nodeIndex)
     {
-        Undo.RecordObject(path, "Delete Node");
+        Undo.RegisterCompleteObjectUndo(path, "Delete Node");
         // Remove the node.
         path.nodes.RemoveAt(nodeIndex);
         // Remove connections referencing this node and adjust indices.
@@ -369,7 +372,7 @@ public class PathEditor : Editor
     // Add a new node connected to the currently selected node.
     private void AddNodeConnectedToSelected(Vector3 mousePos)
     {
-        Undo.RecordObject(path, "Add Node");
+        Undo.RegisterCompleteObjectUndo(path, "Add Node");
         path.dirty = true;
         int newIndex = path.nodes.Count;
         path.AddNode(mousePos);
@@ -419,7 +422,7 @@ public class PathEditor : Editor
     {
         if (insertTargetNodeA == -1 || insertTargetNodeB == -1) return;
 
-        Undo.RecordObject(path, "Insert Node");
+        Undo.RegisterCompleteObjectUndo(path, "Insert Node");
         int newIndex = path.nodes.Count;
         path.AddNode(previewNodePos);
 

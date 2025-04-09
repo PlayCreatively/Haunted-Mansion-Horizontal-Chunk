@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &607633891527403492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4133879358028381611}
+  - component: {fileID: 6453404279298605736}
+  - component: {fileID: 70834760395987464}
+  m_Layer: 0
+  m_Name: Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4133879358028381611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607633891527403492}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.289, z: 0.339}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4490225259408865023}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6453404279298605736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607633891527403492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98f1519545fbac4d8ee93a30433557c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSize: 1
+  items:
+  - {fileID: 0}
+--- !u!135 &70834760395987464
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607633891527403492}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: -0.34}
 --- !u!1001 &4168861456394113300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,6 +149,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1d78691e1c7412c419ea49990f1819e4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5036976535808988095}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1d78691e1c7412c419ea49990f1819e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4133879358028381611}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1d78691e1c7412c419ea49990f1819e4, type: 3}
       insertIndex: -1
@@ -267,7 +339,7 @@ PrefabInstance:
     - target: {fileID: -5754084199372789682, guid: 1d78691e1c7412c419ea49990f1819e4, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: -7939940022214940584, guid: db11ee51e911f9a4790718bde66b2a3d, type: 3}
+      objectReference: {fileID: -6246867451151232739, guid: 60663cc6a7b927a439660eaaafd862a2, type: 3}
     - target: {fileID: 919132149155446097, guid: 1d78691e1c7412c419ea49990f1819e4, type: 3}
       propertyPath: m_Name
       value: Visuals

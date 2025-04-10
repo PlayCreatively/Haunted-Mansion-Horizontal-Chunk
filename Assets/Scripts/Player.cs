@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     {
         playerInput.SwitchCurrentControlScheme(
             playerInput.defaultControlScheme,
-            Keyboard.current
+            Keyboard.current, Gamepad.current
         );
 
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -44,7 +44,9 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        rb.linearVelocity += new Vector3(0, GameSettings.Instance.playerJumpForce, 0);
+        var velocity = rb.linearVelocity;
+        velocity.y = GameSettings.Instance.playerJumpForce;
+        rb.linearVelocity = velocity;
         grounded = false;
     }
 

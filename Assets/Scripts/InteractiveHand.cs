@@ -58,4 +58,16 @@ public class InteractiveHand : Inventory
                 interactable.Highlight(true);
             }
     }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out IInteractable interactable))
+        {
+            if (focusedInteractable == interactable)
+            {
+                interactable.Highlight(false);
+                focusedInteractable = null;
+            }
+        }
+    }
 }

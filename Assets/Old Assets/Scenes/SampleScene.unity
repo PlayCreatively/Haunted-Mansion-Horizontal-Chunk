@@ -1521,6 +1521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loopEvent: event:/Loop Playing
+  BGMusicValue: 1
 --- !u!4 &333499030
 Transform:
   m_ObjectHideFlags: 0

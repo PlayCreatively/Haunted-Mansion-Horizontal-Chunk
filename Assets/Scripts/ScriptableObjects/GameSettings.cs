@@ -17,8 +17,13 @@ public class GameSettings : ScriptableObject
         }
     }
 
+    // player settings
+    [Header("Player Settings")]
     public float playerSpeed = 5f;
     public float playerJumpForce = 5f;
+    public float playerThrowForce = 1f;
+    public float playerThrowAngle = 45f;
+    [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
 
 #if UNITY_EDITOR

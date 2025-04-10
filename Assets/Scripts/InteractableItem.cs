@@ -59,4 +59,9 @@ public class InteractableItem : MonoBehaviour, IInteractable
         EnableCollider(value);
         EnableRigidbody(value);
     }
+
+    public void SetVelocity(Vector3 velocity)
+    {
+        rb.linearVelocity = velocity;
+    }
 }

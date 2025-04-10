@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     PlayerInput playerInput;
     Rigidbody rb;
     InteractiveHand hand;
+    Transform visuals;
 
     Vector2 moveInput;
     bool grounded;
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         hand = GetComponentInChildren<InteractiveHand>();
         playerInput = GetComponent<PlayerInput>();
+        visuals = transform.Find("Visuals");
+        Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
     }
 
     void Start()
@@ -32,6 +35,7 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += Drop;
+        playerInput.actions["Throw"].performed += _ => hand.Throw();
     }
 
     private void Drop(InputAction.CallbackContext obj)
@@ -58,6 +62,8 @@ public class Player : MonoBehaviour
         Vector3 deltaMove = Quaternion.AngleAxis(45, Vector3.up) * new Vector3(moveInput.x, 0, moveInput.y) * GameSettings.Instance.playerSpeed;
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
+        if(moveInput.sqrMagnitude > .05f)
+            visuals.LookAt(transform.position + deltaMove.XZ(0), Vector3.up);
         //rb.rotation = Quaternion.LookRotation(new Vector3(input.x, 0, input.y));
     }
 

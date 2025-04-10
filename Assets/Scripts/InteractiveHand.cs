@@ -13,6 +13,18 @@ public class InteractiveHand : Inventory
         base.Awake();
     }
 
+    public void Throw()
+    {
+        if (Item != null)
+        {
+            var item = Item;
+            RemoveItem(item);
+            var newVelocity = (Quaternion.AngleAxis(-GameSettings.Instance.playerThrowAngle, transform.right) * transform.forward) * GameSettings.Instance.playerThrowForce;
+            Debug.DrawLine(transform.position, transform.position + newVelocity, Color.red, 1f);
+            item.SetVelocity(newVelocity);
+        }
+    }
+
     public void Interact()
     {
         Debug.Log("Interact");

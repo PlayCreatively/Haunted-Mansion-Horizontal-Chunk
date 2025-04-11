@@ -16,4 +16,11 @@ public static class ExtensionMethods
     {
         return new(v.x, y, v.y);
     }
+
+    public static void Squash(this Transform trans, float yNormal)
+    {
+        float xNormal = 2f - yNormal;
+
+        trans.localScale = new(xNormal, yNormal, xNormal);
+    }
 }

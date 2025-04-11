@@ -12,8 +12,10 @@ public class Player : MonoBehaviour
     InteractiveHand hand;
     Transform visuals;
 
-    Vector2 moveInput;
+    Vector3 moveInput;
     bool grounded;
+    float dashValue = 0.5f;
+    float jumpSquash = 0.5f;
 
     void Awake()
     {
@@ -40,12 +42,32 @@ public class Player : MonoBehaviour
             devices.ToArray() // Use the devices array
         );
 
-        playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerInput.actions["Move"].performed += ctx => moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
         playerInput.actions["Move"].canceled += _ => moveInput = Vector2.zero;
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += Drop;
         playerInput.actions["Throw"].performed += _ => hand.Throw();
+        playerInput.actions["Dash"].performed += _ => DashInput();
+    }
+
+    void ProcessDash()
+    {
+        if (dashValue <= 0)
+            return;
+
+        const float squashAmount = 0.3f;
+        visuals.Squash(1f - squashAmount * dashValue);
+
+        float dashDelta = Mathf.Min(Time.deltaTime, dashValue);
+        dashValue -= dashDelta;
+        rb.AddForce(dashValue * GameSettings.Instance.playerDashSpeed * moveInput, ForceMode.VelocityChange);
+    }
+
+    void DashInput()
+    {
+        if (dashValue <= 0)
+            dashValue = GameSettings.Instance.playerDashDuration;
     }
 
     private void Drop(InputAction.CallbackContext obj)
@@ -62,19 +84,35 @@ public class Player : MonoBehaviour
         velocity.y = GameSettings.Instance.playerJumpForce;
         rb.linearVelocity = velocity;
         grounded = false;
+
+        jumpSquash = .5f;
+    }
+
+    private void Update()
+    {
+        if (jumpSquash > 0)
+        {
+            jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
+            //visuals.Squash(1f + jumpSquash);
+        }
+
     }
 
     void FixedUpdate()
     {
+        visuals.Squash(rb.linearVelocity.y / 15f + 1);
+
+
         if (grounded && playerInput.actions.FindAction("Jump").IsPressed())
             Jump();
 
-        Vector3 deltaMove = Quaternion.AngleAxis(45, Vector3.up) * new Vector3(moveInput.x, 0, moveInput.y) * GameSettings.Instance.playerSpeed;
+        ProcessDash();
+
+        Vector3 deltaMove = moveInput * GameSettings.Instance.playerSpeed;
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
         if(moveInput.sqrMagnitude > .05f)
-            visuals.LookAt(transform.position + deltaMove.XZ(0), Vector3.up);
-        //rb.rotation = Quaternion.LookRotation(new Vector3(input.x, 0, input.y));
+            visuals.LookAt(transform.position + moveInput, Vector3.up);
     }
 
     void OnCollisionStay(Collision collision)

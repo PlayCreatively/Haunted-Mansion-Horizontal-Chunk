@@ -23,6 +23,8 @@ public class GameSettings : ScriptableObject
     public float playerJumpForce = 5f;
     public float playerThrowForce = 1f;
     public float playerThrowAngle = 45f;
+    public float playerDashSpeed = 5;
+    public float playerDashDuration = 0.5f;
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
 

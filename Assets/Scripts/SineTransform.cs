@@ -7,6 +7,8 @@ public class SineTransform : MonoBehaviour
 
     float baseline = 0.0f; // Baseline position
 
+    float GetY(float x) => x - Mathf.Sin(2 * Mathf.PI * x) / (Mathf.PI * 2);
+
     void Start()
     {
         // Set the baseline to the current position
@@ -15,9 +17,11 @@ public class SineTransform : MonoBehaviour
 
     void FixedUpdate()
     {
+        float t = Mathf.PingPong(Time.time * speed, amplitude);
+
         transform.transform.position = new Vector3(
             transform.position.x,
-            baseline + Mathf.Sin(Time.time * speed) * amplitude,
+            baseline + GetY(t),
             transform.position.z
         );
     }

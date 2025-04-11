@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -25,9 +26,18 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        List<InputDevice> devices = new(2);
+        if(Keyboard.current != null)
+            devices.Add(Keyboard.current);
+        if (Gamepad.current != null)
+        {
+            devices.Add(Gamepad.current);
+            Debug.Log($"Gamepad found: {Gamepad.current}");
+        }
+
         playerInput.SwitchCurrentControlScheme(
             playerInput.defaultControlScheme,
-            Keyboard.current, Gamepad.current
+            devices.ToArray() // Use the devices array
         );
 
         playerInput.actions["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();

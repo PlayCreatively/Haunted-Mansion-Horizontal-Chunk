@@ -27,8 +27,6 @@ public class InteractiveHand : Inventory
 
     public void Interact()
     {
-        Debug.Log("Interact");
-
         if (focusedInteractable != null)
             switch (focusedInteractable)
             {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DetectRoomEntrance : MonoBehaviour
 {
-    private void Start()
+    void Start()
     {
         // Get the MeshFilter component attached to this GameObject
         MeshFilter meshFilter = GetComponent<MeshFilter>();
@@ -25,13 +25,20 @@ public class DetectRoomEntrance : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision detected with: " + collision.gameObject.name);
-
         transform.localScale = new Vector3(1f, 0.5f, 1f);
+
+        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
+        {
+            room.ResourceEnter(item.type, true);
+        }
     }
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log("Collision exited with: " + collision.gameObject.name);
         transform.localScale = new Vector3(1f, 1f, 1f);
+
+        if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
+        {
+            room.ResourceEnter(item.type, false);
+        }
     }
 }

@@ -16,7 +16,18 @@ MonoBehaviour:
   playerJumpForce: 5
   playerThrowForce: 5
   playerThrowAngle: 45
+  playerDashSpeed: 5
+  playerDashDuration: 0.5
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}
   - {fileID: 0}
+  minBookingTime: 60
+  maxBookingTime: 240
+  minStayTime: 20
+  maxStayTime: 60
+  requirementSettings:
+    minAmount: 1
+    maxAmount: 1
+    minTypes: 1
+    maxTypes: 3

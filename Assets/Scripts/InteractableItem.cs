@@ -28,9 +28,17 @@ public interface IHighlightable
     void Highlight(bool value);
 }
 
+public enum ResourceType
+{
+    ToiletPaper,
+    Towel,
+    BedSheet
+}
+
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class InteractableItem : MonoBehaviour, IInteractable
 {
+    public ResourceType type;
     Collider col;
     Rigidbody rb;
 
@@ -42,7 +50,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
 
     public void Highlight(bool value)
     {
-        Debug.Log($"Highlight {gameObject.name} to {value}");
+        //Debug.Log($"Highlight {gameObject.name} to {value}");
     }
 
     public void Interact(object param = null)

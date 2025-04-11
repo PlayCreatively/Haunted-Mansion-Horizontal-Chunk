@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -27,6 +28,36 @@ public class GameSettings : ScriptableObject
     public float playerDashDuration = 0.5f;
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
+    [Header("Room Settings")]
+    public float minBookingTime = 60;
+    public float maxBookingTime = 60 * 4;
+    public float minStayTime = 20;
+    public float maxStayTime = 60;
+    [Header("Room Requirements Settings")]
+    public RequirementSettings requirementSettings = new()
+    {
+        minAmount = 1,
+        maxAmount = 5,
+        minTypes = 1,
+        maxTypes = 3
+    };
+
+    [Serializable]
+    public struct RequirementSettings
+    {
+        public int minAmount;
+        public int maxAmount;
+        public int minTypes;
+        public int maxTypes;
+
+        internal readonly void Deconstruct(out int minAmount, out int maxAmount, out int minTypes, out int maxTypes)
+        {
+            minAmount = this.minAmount;
+            maxAmount = this.maxAmount;
+            minTypes = this.minTypes;
+            maxTypes = this.maxTypes;
+        }
+    }
 
 #if UNITY_EDITOR
     [UnityEditor.MenuItem("Game/" + nameof(GameSettings))]

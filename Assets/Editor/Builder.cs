@@ -47,7 +47,7 @@ class Builder
         BuildPlayerWithProfileOptions options = new BuildPlayerWithProfileOptions
         {
             buildProfile = activeProfile,
-            locationPathName = "Builds/" + activeProfile.name,
+            locationPathName = "Builds/webGL",
             options = BuildOptions.None
         };
 
@@ -63,7 +63,15 @@ class Builder
         else if (summary.result == BuildResult.Failed)
         {
             Debug.LogError("Build failed");
+            return;
         }
+
+
+        // Copy the Build folder to the webGL-setup folder.
+        const string toCopy = "Build";
+        FileUtil.ReplaceDirectory(path + toCopy, outputPath + toCopy);
+
+        Push();
     }
 
     [MenuItem("Tools/⏩ | Push to Itch", priority = -1)]

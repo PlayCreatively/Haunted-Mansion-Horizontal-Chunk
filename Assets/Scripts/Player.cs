@@ -113,14 +113,15 @@ public class Player : MonoBehaviour
         rb.linearVelocity = deltaMove;
         if(moveInput.sqrMagnitude > .05f)
             visuals.LookAt(transform.position + moveInput, Vector3.up);
+
+        grounded = false;
     }
 
     void OnCollisionStay(Collision collision)
     {
-        grounded = false;
         foreach (var contact in collision.contacts)
         {
-            grounded |= contact.normal.y > 0 && Physics.Raycast(transform.position, Vector3.down, 1);
+            grounded |= contact.normal.y > .8f && Physics.Raycast(transform.position + Vector3.up * .2f, Vector3.down, 1);
         }
     }
 }

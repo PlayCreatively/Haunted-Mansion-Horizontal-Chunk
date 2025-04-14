@@ -25,7 +25,6 @@ public class DetectRoomEntrance : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        transform.localScale = new Vector3(1f, 0.5f, 1f);
 
         if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
         {
@@ -34,7 +33,6 @@ public class DetectRoomEntrance : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        transform.localScale = new Vector3(1f, 1f, 1f);
 
         if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
         {

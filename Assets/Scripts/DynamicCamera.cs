@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[ExecuteAlways]
+[ExecuteAlways, DefaultExecutionOrder(200)]
 public class DynamicCamera : MonoBehaviour
 {
     [SerializeField]

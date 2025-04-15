@@ -34,16 +34,18 @@ public class GameSettings : ScriptableObject
     public float minStayTime = 20;
     public float maxStayTime = 60;
     [Header("Room Requirements Settings")]
-    public RequirementSettings requirementSettings = new()
+    public RoomRequirementSettings requirementSettings = new()
     {
         minAmount = 1,
         maxAmount = 5,
         minTypes = 1,
         maxTypes = 3
     };
+    [Header("Elevator Settings")]
+    public bool smartElevator = true;
 
     [Serializable]
-    public struct RequirementSettings
+    public struct RoomRequirementSettings
     {
         public int minAmount;
         public int maxAmount;

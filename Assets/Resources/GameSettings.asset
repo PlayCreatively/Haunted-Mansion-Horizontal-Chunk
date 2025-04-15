@@ -31,3 +31,4 @@ MonoBehaviour:
     maxAmount: 1
     minTypes: 1
     maxTypes: 3
+  smartElevator: 1

@@ -62,35 +62,44 @@ public class Elevator : MonoBehaviour
 
     void FixedUpdate()
     {
-        switch (state)
+        if (!GameSettings.Instance.smartElevator)
         {
-            case State.Idle:
-                if(IsPlayerInElevator())
-                    state = State.Moving;
-                break;
-            case State.Moving:
-                Assert.IsTrue(targetFloor != -1);
-                Assert.IsTrue(moveDir != 0);
-                UpdateFloorTraversal();
-
-                if ((currentY - (int)currentY) == 0)
-                {
-                    ReachedFloor();
-                }
-                break;
+            SetY(Mathf.PingPong(Time.time * speed, floorCount - 1));
+            UpdateOpenDoors();
         }
+        else
+            switch (state)
+            {
+                case State.Idle:
+                    if (IsPlayerInElevator())
+                        state = State.Moving;
+                    break;
+                case State.Moving:
+                    Assert.IsTrue(targetFloor != -1);
+                    Assert.IsTrue(moveDir != 0);
+                    UpdateFloorTraversal();
+
+                    if ((currentY - (int)currentY) == 0)
+                    {
+                        ReachedFloor();
+                    }
+                    break;
+            }
     }
+
+    void SetY(float y) => platform.position = new Vector3(
+        platform.position.x,
+        baseline + GetY(y),
+        platform.position.z
+    );
+
 
     void UpdateFloorTraversal()
     {
         float moveDelta = MathF.Min(Mathf.Abs(currentY - targetFloor), Time.fixedDeltaTime * speed);
         currentY += moveDelta * moveDir;
 
-        platform.position = new Vector3(
-            platform.position.x,
-            baseline + GetY(currentY),
-            platform.position.z
-        );
+        SetY(currentY);
 
         UpdateOpenDoors();
     }
@@ -124,7 +133,7 @@ public class Elevator : MonoBehaviour
 
             if(IsPlayerInElevator())
             {
-                Debug.Log("Player in elevator, moving to floor " + targetFloor);
+                //Debug.Log("Player in elevator, moving to floor " + targetFloor);
                 state = State.Moving;
             }
         }

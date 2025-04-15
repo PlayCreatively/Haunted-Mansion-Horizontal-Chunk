@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7322014734409184496}
   - component: {fileID: 1418678498282939983}
+  - component: {fileID: 4432153518754805617}
   m_Layer: 0
   m_Name: Elevator Door
   m_TagString: Untagged
@@ -49,6 +50,27 @@ MonoBehaviour:
   time: 0.6
   openWidth: 0.1
   closeWidth: 0.5
+--- !u!65 &4432153518754805617
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2939134838640633938}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0.57}
 --- !u!1 &3584202265606282672
 GameObject:
   m_ObjectHideFlags: 0

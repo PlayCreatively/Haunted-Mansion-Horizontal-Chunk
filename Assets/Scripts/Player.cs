@@ -11,19 +11,24 @@ public class Player : MonoBehaviour
     Rigidbody rb;
     InteractiveHand hand;
     Transform visuals;
+    ParticleSystem[] dashParticles;
+    ParticleSystem walkParticles;
+
 
     Vector3 moveInput;
     bool grounded;
     float dashValue = 0.5f;
     float jumpSquash = 0.5f;
 
-    void Awake()
+void Awake()
     {
         rb = GetComponent<Rigidbody>();
         hand = GetComponentInChildren<InteractiveHand>();
         playerInput = GetComponent<PlayerInput>();
         visuals = transform.Find("Visuals");
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
+        walkParticles = visuals.GetChild(0).GetComponentInChildren<ParticleSystem>();
+        dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
     }
 
     void Start()
@@ -67,7 +72,14 @@ public class Player : MonoBehaviour
     void DashInput()
     {
         if (dashValue <= 0)
+        {
+            foreach (var particle in dashParticles)
+            {
+                particle.Play();
+            }
+
             dashValue = GameSettings.Instance.playerDashDuration;
+        }
     }
 
     private void Drop(InputAction.CallbackContext obj)
@@ -111,10 +123,18 @@ public class Player : MonoBehaviour
         Vector3 deltaMove = moveInput * GameSettings.Instance.playerSpeed;
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
-        if(moveInput.sqrMagnitude > .05f)
+        bool isMoving = moveInput.magnitude > 0.02f;
+        if (isMoving)
+        {
+            if(!walkParticles.isPlaying && grounded)
+                walkParticles.Play();
             visuals.LookAt(transform.position + moveInput, Vector3.up);
+        }
+        if(walkParticles.isPlaying && (!isMoving || !grounded))
+            walkParticles.Stop();
 
-        grounded = false;
+
+            grounded = false;
     }
 
     void OnCollisionStay(Collision collision)

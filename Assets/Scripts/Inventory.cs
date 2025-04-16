@@ -64,5 +64,6 @@ public class Inventory : MonoBehaviour
         items.Remove(item);
         item.EnablePhysics(true);
         item.transform.SetParent(null, true);
+        item.transform.localScale = Vector3.one;
     }
 }

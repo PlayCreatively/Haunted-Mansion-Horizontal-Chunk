@@ -1,17 +1,23 @@
+using TMPro;
 using UnityEngine;
 
-[DefaultExecutionOrder(10)]
+[DefaultExecutionOrder(-500)]
 public class RoomUI : MonoBehaviour
 {
     public Room room;
     public GameObject bookingUI;
+    TextMeshProUGUI bookingTimeUI;
     public GameObject checkInUI;
     public GameObject requirementsParent;
 
-    void Awake()
+    void Start()
     {
         bookingUI.SetActive(false);
         checkInUI.SetActive(false);
+
+        bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
+        room.OnStateChange += UpdateRequirementsUI;
+        room.OnRequirementsChange += UpdateRequirementsUI;
     }
 
     void Update()
@@ -25,12 +31,10 @@ public class RoomUI : MonoBehaviour
         return new (screenPos.x, screenPos.y);
     }
 
-    public void UpdateUI(Room.Requirements requirements)
+    public void UpdateRequirementsUI(Room.Requirements requirements)
     {
-        bookingUI.SetActive(room.IsBooked);
         //checkInUI.SetActive(room.IsOccupied);
         requirementsParent.SetActive(room.IsDirty);
-        requirementsParent.transform.GetChild(0).gameObject.SetActive(false);
 
         if (room.IsDirty)
         {
@@ -39,5 +43,19 @@ public class RoomUI : MonoBehaviour
                 requirementsParent.transform.GetChild(i).gameObject.SetActive(room.requirements[i] > 0);
             }
         }
+    }
+
+    public void UpdateRequirementsUI(RoomState state)
+    {
+        bookingUI.SetActive(state == RoomState.Booked);
+        checkInUI.SetActive(state == RoomState.Occupied);
+    }
+
+    public void UpdateBookingTimeUI(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60);
+        int seconds = Mathf.FloorToInt(time % 60);
+
+        bookingTimeUI.text = $"{minutes:D2}:{seconds:D2}";
     }
 }

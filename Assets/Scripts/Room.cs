@@ -6,10 +6,9 @@ using Random = UnityEngine.Random;
 
 public enum RoomState
 {
-    Dirty,
+    NonBooked,
     Booked,
     Occupied,
-    Clean,
     //Locked
 }
 
@@ -17,8 +16,19 @@ public enum RoomState
 public class Room : MonoBehaviour
 {
     float stayTime;
-    float bookingTime;
+    float _bookedTime;
+    float BookedTime
+    {
+        get => _bookedTime;
+        set
+        {
+            _bookedTime = value;
+            roomUI.UpdateBookingTimeUI(_bookedTime);
+        }
+    }
+    float nonBookedTime = 0f;
 
+    bool isDirty = false;
     RoomState state;
     public Requirements requirements;
 
@@ -42,7 +52,6 @@ public class Room : MonoBehaviour
         roomUI = Instantiate(roomUI, Vector3.zero, Quaternion.identity, canvas.transform);
         roomUI.name = gameObject.name + " UI";
         roomUI.room = this;
-        OnRequirementsChange += roomUI.UpdateUI;
 
         CheckOut();
     }
@@ -51,67 +60,56 @@ public class Room : MonoBehaviour
     {
         switch (state)
         {
-            case RoomState.Clean:
-                break;
-            case RoomState.Dirty:
+            case RoomState.NonBooked:
+                nonBookedTime -= Time.deltaTime;
+                Debug.Log($"{gameObject.name} dirty. Waiting for cleaning.\n {nonBookedTime} time left", gameObject);
+                if(nonBookedTime <= 0)
+                {
+                    Book();
+                    Debug.Log($"{gameObject.name} dirty. Someone booked it. Clean it!", gameObject);
+                }
                 break;
             case RoomState.Booked:
-                bookingTime -= Time.deltaTime;
-                if (bookingTime <= 0)
+                BookedTime -= Time.deltaTime;
+                if (BookedTime <= 0)
                 {
-                    Debug.Log($"{gameObject.name} booking time expired. You lose!", gameObject);
+                    CheckIn();
+                    if(isDirty)
+                        Debug.Log($"{gameObject.name} booking time expired. You lose!", gameObject);
                 }
                 break;
             case RoomState.Occupied:
                 stayTime -= Time.deltaTime;
                 if (stayTime <= 0)
                 {
-                    state = RoomState.Clean;
-                    Clean();
+                    CheckOut();
                 }
                 break;
         }
     }
 
-    public RoomState State
-    {
-        get => state;
-        set
-        {
-            state = value;
-            switch (state)
-            {
-                case RoomState.Clean:
-                    Clean();
-                    break;
-                case RoomState.Dirty:
-                    break;
-                case RoomState.Occupied:
-                    CheckIn();
-                    break;
-            }
-        }
-    }
     public float StayTime => stayTime;
-    public float BookingTime => bookingTime;
+    public float NonBookedTime => nonBookedTime;
     public static List<Room> Rooms => rooms;
 
-    public bool IsOccupied => state == RoomState.Occupied;
-    public bool IsClean => state == RoomState.Clean;
-    public bool IsDirty => state == RoomState.Dirty;
+    public bool IsClean => !isDirty;
+    public bool IsDirty => isDirty;
     public bool IsBooked => state == RoomState.Booked;
+    public bool IsOccupied => state == RoomState.Occupied;
 
     public void Clean()
     {
-        state = RoomState.Clean;
+        Debug.Log($"{gameObject.name} cleaned", gameObject);
+        isDirty = false;
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
     }
 
     public void Book()
     {
-        state = RoomState.Dirty;
-        bookingTime = Random.Range(GameSettings.Instance.minBookingTime, GameSettings.Instance.maxBookingTime);
+        Debug.Log($"{gameObject.name} booked", gameObject);
+        state = RoomState.Booked;
+        BookedTime = GameSettings.Instance.GetRandomBookedTime;
 
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
@@ -119,8 +117,9 @@ public class Room : MonoBehaviour
 
     public void CheckIn()
     {
+        Debug.Log($"{gameObject.name} checked in", gameObject);
         state = RoomState.Occupied;
-        stayTime = Random.Range(GameSettings.Instance.minStayTime, GameSettings.Instance.maxStayTime);
+        stayTime = GameSettings.Instance.GetRandomStayTime;
 
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
@@ -128,7 +127,10 @@ public class Room : MonoBehaviour
 
     public void CheckOut()
     {
-        state = RoomState.Dirty;
+        Debug.Log($"{gameObject.name} checked out", gameObject);
+        state = RoomState.NonBooked;
+        isDirty = true;
+        nonBookedTime = GameSettings.Instance.GetRandomNonBookedTime;
         requirements = Requirements.CreateRandom();
         OnRequirementsChange?.Invoke(requirements);
 
@@ -138,7 +140,7 @@ public class Room : MonoBehaviour
 
     public void ResourceEnter(ResourceType type, bool enter)
     {
-        if (state == RoomState.Dirty)
+        if (state == RoomState.NonBooked)
         {
             requirements[type] += enter ? -1 : 1;
             OnRequirementsChange?.Invoke(requirements);

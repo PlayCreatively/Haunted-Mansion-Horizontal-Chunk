@@ -201,10 +201,10 @@ TextureImporter:
       name: UIPlaceholders_4
       rect:
         serializedVersion: 2
-        x: 102
-        y: 555
-        width: 77
-        height: 209
+        x: 821
+        y: 818
+        width: 224
+        height: 224
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,6 +215,50 @@ TextureImporter:
       bones: []
       spriteID: e39599eb4ba02b540a9887a53b5538bb
       internalID: -2025651983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders_5
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 490
+        width: 186
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a68f3310106039d40b997db3f4c85085
+      internalID: -1064465120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders_6
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 557
+        width: 73
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efb13e22f32e6064c89e027754cd6a98
+      internalID: 434622640
       vertices: []
       indices: 
       edges: []
@@ -239,6 +283,8 @@ TextureImporter:
       UIPlaceholders_3: -833610795
       UIPlaceholders_4: -2025651983
       UIPlaceholders_5: -1064465120
+      UIPlaceholders_6: 434622640
+      UIPlaceholders_7: -522605117
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

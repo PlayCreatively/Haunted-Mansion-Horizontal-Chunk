@@ -29,10 +29,15 @@ public class GameSettings : ScriptableObject
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
     [Header("Room Settings")]
-    public float minBookingTime = 60;
-    public float maxBookingTime = 60 * 4;
+    public float minBookedTime = 60;
+    public float maxBookedTime = 60 * 4;
+    public float GetRandomBookedTime => UnityEngine.Random.Range(minBookedTime, maxBookedTime);
     public float minStayTime = 20;
     public float maxStayTime = 60;
+    public float GetRandomStayTime => UnityEngine.Random.Range(minStayTime, maxStayTime);
+    public float minNonBookedTime = 5;
+    public float maxNonBookedTime = 20;
+    public float GetRandomNonBookedTime => UnityEngine.Random.Range(minNonBookedTime, maxNonBookedTime);
     [Header("Room Requirements Settings")]
     public RoomRequirementSettings requirementSettings = new()
     {

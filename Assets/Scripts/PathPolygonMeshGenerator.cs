@@ -547,7 +547,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 GameObject instance = Instantiate(connectionPrefab, transform);
 #endif
                 instance.name = $"ConnectionInstance {con.nodeA}-{con.nodeB}";
-                instance.transform.SetPositionAndRotation(midpoint + Vector3.up * .5f, finalRotation);
+                instance.transform.SetPositionAndRotation(connectionPrefabs[wallIndex].transform.position + midpoint + Vector3.up * .5f, finalRotation);
 
                 // Stretch the prefab along its local X axis (the connection direction) to match the connection length.
                 Vector3 originalScale = instance.transform.localScale;

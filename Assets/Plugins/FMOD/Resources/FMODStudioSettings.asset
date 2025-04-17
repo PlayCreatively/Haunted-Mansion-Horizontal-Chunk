@@ -634,6 +634,7 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
+  - Character SFX
   - TEST4BANK55555
   - TESTBANK
   BanksToLoad: []

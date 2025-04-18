@@ -25,6 +25,7 @@ public class FMODAudioManager : MonoBehaviour
         landingOnTheGreenGooInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on green goo");
         landingOnTheLTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on l trash monster");
         landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on m trash monster");
+        landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on s trash monster");
         landingOnTheMummyInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on mummy");
     }
 
@@ -90,5 +91,8 @@ public class FMODAudioManager : MonoBehaviour
         
         landingOnTheMTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheMTrashMonsterInstance.release();
+        
+        landingOnTheSTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        landingOnTheSTrashMonsterInstance.release();
     }
 }

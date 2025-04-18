@@ -15,7 +15,11 @@ public class FMODAudioManager : MonoBehaviour
     private EventInstance landingOnTheMummyInstance;
     
     //Event instances for character SFX
-    
+    private EventInstance jumpingOffTheBalconyInstance;
+    private EventInstance onDashStartsInstance;
+    private EventInstance itemThrownInstance;
+    private EventInstance itemPickedUpInstance;
+    private EventInstance itemDroppedInstance;
     
     // Assigning paths
     void Awake()
@@ -27,6 +31,12 @@ public class FMODAudioManager : MonoBehaviour
         landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on m trash monster");
         landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on s trash monster");
         landingOnTheMummyInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on mummy");
+
+        jumpingOffTheBalconyInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/jump off the balcony");
+        onDashStartsInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/on dash starts");
+        itemPickedUpInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item picked up");
+        itemThrownInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item thrown");
+        itemDroppedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item dropped");
     }
 
     //Starting looped tracks
@@ -35,7 +45,7 @@ public class FMODAudioManager : MonoBehaviour
         //exampleInstance.start();
     }
 
-    //Public methods
+    //Public methods: MONSTERS
 
     public void TriggerLandingOnTheGhostSfx(int ghostHp) //Plays a SFX based on ghost's HP. Ghost HP [0;2]
     {
@@ -71,28 +81,57 @@ public class FMODAudioManager : MonoBehaviour
         landingOnTheMummyInstance.start();
     }
     
+    //Public methods: CHARACTER
+    public void TriggerItemThrownSfx() //Plays a throwing SFX. No parameter
+    {
+        itemThrownInstance.start();
+    }
+    public void TriggerJumpingOffTheBalconySfx() //Plays a landing SFX. No parameter
+    {
+        jumpingOffTheBalconyInstance.start();
+    }
+    public void TriggerOnDashStartsSfx() //Plays a dash SFX. No parameter
+    {
+        onDashStartsInstance.start();
+    }
+    public void TriggerItemDroppedSfx(int itemType) //Plays a SFX based on item's type. Item Type [0;4]
+    {
+        itemDroppedInstance.setParameterByName("Item Type", itemType);
+        itemDroppedInstance.start();
+    }
+    public void TriggerItemPickedUpSfx(int itemType) //Plays a SFX based on item's type. Item Type [0;4]
+    {
+        itemPickedUpInstance.setParameterByName("Item Type", itemType);
+        itemPickedUpInstance.start();
+    }
+    
     //Cleanup
     private void OnDestroy()
     {
         landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheGhostInstance.release();
-        
         landingOnTheMummyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheMummyInstance.release();
-        
         landingOnTheSpiderInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheSpiderInstance.release();
-        
         landingOnTheGreenGooInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheGreenGooInstance.release();
-        
         landingOnTheLTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheLTrashMonsterInstance.release();
-        
         landingOnTheMTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheMTrashMonsterInstance.release();
-        
         landingOnTheSTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         landingOnTheSTrashMonsterInstance.release();
+        //==============//
+        onDashStartsInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        onDashStartsInstance.release();
+        jumpingOffTheBalconyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        jumpingOffTheBalconyInstance.release();
+        itemDroppedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        itemDroppedInstance.release();
+        itemThrownInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        itemThrownInstance.release();
+        itemPickedUpInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        itemPickedUpInstance.release();
     }
 }

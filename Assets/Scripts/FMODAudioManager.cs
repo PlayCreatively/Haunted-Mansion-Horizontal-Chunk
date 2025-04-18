@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
@@ -26,5 +27,12 @@ public class FMODAudioManager : MonoBehaviour
     {
         landingOnTheGhostInstance.setParameterByName("Ghost HP", ghostHp);
         landingOnTheGhostInstance.start();
+    }
+    
+    //Cleanup
+    private void OnDestroy()
+    {
+        landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        landingOnTheGhostInstance.release();
     }
 }

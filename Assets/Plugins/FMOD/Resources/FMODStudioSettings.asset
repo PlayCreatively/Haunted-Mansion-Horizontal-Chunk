@@ -635,6 +635,7 @@ MonoBehaviour:
   - Master
   Banks:
   - Character SFX
+  - Monsters SFX
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

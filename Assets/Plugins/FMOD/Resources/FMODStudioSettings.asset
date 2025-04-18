@@ -635,8 +635,6 @@ MonoBehaviour:
   - Master
   Banks:
   - Character SFX
-  - TEST4BANK55555
-  - TESTBANK
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

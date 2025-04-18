@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 //Items | Objects
@@ -18,14 +19,16 @@ using UnityEngine;
 
 public interface IInteractable : IHighlightable
 {
-    void Interact(object param = null);
+    void Interact(InteractiveHand hand);
 }
 
-
+public interface IInteractableObject : IInteractable
+{
+}
 
 public interface IHighlightable
 {
-    void Highlight(bool value);
+    void Highlight(bool value, InteractiveHand interactiveHand);
 }
 
 public enum ResourceType
@@ -35,27 +38,37 @@ public enum ResourceType
     BedSheet
 }
 
+[Flags]
+public enum ResourceTypeMask
+{
+    ToiletPaper = 1,
+    Towel = 2,
+    BedSheet = 4
+}
+
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class InteractableItem : MonoBehaviour, IInteractable
 {
     public ResourceType type;
     Collider col;
     Rigidbody rb;
+    MeshRenderer meshRend;
 
     private void Awake()
     {
         col = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
+        meshRend = GetComponent<MeshRenderer>();
     }
 
-    public void Highlight(bool value)
+    public void Highlight(bool value, InteractiveHand interactiveHand)
     {
-        //Debug.Log($"Highlight {gameObject.name} to {value}");
+        meshRend.material.color = value ? Color.yellow : Color.white;
     }
 
-    public void Interact(object param = null)
+    public void Interact(InteractiveHand hand)
     {
-        throw new System.NotImplementedException($"Interact run in item: {gameObject.name}.\nItems are not meant to be interacted with.");
+        hand.AddItem(this);
     }
 
     public void EnableCollider(bool value) => col.enabled = value;
@@ -71,5 +84,10 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public void SetVelocity(Vector3 velocity)
     {
         rb.linearVelocity = velocity;
+    }
+
+    internal void EnableVisibility(bool isItemsVisible)
+    {
+        meshRend.enabled = isItemsVisible;
     }
 }

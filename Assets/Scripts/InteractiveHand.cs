@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class InteractiveHand : Inventory
 {
@@ -27,22 +28,21 @@ public class InteractiveHand : Inventory
 
     public void Interact()
     {
-        if (focusedInteractable != null)
-            switch (focusedInteractable)
-            {
-                case InteractableItem item:
-                    if(AddItem(item))
-                    {
-                        focusedInteractable = null; // reset focused interactable
-                    }
-                    break;
+        Debug.Log($"Interact with {focusedInteractable} using {items.FirstOrDefault()}");
+        focusedInteractable?.Interact(this);
+    }
 
-                case InteractableObject obj:
-                    obj.Interact(items.First());
-                    break;
-                default:
-                    break;
-            }
+    public override bool AddItem(InteractableItem item)
+    {
+        if (item == focusedInteractable as InteractableItem)
+        {
+            focusedInteractable.Highlight(false, this);
+            focusedInteractable = null;
+        }
+
+        if (Item != null) RemoveItem(Item);
+
+        return base.AddItem(item);
     }
 
     bool IsCloserThanFocused(IInteractable other)
@@ -64,8 +64,9 @@ public class InteractiveHand : Inventory
         if (other.TryGetComponent(out IInteractable interactable))
             if (IsCloserThanFocused(interactable))
             {
+                focusedInteractable?.Highlight(false, this);
                 focusedInteractable = interactable;
-                interactable.Highlight(true);
+                focusedInteractable.Highlight(true, this);
             }
     }
 
@@ -75,7 +76,7 @@ public class InteractiveHand : Inventory
         {
             if (focusedInteractable == interactable)
             {
-                interactable.Highlight(false);
+                interactable.Highlight(false, this);
                 focusedInteractable = null;
             }
         }

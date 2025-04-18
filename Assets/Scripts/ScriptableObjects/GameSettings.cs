@@ -66,6 +66,39 @@ public class GameSettings : ScriptableObject
         }
     }
 
+    [Serializable]
+    public struct ResourceInfo
+    {
+        public InteractableItem prefab;
+        public GameObject visualPrefab;
+        public Mesh mesh;
+    }
+
+    [Space(20), Header("Static Settings")]
+    public ResourceInfo toiletPaper;
+    public ResourceInfo towel;
+    public ResourceInfo bedSheet;
+    public ResourceInfo GetResourceInfo(ResourceType type)
+    {
+        return type switch
+        {
+            ResourceType.ToiletPaper => toiletPaper,
+            ResourceType.Towel => towel,
+            ResourceType.BedSheet => bedSheet,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+    }
+    public ResourceInfo GetResourceInfo(ResourceTypeMask type)
+    {
+        return type switch
+        {
+            ResourceTypeMask.ToiletPaper => toiletPaper,
+            ResourceTypeMask.Towel => towel,
+            ResourceTypeMask.BedSheet => bedSheet,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+    }
+
 #if UNITY_EDITOR
     [UnityEditor.MenuItem("Game/" + nameof(GameSettings))]
     public static void CreateAndShow()

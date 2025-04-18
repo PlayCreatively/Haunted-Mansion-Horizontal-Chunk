@@ -21,7 +21,7 @@ MonoBehaviour:
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}
-  - {fileID: 1652439633196221176, guid: a7ed6f98d047dd240b343c273e04a5a8, type: 3}
+  - {fileID: 919132149155446097, guid: 5e0e477a718df9a46bcf4fa3fa3b4795, type: 3}
   minBookedTime: 60
   maxBookedTime: 240
   minStayTime: 20
@@ -34,3 +34,15 @@ MonoBehaviour:
     minTypes: 1
     maxTypes: 3
   smartElevator: 1
+  toiletPaper:
+    prefab: {fileID: -8330054083481465843, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
+    visualPrefab: {fileID: 3870387949449623212, guid: a739a2dcaf14465498ddade6fd2ae828, type: 3}
+    mesh: {fileID: 4506057975584541052, guid: c80316b84d036794a92b068a73da939c, type: 3}
+  towel:
+    prefab: {fileID: -7235903851819569586, guid: badca6beb724cdc4592a4064a30817e8, type: 3}
+    visualPrefab: {fileID: 3870387949449623212, guid: 7354f380b42b45748ab276b066935954, type: 3}
+    mesh: {fileID: 4887130443118080773, guid: 54c0f726de52dbb4ca8413afa34abeac, type: 3}
+  bedSheet:
+    prefab: {fileID: -766079046467392610, guid: 0b3afa738b6b3214ab5444fea324936f, type: 3}
+    visualPrefab: {fileID: 3870387949449623212, guid: 103d16c9b8c06f545a836feb0e7e5c46, type: 3}
+    mesh: {fileID: -1558037838122711689, guid: adce8986e54ddaf49a7c6fb11ad1765a, type: 3}

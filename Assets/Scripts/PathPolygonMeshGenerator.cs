@@ -158,6 +158,48 @@ public class PathPolygonMeshGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// Moves the floor mesh collider slightly towards the camera and tags all overlapping child walls.
+    /// </summary>
+    void TagNearCameraWalls()
+    {
+        // Ensure the MeshCollider exists
+        MeshCollider floorCollider = GetComponent<MeshCollider>();
+        if (floorCollider == null || floorCollider.sharedMesh == null)
+        {
+            Debug.LogError("Floor MeshCollider or its shared mesh is missing.");
+            return;
+        }
+
+        // Create a temporary collider slightly offset towards the camera
+        Vector3 cameraDirection = (Camera.main != null) ? Camera.main.transform.forward : new Vector3(-1, -1, 1);
+        Vector3 offset = cameraDirection.normalized * 0.1f; // Small offset towards the camera
+
+        GameObject tempColliderObject = new GameObject("TempCollider");
+        tempColliderObject.transform.SetParent(transform, false);
+        tempColliderObject.transform.position = transform.position + offset;
+
+        MeshCollider tempCollider = tempColliderObject.AddComponent<MeshCollider>();
+        tempCollider.sharedMesh = floorCollider.sharedMesh;
+        tempCollider.convex = true; // Convex is required for overlap checks
+
+        // Find and tag overlapping child walls
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("Wall")) // Assuming walls are tagged as "Wall"
+            {
+                Collider wallCollider = child.GetComponent<Collider>();
+                if (wallCollider != null && tempCollider.bounds.Intersects(wallCollider.bounds))
+                {
+                    child.tag = "NearCameraWall"; // Tag the wall as "NearCameraWall"
+                }
+            }
+        }
+
+        // Clean up the temporary collider
+        DestroyImmediate(tempColliderObject);
+    }
+
+    /// <summary>
     /// Builds an ordered list of node indices by traversing the connections.
     /// Assumes that the connections form a continuous loop (or chain).
     /// </summary>

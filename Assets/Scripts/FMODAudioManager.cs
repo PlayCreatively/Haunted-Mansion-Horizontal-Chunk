@@ -5,6 +5,8 @@ using FMOD.Studio;
 
 public class FMODAudioManager : MonoBehaviour
 {
+    public static FMODAudioManager Instance { get; private set; } //Singleton instance
+
     //Event Instances for enemy SFX
     private EventInstance landingOnTheGhostInstance;
     private EventInstance landingOnTheSpiderInstance;
@@ -24,6 +26,16 @@ public class FMODAudioManager : MonoBehaviour
     // Assigning paths
     void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         landingOnTheGhostInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on ghost");
         landingOnTheSpiderInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on spider");
         landingOnTheGreenGooInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/land on green goo");

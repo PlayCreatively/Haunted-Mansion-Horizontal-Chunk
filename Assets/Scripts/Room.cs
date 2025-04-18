@@ -62,7 +62,7 @@ public class Room : MonoBehaviour
         {
             case RoomState.NonBooked:
                 nonBookedTime -= Time.deltaTime;
-                Debug.Log($"{gameObject.name} dirty. Waiting for cleaning.\n {nonBookedTime} time left", gameObject);
+                //Debug.Log($"{gameObject.name} dirty. Waiting for cleaning.\n {nonBookedTime} time left", gameObject);
                 if(nonBookedTime <= 0)
                 {
                     Book();

@@ -111,9 +111,9 @@ public class FMODAudioManager : MonoBehaviour
         itemDroppedInstance.setParameterByName("Item Type", itemType);
         itemDroppedInstance.start();
     }
-    public void TriggerItemPickedUpSfx(int itemType) //Plays a SFX based on item's type. Item Type [0;4]
+    public void TriggerItemPickedUpSfx(int characterIndex) //Plays a SFX based on character's index. Index [0;1]: 0=m, 1=f
     {
-        itemPickedUpInstance.setParameterByName("Item Type", itemType);
+        itemPickedUpInstance.setParameterByName("Character Index", characterIndex);
         itemPickedUpInstance.start();
     }
     

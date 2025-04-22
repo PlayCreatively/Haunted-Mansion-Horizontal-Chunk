@@ -195,13 +195,13 @@ public class PathEditor : Editor
     // Cycle through the enum value for the selected connection using arrow keys.
     private void ProcessArrowKeys(Event e)
     {
-        Array values = Enum.GetValues(typeof(LineType));
+        int wallTypeCount = GameSettings.Instance.wallPrefabs.Length;
         var con = path.connections[selectedConnection];
-        Debug.Log(con.lineType);
+
         if (e.keyCode == KeyCode.LeftArrow || e.keyCode == KeyCode.UpArrow)
         {
             Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
-            con.lineType = (con.lineType - 1 + values.Length) % values.Length;
+            con.lineType = (con.lineType - 1 + wallTypeCount) % wallTypeCount;
 
             path.connections[selectedConnection] = con;
             EditorUtility.SetDirty(path);
@@ -211,12 +211,16 @@ public class PathEditor : Editor
         else if (e.keyCode == KeyCode.RightArrow || e.keyCode == KeyCode.DownArrow)
         {
             Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
-            con.lineType = (con.lineType + 1) % values.Length;
+            con.lineType = (con.lineType + 1) % wallTypeCount;
             path.connections[selectedConnection] = con;
             EditorUtility.SetDirty(path);
             path.dirty = true;
             e.Use();
         }
+
+        // Debug log to show the current wall type.
+        var wallType = GameSettings.Instance.wallPrefabs[con.lineType];
+        Debug.Log(wallType != null ? wallType.name : "Nothing");
     }
 
     // Process mouse events (clicks, drags, CTRL-based additions, etc.)

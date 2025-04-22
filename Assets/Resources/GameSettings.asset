@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f957d0c9e274e941b94b0870a86b2cb, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  playerSpeed: 2.5
+  playerSpeed: 2
   playerJumpForce: 6
   playerThrowForce: 5
   playerThrowAngle: 45
-  playerDashSpeed: 5
+  playerDashSpeed: 7
   playerDashDuration: 0.5
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}
-  - {fileID: 919132149155446097, guid: 5e0e477a718df9a46bcf4fa3fa3b4795, type: 3}
+  - {fileID: 1652439633196221176, guid: a7ed6f98d047dd240b343c273e04a5a8, type: 3}
+  - {fileID: 0}
   minBookedTime: 60
   maxBookedTime: 240
   minStayTime: 20
@@ -35,7 +36,7 @@ MonoBehaviour:
     maxTypes: 3
   smartElevator: 1
   toiletPaper:
-    prefab: {fileID: -8330054083481465843, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
+    prefab: {fileID: 0}
     visualPrefab: {fileID: 3870387949449623212, guid: a739a2dcaf14465498ddade6fd2ae828, type: 3}
     mesh: {fileID: 4506057975584541052, guid: c80316b84d036794a92b068a73da939c, type: 3}
   towel:

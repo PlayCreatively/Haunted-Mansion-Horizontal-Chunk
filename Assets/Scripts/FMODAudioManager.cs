@@ -94,28 +94,24 @@ public class FMODAudioManager : MonoBehaviour
     }
     
     //Public methods: CHARACTER
-    public void TriggerItemThrownSfx(int characterIndex) //Plays a SFX based on character's index. Index [0;1]: 0=m, 1=f
+    public void TriggerItemThrownSfx() //Plays an item thrown SFX. No parameter
     {
-        itemPickedUpInstance.setParameterByName("Character Index", characterIndex);
         itemThrownInstance.start();
     }
-    public void TriggerJumpingOffTheBalconySfx(int characterIndex) //Plays a SFX based on character's index. Index [0;1]: 0=m, 1=f
+    public void TriggerJumpingOffTheBalconySfx() //Plays a jumping off the balcony SFX. No parameter
     {
-        itemPickedUpInstance.setParameterByName("Character Index", characterIndex);
         jumpingOffTheBalconyInstance.start();
     }
     public void TriggerOnDashStartsSfx() //Plays a dash SFX. No parameter
     {
         onDashStartsInstance.start();
     }
-    public void TriggerItemDroppedSfx(int characterIndex) //Plays a SFX based on character's index. Index [0;1]: 0=m, 1=f
+    public void TriggerItemDroppedSfx() //Plays an item dropped SFX. No parameter
     {
-        itemDroppedInstance.setParameterByName("Character Index", characterIndex);
         itemDroppedInstance.start();
     }
-    public void TriggerItemPickedUpSfx(int characterIndex) //Plays a SFX based on character's index. Index [0;1]: 0=m, 1=f
+    public void TriggerItemPickedUpSfx() //Plays an item picked up SFX. No parameter
     {
-        itemPickedUpInstance.setParameterByName("Character Index", characterIndex);
         itemPickedUpInstance.start();
     }
     

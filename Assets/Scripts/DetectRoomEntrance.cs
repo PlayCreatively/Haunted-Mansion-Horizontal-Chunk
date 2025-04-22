@@ -26,7 +26,7 @@ public class DetectRoomEntrance : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
+        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item))
         {
             room.ResourceEnter(item.type, true);
         }
@@ -34,7 +34,7 @@ public class DetectRoomEntrance : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
 
-        if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out InteractableItem item))
+        if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item))
         {
             room.ResourceEnter(item.type, false);
         }

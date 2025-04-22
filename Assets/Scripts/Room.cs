@@ -138,7 +138,7 @@ public class Room : MonoBehaviour
         OnRoomStateChange?.Invoke(this);
     }
 
-    public void ResourceEnter(ResourceType type, bool enter)
+    public void ResourceEnter(CarriableType type, bool enter)
     {
         if (state == RoomState.NonBooked)
         {
@@ -167,16 +167,16 @@ public class Room : MonoBehaviour
         public int[] resourceRequirement;
         public readonly int Count => resourceRequirement.Length;
 
-        static readonly int resourceTypeCount = Enum.GetValues(typeof(ResourceType)).Length;
+        static readonly int resourceTypeCount = Enum.GetValues(typeof(CarriableType)).Length;
 
         //bool cleaning;
 
         public Requirements(int tpAmount, int tAmount, int bAmount)
         {
             resourceRequirement = new int[resourceTypeCount];
-            this[ResourceType.ToiletPaper] = tpAmount;
-            this[ResourceType.Towel] = tAmount;
-            this[ResourceType.BedSheet] = bAmount;
+            this[CarriableType.ToiletPaper] = tpAmount;
+            this[CarriableType.Towel] = tAmount;
+            this[CarriableType.BedSheet] = bAmount;
         }
 
         public static Requirements CreateRandom()
@@ -202,7 +202,7 @@ public class Room : MonoBehaviour
             return true;
         }
 
-        public readonly int this[ResourceType type]
+        public readonly int this[CarriableType type]
         {
             get => resourceRequirement[(int)type];
             set => resourceRequirement[(int)type] = value;

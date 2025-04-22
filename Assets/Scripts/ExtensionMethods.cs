@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class ExtensionMethods
@@ -22,5 +23,11 @@ public static class ExtensionMethods
         float xNormal = 2f - yNormal;
 
         trans.localScale = new(xNormal, yNormal, xNormal);
+    }
+
+    public static bool IsInMask(this CarriableTypeMask mask, CarriableType type)
+    {
+        CarriableTypeMask typeAsMask = (CarriableTypeMask)(1 << (int)type);
+        return (typeAsMask & mask) > 0;
     }
 }

@@ -69,7 +69,7 @@ public class GameSettings : ScriptableObject
     [Serializable]
     public struct ResourceInfo
     {
-        public InteractableItem prefab;
+        public Carriable prefab;
         public GameObject visualPrefab;
         public Mesh mesh;
     }
@@ -78,23 +78,23 @@ public class GameSettings : ScriptableObject
     public ResourceInfo toiletPaper;
     public ResourceInfo towel;
     public ResourceInfo bedSheet;
-    public ResourceInfo GetResourceInfo(ResourceType type)
+    public ResourceInfo GetResourceInfo(CarriableType type)
     {
         return type switch
         {
-            ResourceType.ToiletPaper => toiletPaper,
-            ResourceType.Towel => towel,
-            ResourceType.BedSheet => bedSheet,
+            CarriableType.ToiletPaper => toiletPaper,
+            CarriableType.Towel => towel,
+            CarriableType.BedSheet => bedSheet,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }
-    public ResourceInfo GetResourceInfo(ResourceTypeMask type)
+    public ResourceInfo GetResourceInfo(CarriableTypeMask type)
     {
         return type switch
         {
-            ResourceTypeMask.ToiletPaper => toiletPaper,
-            ResourceTypeMask.Towel => towel,
-            ResourceTypeMask.BedSheet => bedSheet,
+            CarriableTypeMask.ToiletPaper => toiletPaper,
+            CarriableTypeMask.Towel => towel,
+            CarriableTypeMask.BedSheet => bedSheet,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

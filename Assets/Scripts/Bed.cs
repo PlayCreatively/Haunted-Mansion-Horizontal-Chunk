@@ -33,10 +33,10 @@ public class Bed : MonoBehaviour, IInteractable
 
     public void Interact(InteractiveHand hand)
     {
-        var itemInHand = hand.Item;
-        if (itemInHand != null && hand.Item.type == ResourceType.BedSheet && IsDirty())
+        var itemInHand = hand.ItemInHand;
+        if (itemInHand != null && hand.ItemInHand.type == CarriableType.BedSheet && IsDirty())
         {
-            hand.RemoveItem(itemInHand);
+            hand.DropFromHand();
             Destroy(itemInHand.gameObject);
             MakeDirty(false);
         }

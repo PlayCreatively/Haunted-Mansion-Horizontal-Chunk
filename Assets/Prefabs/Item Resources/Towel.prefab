@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3870387949449623212, guid: 7354f380b42b45748ab276b066935954, type: 3}
       propertyPath: m_Name
-      value: Towel Variant
+      value: Towel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3870387949449623212, guid: 7354f380b42b45748ab276b066935954, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8067867359579029068, guid: 7354f380b42b45748ab276b066935954, type: 3}
       propertyPath: m_LocalPosition.x
@@ -77,7 +81,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5785576260023666750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63de91f71f784d14eb943e675cbff4e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c5853b1f971b6e4ea28f7377394a020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1

@@ -11,6 +11,7 @@ public class StackingInventory : Inventory, IInteractableObject
     Material highlight; // Material to use when items are grayed out
     MeshRenderer[] itemMeshRends;
     Material defaultMaterial; // Default material for items
+    int count = 0;
 
     protected override void Awake()
     {
@@ -80,35 +81,43 @@ public class StackingInventory : Inventory, IInteractableObject
                 }
     }
 
-    public override bool AddItem(InteractableItem item)
+    public override int FindSpaceAndInsert(Carriable item)
     {
-        var added = base.AddItem(item);
-        if(added)
-            itemMeshRends[items.Count-1].sharedMaterial = defaultMaterial;
+        if(count >= maxSize)
+            return -1;
 
-        return added;
+        InsertAt(count, item);
+
+        return count - 1;
     }
 
-    public override void RemoveItem(InteractableItem item)
+    public override bool InsertAt(int index, Carriable item)
     {
-        itemMeshRends[items.Count-1].sharedMaterial = grayedOutMaterial;
+        if (count >= maxSize)
+            return false;
 
-        base.RemoveItem(item);
+        count++;
+
+        itemMeshRends[index].sharedMaterial = defaultMaterial;
+        return base.InsertAt(index, item);
     }
 
     public void Interact(InteractiveHand hand)
     {
-        if (hand.Item != null)
+        if (hand.ItemInHand != null && allowedTypes.IsInMask(hand.ItemInHand.type))
         {
-            hand.TransferItem(hand.Item, this);
+            hand.Inventory.TransferItem(hand.ItemInHand, this);
         }
     }
 
-    public void Highlight(bool value, InteractiveHand interactiveHand)
+    public void Highlight(bool value, InteractiveHand hand)
     {
-        if (items.Count >= maxSize || interactiveHand.Item == null)
+        if (count >= maxSize || hand.ItemInHand == null || !allowedTypes.IsInMask(hand.ItemInHand.type))
+        {
+            itemMeshRends[count].sharedMaterial = grayedOutMaterial;
             return;
+        }
 
-        itemMeshRends[items.Count].sharedMaterial = value ? highlight : grayedOutMaterial;
+        itemMeshRends[count].sharedMaterial = value ? highlight : grayedOutMaterial;
     }
 }

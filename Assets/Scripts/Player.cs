@@ -51,9 +51,11 @@ void Awake()
         playerInput.actions["Move"].canceled += _ => moveInput = Vector2.zero;
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
-        playerInput.actions["Drop"].performed += Drop;
+        playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
         playerInput.actions["Throw"].performed += _ => hand.Throw();
         playerInput.actions["Dash"].performed += _ => DashInput();
+        playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
+        playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
     }
 
     void ProcessDash()
@@ -80,14 +82,6 @@ void Awake()
 
             dashValue = GameSettings.Instance.playerDashDuration;
         }
-    }
-
-    private void Drop(InputAction.CallbackContext obj)
-    {
-        if (hand.IsEmpty())
-            return;
-
-        hand.RemoveItem(hand.Item);
     }
 
     void Jump()

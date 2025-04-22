@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+[DefaultExecutionOrder(1)]
 public class Elevator : MonoBehaviour
 {
     const float size = 2f; // Size of the elevator platform
@@ -11,7 +12,7 @@ public class Elevator : MonoBehaviour
     public float speed = 1.0f; // Speed of the sine wave
     public int floorCount = 3;
 
-    public Transform platform;
+    public Rigidbody platform;
 
     float baseline = 0.0f; // Baseline position
     float openWindow = 0.2f; // Distance window for opening the elevator door
@@ -44,6 +45,24 @@ public class Elevator : MonoBehaviour
         ) > 0;
     }
 
+    void WakeUpItemsInElevator()
+    {
+        var colliders = new Collider[10];
+        int itemCount = Physics.OverlapBoxNonAlloc(
+            platform.position + platformBounds.center,
+            platformBounds.extents,
+            colliders,
+            Quaternion.identity,
+            LayerMask.GetMask("Item")
+        );
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            Debug.Log($"Waking up item {colliders[i].name} in elevator");
+            colliders[i].attachedRigidbody.WakeUp();
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -72,11 +91,14 @@ public class Elevator : MonoBehaviour
             {
                 case State.Idle:
                     if (IsPlayerInElevator())
+                    {
                         state = State.Moving;
+                        WakeUpItemsInElevator();
+                    }
                     break;
                 case State.Moving:
                     Assert.IsTrue(targetFloor != -1);
-                    Assert.IsTrue(moveDir != 0);
+                    Assert.IsTrue(moveDir != 0, "Elevator has no set move direction but is in 'moving' state");
                     UpdateFloorTraversal();
 
                     if ((currentY - (int)currentY) == 0)
@@ -87,11 +109,11 @@ public class Elevator : MonoBehaviour
             }
     }
 
-    void SetY(float y) => platform.position = new Vector3(
+    void SetY(float y) => platform.MovePosition(new Vector3(
         platform.position.x,
         baseline + GetY(y),
         platform.position.z
-    );
+    ));
 
 
     void UpdateFloorTraversal()

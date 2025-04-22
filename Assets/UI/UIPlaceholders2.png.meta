@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -108,12 +108,166 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: UIPlaceholders2_4
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 823
+        width: 224
+        height: 224
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ac590ab1fa1738489d3769217911d54
+      internalID: 1951846381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_5
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 495
+        width: 185
+        height: 556
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d75e6f074ec85844886d8408ce28a4a1
+      internalID: 1291343537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_14
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 645
+        width: 93
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b752e06356b954b4c885a0d3b806e3b6
+      internalID: -650257523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_15
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 655
+        width: 110
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c8c6f7361b40754383469da614e3127
+      internalID: -648848390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_16
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 471
+        width: 88
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94ea4854135a3f24b9ccd5e3cabf391f
+      internalID: 89592015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_18
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 480
+        width: 88
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43ccb3a582e554649aeb551a704db8c1
+      internalID: 8930742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIPlaceholders2_20
+      rect:
+        serializedVersion: 2
+        x: 606
+        y: 470
+        width: 65
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f2e3c29a4fb3846946f503c7b9ad43
+      internalID: 963533773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b1e6fcd16587bd34fb37b6cf371d3dce
     internalID: 0
     vertices: []
     indices: 
@@ -122,7 +276,29 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UIPlaceholders2_0: -705889809
+      UIPlaceholders2_1: -2126143703
+      UIPlaceholders2_10: 436816762
+      UIPlaceholders2_11: 1634461450
+      UIPlaceholders2_12: -1904378289
+      UIPlaceholders2_13: 878218813
+      UIPlaceholders2_14: -650257523
+      UIPlaceholders2_15: -648848390
+      UIPlaceholders2_16: 89592015
+      UIPlaceholders2_17: -2022041902
+      UIPlaceholders2_18: 8930742
+      UIPlaceholders2_19: 370883258
+      UIPlaceholders2_2: 1036754302
+      UIPlaceholders2_20: 963533773
+      UIPlaceholders2_21: -1609671601
+      UIPlaceholders2_3: 1300754792
+      UIPlaceholders2_4: 1951846381
+      UIPlaceholders2_5: 1291343537
+      UIPlaceholders2_6: -1370386470
+      UIPlaceholders2_7: -1863246152
+      UIPlaceholders2_8: 1284578175
+      UIPlaceholders2_9: 1742953423
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

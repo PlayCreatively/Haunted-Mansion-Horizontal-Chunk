@@ -45,9 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98f1519545fbac4d8ee93a30433557c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSize: 1
-  items:
-  - {fileID: 0}
+  backpackPrefab: {fileID: 2177806074340410386, guid: 9a65d400cc7512d4ea9a72176c6c0fd7, type: 3}
 --- !u!135 &70834760395987464
 SphereCollider:
   m_ObjectHideFlags: 0

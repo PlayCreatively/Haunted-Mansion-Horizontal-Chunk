@@ -23,7 +23,7 @@ public class Bed : MonoBehaviour, IInteractable
     public void MakeDirty(bool dirty)
     {
         if(!dirty)
-            FMODAudioManager.Instance.TriggerItemDroppedSfx(0);
+            FMODAudioManager.Instance.TriggerItemDroppedSfx();
 
         foreach (var bedsheet in bedsheets)
         {

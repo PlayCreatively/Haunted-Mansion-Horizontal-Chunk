@@ -77,7 +77,7 @@ public class Inventory : MonoBehaviour, IInventory
         items[index] = item;
         OnInventoryUpdate?.Invoke(index, item.type);
 
-        FMODAudioManager.Instance.TriggerItemPickedUpSfx((int)item.type);
+        FMODAudioManager.Instance.TriggerItemPickedUpSfx();
 
         return true;
     }
@@ -158,7 +158,7 @@ public class Inventory : MonoBehaviour, IInventory
         item.transform.localScale = Vector3.one;
 
         OnInventoryUpdate?.Invoke(index, (CarriableType)(-1));
-        FMODAudioManager.Instance.TriggerItemDroppedSfx((int)item.type);
+        FMODAudioManager.Instance.TriggerItemDroppedSfx();
 
         return item;
     }

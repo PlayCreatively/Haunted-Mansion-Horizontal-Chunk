@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 899a0a38c780bf24ea542d3db2783e06, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 550fec9eeca8161439cccdbab773d7bd, type: 2}
     - target: {fileID: 919132149155446097, guid: 899a0a38c780bf24ea542d3db2783e06, type: 3}
       propertyPath: m_Name
       value: SM_PIANO_SEAT

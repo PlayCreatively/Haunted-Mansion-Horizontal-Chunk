@@ -61,7 +61,7 @@ public class PathEditor : Editor
         SceneView.RepaintAll();
     }
 
-    private void OnSceneGUI()
+    void OnSceneGUI()
     {
         if (path.editMode && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
         {
@@ -102,7 +102,7 @@ public class PathEditor : Editor
         SceneView.RepaintAll();
     }
 
-    private void HandleKeyInput(Event e)
+    void HandleKeyInput(Event e)
     {
         // If ESC is pressed, exit edit mode.
         if (e.keyCode == KeyCode.Escape)
@@ -142,10 +142,18 @@ public class PathEditor : Editor
             e.Use();
         }
         //undo
-        else if (e.keyCode == KeyCode.Z && e.control)
+        else if (e.keyCode == KeyCode.Z && (e.control || e.command))
         {
             selectedNode = -1;
             Undo.PerformUndo();
+            path.dirty = true;
+            e.Use();
+        }
+        //redo
+        else if (e.keyCode == KeyCode.Z && e.shift && (e.control || e.command))
+        {
+            selectedNode = -1;
+            Undo.PerformRedo();
             path.dirty = true;
             e.Use();
         }
@@ -157,7 +165,7 @@ public class PathEditor : Editor
     }
 
     // Update hovered node and connection based on current mouse position.
-    private void UpdateHoveredElements(Vector3 mousePos)
+    void UpdateHoveredElements(Vector3 mousePos)
     {
         hoveredNode = -1;
         hoveredConnection = -1;
@@ -193,7 +201,7 @@ public class PathEditor : Editor
     }
 
     // Cycle through the enum value for the selected connection using arrow keys.
-    private void ProcessArrowKeys(Event e)
+    void ProcessArrowKeys(Event e)
     {
         int wallTypeCount = GameSettings.Instance.wallPrefabs.Length;
         var con = path.connections[selectedConnection];
@@ -224,7 +232,7 @@ public class PathEditor : Editor
     }
 
     // Process mouse events (clicks, drags, CTRL-based additions, etc.)
-    private void HandleMouseInput(Event e, Vector3 mousePos)
+    void HandleMouseInput(Event e, Vector3 mousePos)
     {
         Vector3 snapMousePos = Snapping.Snap(mousePos, EditorSnapSettings.move, SnapAxis.X | SnapAxis.Z);
 
@@ -322,7 +330,7 @@ public class PathEditor : Editor
     }
 
     // Helper method to check if a connection between two nodes already exists.
-    private bool ConnectionExists(int nodeA, int nodeB)
+    bool ConnectionExists(int nodeA, int nodeB)
     {
         foreach (var con in path.connections)
         {
@@ -333,7 +341,7 @@ public class PathEditor : Editor
     }
 
     // Deletes a node and updates connections accordingly.
-    private void DeleteNode(int nodeIndex)
+    void DeleteNode(int nodeIndex)
     {
         Undo.RegisterCompleteObjectUndo(path, "Delete Node");
         // Remove the node.
@@ -361,7 +369,7 @@ public class PathEditor : Editor
     }
 
     // Converts the current mouse ray to a world point.
-    private Vector3 GetMouseWorldPosition(Ray ray)
+    Vector3 GetMouseWorldPosition(Ray ray)
     {
         Plane plane = new (Vector3.up, Vector3.up * path.transform.position.y);
         var mousePos = plane.Raycast(ray, out float distance) ? ray.GetPoint(distance) : Vector3.zero;
@@ -375,7 +383,7 @@ public class PathEditor : Editor
     }
 
     // Add a new node connected to the currently selected node.
-    private void AddNodeConnectedToSelected(Vector3 mousePos)
+    void AddNodeConnectedToSelected(Vector3 mousePos)
     {
         Undo.RegisterCompleteObjectUndo(path, "Add Node");
         path.dirty = true;
@@ -393,7 +401,7 @@ public class PathEditor : Editor
     }
 
     // When holding CTRL, check if the mouse is near a connection for node insertion.
-    private void CheckForLineInsertion(Vector3 mousePos)
+    void CheckForLineInsertion(Vector3 mousePos)
     {
         float minDistance = 0.5f;
         for (int i = 0; i < path.connections.Count; i++)
@@ -423,7 +431,7 @@ public class PathEditor : Editor
     }
 
     // Insert a new node along a connection (splitting it into two connections).
-    private void InsertNodeOnLine()
+    void InsertNodeOnLine()
     {
         if (insertTargetNodeA == -1 || insertTargetNodeB == -1) return;
 
@@ -461,7 +469,7 @@ public class PathEditor : Editor
     }
 
     // Returns the closest point on a line segment.
-    private Vector3 ClosestPointOnSegment(Vector3 a, Vector3 b, Vector3 p)
+    Vector3 ClosestPointOnSegment(Vector3 a, Vector3 b, Vector3 p)
     {
         Vector3 ap = p - a, ab = b - a;
         float t = Mathf.Clamp01(Vector3.Dot(ap, ab) / Vector3.Dot(ab, ab));
@@ -469,7 +477,7 @@ public class PathEditor : Editor
     }
 
     // Draw nodes and connections, highlighting hovered/selected elements.
-    private void DrawNodesAndConnections()
+    void DrawNodesAndConnections()
     {
         path.DrawConnections();
 

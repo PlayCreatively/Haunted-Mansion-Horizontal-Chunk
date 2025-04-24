@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(Path))]
@@ -23,6 +24,18 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
     private List<Vector2> lastGenerated2DVertices = null;  // Store 2D vertices
     private List<int> lastGeneratedTriangles = null;
+
+    // regenerate the path on engine start
+    [InitializeOnLoadMethod]
+    static void OnProjectLoadedInEditor()
+    {
+        // Find all Path components in the scene and regenerate them.
+        PathPolygonMeshGenerator[] paths = FindObjectsByType<PathPolygonMeshGenerator>(FindObjectsSortMode.None);
+        foreach (var path in paths)
+        {
+            path.Generate2DPolygonMesh();
+        }
+    }
 
     void Awake()
     {

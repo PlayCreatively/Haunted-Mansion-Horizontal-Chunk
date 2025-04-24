@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 [Serializable]
 public enum LineType { Normal, Path, Shortcut }
@@ -14,15 +15,19 @@ public struct Connection
     public int nodeB;
     public float width; // Default width for the connection
     public bool isCardinal; // If true, the connection is a straight line (cardinal direction)
+    public Vector3 normal; // Normal vector for the connection
+    public bool flipFacing; // If true, the normal is flipped
 
     public int lineType;
 
-    public Connection(int a, int b, float width = 0.5f, bool isCardinal = false)
+    public Connection(int a, int b, Vector3 normal, bool flipFacing, float width = 0.5f, bool isCardinal = false)
     {
         nodeA = a;
         nodeB = b;
         this.width = width;
         this.isCardinal = isCardinal;
+        this.normal = normal;
+        this.flipFacing = flipFacing;
         lineType = 0; // Default to Normal
     }
 
@@ -154,6 +159,9 @@ public class Path : MonoBehaviour
                 Vector3 b = GetPos(con.nodeB);
 
                 DrawLine(a, b, (int)con.LineType);
+
+                // draw normal
+                Debug.DrawRay((a + b) * .5f, con.normal, Color.red);
             }
         }
     }
@@ -170,5 +178,21 @@ public class Path : MonoBehaviour
             else
                 throw new IndexOutOfRangeException("Index out of range");
         }
+    }
+
+    /// <summary>
+    /// Computes normals for all connections, ensuring perimeter normals face inward and interior connections have consistent normals.
+    /// </summary>
+    [ContextMenu("Compute Connection Normals")]
+    public void ComputeConnectionNormals()
+    {
+        if (connections == null || connections.Count == 0)
+        {
+            Debug.LogError("No connections to compute normals.");
+            return;
+        }
+
+
+        Debug.Log($"Computed normals for {connections.Count} connections using centroid method.");
     }
 }

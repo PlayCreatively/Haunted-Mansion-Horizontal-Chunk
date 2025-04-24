@@ -247,12 +247,12 @@ public class ManagedArray<T> where T : class
                 int newDir = i - index;
                 if(dir == null)
                 {
-                    Debug.Log($"New direction: {newDir} < null");
+                    //Debug.Log($"New direction: {newDir} < null");
                     dir = newDir;
                 }
                 else if (Math.Abs(newDir) < Math.Abs(dir.Value))
                 {
-                    Debug.Log($"New direction: {newDir} < {dir}");
+                    //Debug.Log($"New direction: {newDir} < {dir}");
                     dir = newDir;
                 }
             }

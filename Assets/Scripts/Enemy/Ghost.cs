@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[SelectionBase]
+
 public class Ghost : Enemy
 {
     protected override void Awake()

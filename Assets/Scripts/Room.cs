@@ -29,7 +29,7 @@ public class Room : MonoBehaviour
     float nonBookedTime = 0f;
 
     bool isDirty = false;
-    RoomState state;
+    public RoomState state;
     public Requirements requirements;
 
     RoomUI roomUI;
@@ -44,7 +44,7 @@ public class Room : MonoBehaviour
 
     void Awake()
     {
-        //Clean();
+        Clean();
 
         roomUI = Resources.Load<RoomUI>("RoomUI");
         Assert.IsNotNull(roomUI, "RoomUI prefab not found in Resources folder");
@@ -53,7 +53,11 @@ public class Room : MonoBehaviour
         roomUI.name = gameObject.name + " UI";
         roomUI.room = this;
 
-        CheckOut();
+    }
+
+    void Start()
+    {
+        CheckIn();
     }
 
     void Update()
@@ -99,6 +103,7 @@ public class Room : MonoBehaviour
 
     public void Clean()
     {
+        FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         isDirty = false;
         OnStateChange?.Invoke(state);
@@ -125,6 +130,7 @@ public class Room : MonoBehaviour
         OnRoomStateChange?.Invoke(this);
     }
 
+    [ContextMenu("Check Out")]
     public void CheckOut()
     {
         Debug.Log($"{gameObject.name} checked out", gameObject);
@@ -140,11 +146,17 @@ public class Room : MonoBehaviour
 
     public void ResourceEnter(CarriableType type, bool enter)
     {
-        if (state == RoomState.NonBooked)
+        if (state != RoomState.Occupied)
         {
             requirements[type] += enter ? -1 : 1;
             OnRequirementsChange?.Invoke(requirements);
             Debug.Log($"{gameObject.name} {type} {(enter ? "added" : "removed")}. Remaining: {requirements[type]}", gameObject);
+
+            if (requirements.IsFulfilled())
+            {
+                Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
+                Clean();
+            }
         }
     }
 
@@ -167,7 +179,7 @@ public class Room : MonoBehaviour
         public int[] resourceRequirement;
         public readonly int Count => resourceRequirement.Length;
 
-        static readonly int resourceTypeCount = Enum.GetValues(typeof(CarriableType)).Length;
+        static readonly int resourceTypeCount = 3;
 
         //bool cleaning;
 
@@ -185,13 +197,24 @@ public class Room : MonoBehaviour
 
             Requirements requirements = new(0,0,0);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
-                int resourceType = Random.Range(0, resourceTypeCount - 1);
+                int resourceType = Random.Range(0, resourceTypeCount);
                 requirements[resourceType] += Random.Range(minAmount, maxAmount);
             }
 
             return requirements;
+        }
+
+        public override readonly string ToString()
+        {
+            string result = "";
+            for (int i = 0; i < resourceRequirement.Length; i++)
+            {
+                if (resourceRequirement[i] > 0)
+                    result += $"{(CarriableType)i}: {resourceRequirement[i]} ";
+            }
+            return result;
         }
 
         public readonly bool IsFulfilled()

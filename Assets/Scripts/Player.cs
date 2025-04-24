@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,8 +8,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody)), SelectionBase]
 public class Player : MonoBehaviour
 {
+    public int playerIndex = 0;
+
     PlayerInput playerInput;
     Rigidbody rb;
+    Collider col;
     InteractiveHand hand;
     Transform visuals;
     ParticleSystem[] dashParticles;
@@ -19,6 +23,8 @@ public class Player : MonoBehaviour
     bool grounded;
     float dashValue = 0.5f;
     float jumpSquash = 0.5f;
+    bool stunned;
+    float skipForce;
 
 void Awake()
     {
@@ -26,21 +32,23 @@ void Awake()
         hand = GetComponentInChildren<InteractiveHand>();
         playerInput = GetComponent<PlayerInput>();
         visuals = transform.Find("Visuals");
+        col = GetComponent<Collider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
+
     }
 
     void Start()
     {
         List<InputDevice> devices = new(2);
+        for (int i = 0; i < Gamepad.all.Count; i++)
+        {
+            devices.Add(Gamepad.all[playerIndex]);
+        }
+
         if(Keyboard.current != null)
             devices.Add(Keyboard.current);
-        if (Gamepad.current != null)
-        {
-            devices.Add(Gamepad.current);
-            Debug.Log($"Gamepad found: {Gamepad.current}");
-        }
 
         playerInput.SwitchCurrentControlScheme(
             playerInput.defaultControlScheme,
@@ -84,6 +92,45 @@ void Awake()
         }
     }
 
+    public void Stun(Vector3 origin)
+    {
+        if(stunned) return;
+
+        var dir = transform.position - origin;
+        dir.y = 0;
+        dir.Normalize();
+        dir *= GameSettings.Instance.playerStunForce;
+        dir.y = 5;
+
+        rb.AddForce(dir, ForceMode.VelocityChange);
+
+        StartCoroutine(StunRoutine());
+    }
+
+    IEnumerator StunRoutine()
+    {
+        enabled = false;
+        SetStunned(true);
+        var physicsMat = col.material;
+        physicsMat.bounciness = 1f;
+        physicsMat.dynamicFriction = physicsMat.staticFriction = 0f;
+        physicsMat.bounceCombine = PhysicsMaterialCombine.Maximum;
+        physicsMat.frictionCombine = PhysicsMaterialCombine.Minimum;
+        float stunDuration = GameSettings.Instance.playerStunDuration;
+        yield return new WaitForSeconds(stunDuration);
+        col.material.bounciness = 0f;
+        physicsMat.dynamicFriction = physicsMat.staticFriction = .6f;
+        SetStunned(false);
+        enabled = true;
+    }
+
+    void SetStunned(bool value)
+    {
+        visuals.Find("Body").GetComponent<MeshRenderer>().material.SetColor("_Color", value ? Color.red : Color.cyan);
+        stunned = value;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
+    }
+
     public void Jump()
     {
         var velocity = rb.linearVelocity;
@@ -106,8 +153,10 @@ void Awake()
 
     void FixedUpdate()
     {
-        visuals.Squash(rb.linearVelocity.y / 15f + 1);
+        if(stunned)
+            return;
 
+        visuals.Squash(rb.linearVelocity.y / 15f + 1);
 
         if (grounded && playerInput.actions.FindAction("Jump").IsPressed())
             Jump();

@@ -26,6 +26,8 @@ public class GameSettings : ScriptableObject
     public float playerThrowAngle = 45f;
     public float playerDashSpeed = 5;
     public float playerDashDuration = 0.5f;
+    public float playerStunForce = 1;
+    public float playerStunDuration = 1;
     [Header("Enemy Settings")]
     public EnemySettings Ghost;
     public EnemySettings Mummy, GreenGoo, Spider, TrashMonster;
@@ -81,6 +83,7 @@ public class GameSettings : ScriptableObject
     public ResourceInfo toiletPaper;
     public ResourceInfo towel;
     public ResourceInfo bedSheet;
+
     public ResourceInfo GetResourceInfo(CarriableType type)
     {
         return type switch

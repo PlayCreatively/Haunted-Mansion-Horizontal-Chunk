@@ -7,6 +7,7 @@ public class EnemySettings
     public float speed = 1.0f;
 }
 
+[SelectionBase]
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        FMODAudioManager.Instance.TriggerLandingOnTheMummySfx(0);
         rb.detectCollisions = false;
         rb.freezeRotation = false;
         rb.useGravity = false;
@@ -116,6 +118,10 @@ public class Enemy : MonoBehaviour
             {
                 collision.gameObject.GetComponent<Player>().Jump();
                 Die();
+            }
+            else // player stunned
+            {
+                collision.gameObject.GetComponent<Player>().Stun(transform.position);
             }
         }
     }

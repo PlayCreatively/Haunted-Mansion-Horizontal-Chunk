@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 16ea928e2bbb50441a86a7ed68f42659, type: 2}
+  - {fileID: 2100000, guid: 8d253161739759442be7001fe86b6cfb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 2739776180189379971}
   - component: {fileID: 1019089982228092497}
   m_Layer: 0
-  m_Name: Bedsheet
+  m_Name: M_BEDSHEET
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff587ea1ff2085a44ba50c722a949aa4, type: 2}
+  - {fileID: 2100000, guid: 99c14827d451abe42ab1a17278e625b9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -44,8 +44,6 @@ public class Room : MonoBehaviour
 
     void Awake()
     {
-        Clean();
-
         roomUI = Resources.Load<RoomUI>("RoomUI");
         Assert.IsNotNull(roomUI, "RoomUI prefab not found in Resources folder");
         GameObject canvas = GameObject.Find("Canvas");

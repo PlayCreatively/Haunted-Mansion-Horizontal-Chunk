@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.IO;
 
 [Serializable]
 public enum LineType { Normal, Path, Shortcut }
@@ -195,4 +196,25 @@ public class Path : MonoBehaviour
 
         Debug.Log($"Computed normals for {connections.Count} connections using centroid method.");
     }
+
+
+    [ContextMenu("Recenter room")]
+    public void RecenterRoom()
+    {
+        Vector3 center = Vector3.zero;
+        foreach (var node in nodes)
+        {
+            center += new Vector3(node.x, 0, node.y);
+        }
+        center /= nodes.Count;
+
+        center = Snapping.Snap(center, UnityEditor.EditorSnapSettings.move);
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            nodes[i] -= new Vector2(center.x, center.z);
+        }
+        transform.position += center;
+    }
+
 }

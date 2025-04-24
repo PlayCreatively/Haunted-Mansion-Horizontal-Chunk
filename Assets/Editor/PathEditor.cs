@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
+using log4net.Util;
 
 [CustomEditor(typeof(Path))]
 public class PathEditor : Editor
@@ -28,6 +29,23 @@ public class PathEditor : Editor
         {
             SetEditMode(false);
         }
+    }
+
+    [MenuItem("Tools/Path Editor/Reset All Paths")]
+    [InitializeOnLoadMethod]
+    static void OnProjectLoadedInEditor()
+    {
+        foreach (var path in FindObjectsByType<Path>(0))
+        {
+            path.RecenterRoom();
+        }
+
+        // rebuild all paths
+        foreach (var path in FindObjectsByType<PathPolygonMeshGenerator>(0))
+        {
+            path.Generate2DPolygonMesh();
+        }
+
     }
 
     public override void OnInspectorGUI()

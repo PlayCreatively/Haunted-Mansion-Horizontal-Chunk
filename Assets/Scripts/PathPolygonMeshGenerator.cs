@@ -616,4 +616,13 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         UnityEditor.EditorApplication.RepaintHierarchyWindow();
     }
 #endif
+        public static void CleanOrphanWalls()
+        {
+            // Destroy all walls without parent
+            foreach (var wall in GameObject.FindGameObjectsWithTag("Wall"))
+                if (wall.transform.parent == null)
+                {
+                    DestroyImmediate(wall);
+                }
+        }
 }

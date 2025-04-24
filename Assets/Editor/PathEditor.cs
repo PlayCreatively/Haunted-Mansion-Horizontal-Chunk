@@ -148,6 +148,8 @@ public class PathEditor : Editor
             Undo.PerformUndo();
             path.dirty = true;
             e.Use();
+
+            PathPolygonMeshGenerator.CleanOrphanWalls();
         }
         //redo
         else if (e.keyCode == KeyCode.Z && e.shift && (e.control || e.command))
@@ -156,6 +158,8 @@ public class PathEditor : Editor
             Undo.PerformRedo();
             path.dirty = true;
             e.Use();
+
+            PathPolygonMeshGenerator.CleanOrphanWalls();
         }
         else
         {

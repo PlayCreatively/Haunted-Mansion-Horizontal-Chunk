@@ -31,6 +31,9 @@ public class FMODAudioManager : MonoBehaviour
     private EventInstance newGreenGooSpawnedInstance;
     private EventInstance newSpiderSpawnedInstance;
     private EventInstance newTrashMonsterSpawnedInstance;
+    
+    //Event instances for environment
+    private EventInstance roomCleanedInstance;
 
     //Assigning paths
     void Awake()
@@ -67,6 +70,8 @@ public class FMODAudioManager : MonoBehaviour
         itemThrownInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item thrown");
         itemDroppedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item dropped");
         stunnedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/stunned");
+        //==============//
+        roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
     }
 
     //Starting looped tracks
@@ -159,6 +164,12 @@ public class FMODAudioManager : MonoBehaviour
     public void TriggerStunnedSfx() //Plays a stunned SFX. No parameter
     {
         stunnedInstance.start();
+    }
+    
+    //Public methods: Environment
+    public void TriggerRoomCleanedSfx() //Plays room cleaned SFX. No parameter
+    {
+        roomCleanedInstance.start();
     }
     //Cleanup
     private void OnDestroy()

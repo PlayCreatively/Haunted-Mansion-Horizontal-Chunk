@@ -33,6 +33,7 @@ public class FMODAudioManager : MonoBehaviour
     private EventInstance newTrashMonsterSpawnedInstance;
     
     //Event instances for environment
+    private EventInstance bgMusicInstance;
     private EventInstance roomCleanedInstance;
 
     //Assigning paths
@@ -71,13 +72,14 @@ public class FMODAudioManager : MonoBehaviour
         itemDroppedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item dropped");
         stunnedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/stunned");
         //==============//
+        bgMusicInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/bg music");
         roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
     }
 
     //Starting looped tracks
     void Start()
     {
-        //exampleInstance.start();
+        bgMusicInstance.start();
     }
 
     //Public methods: MONSTERS

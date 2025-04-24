@@ -84,7 +84,7 @@ void Awake()
         }
     }
 
-    void Jump()
+    public void Jump()
     {
         var velocity = rb.linearVelocity;
         velocity.y = GameSettings.Instance.playerJumpForce;

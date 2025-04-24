@@ -14,10 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpeed: 2
   playerJumpForce: 6
-  playerThrowForce: 5
+  playerThrowForce: 6.5
   playerThrowAngle: 45
   playerDashSpeed: 7
   playerDashDuration: 0.5
+  Ghost:
+    speed: 1
+  Mummy:
+    speed: 1
+  GreenGoo:
+    speed: 1
+  Spider:
+    speed: 1
+  TrashMonster:
+    speed: 1
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}

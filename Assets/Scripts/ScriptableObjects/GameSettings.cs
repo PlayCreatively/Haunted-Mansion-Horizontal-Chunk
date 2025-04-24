@@ -26,6 +26,9 @@ public class GameSettings : ScriptableObject
     public float playerThrowAngle = 45f;
     public float playerDashSpeed = 5;
     public float playerDashDuration = 0.5f;
+    [Header("Enemy Settings")]
+    public EnemySettings Ghost;
+    public EnemySettings Mummy, GreenGoo, Spider, TrashMonster;
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
     [Header("Room Settings")]

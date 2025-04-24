@@ -101,6 +101,11 @@ public class Carriable : MonoBehaviour, IInteractable
         rb.linearVelocity = velocity;
     }
 
+    public void SetAngularVelocity(Vector3 velocity)
+    {
+        rb.angularVelocity = velocity;
+    }
+
     internal void EnableVisibility(bool isItemsVisible)
     {
         meshRend.enabled = isItemsVisible;

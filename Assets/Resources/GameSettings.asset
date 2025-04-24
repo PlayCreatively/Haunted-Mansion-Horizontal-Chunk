@@ -35,8 +35,8 @@ MonoBehaviour:
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}
   - {fileID: 1652439633196221176, guid: a7ed6f98d047dd240b343c273e04a5a8, type: 3}
   - {fileID: 0}
-  minBookedTime: 15
-  maxBookedTime: 20
+  minBookedTime: 30
+  maxBookedTime: 60
   minStayTime: 5
   maxStayTime: 5
   minNonBookedTime: 5

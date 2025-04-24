@@ -215,6 +215,8 @@ public class Path : MonoBehaviour
             nodes[i] -= new Vector2(center.x, center.z);
         }
         transform.position += center;
+
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
 }

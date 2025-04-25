@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 63410613797413540}
   - component: {fileID: 1941258273256909637}
   - component: {fileID: 6562323755159726274}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Handrail
   m_TagString: Wall
   m_Icon: {fileID: 0}

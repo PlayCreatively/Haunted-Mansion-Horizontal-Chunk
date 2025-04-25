@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public interface IInteractable : IHighlightable
@@ -72,6 +74,8 @@ public class Carriable : MonoBehaviour, IInteractable
     Rigidbody rb;
     MeshRenderer meshRend;
 
+    bool highlighted = false;
+
     protected virtual void Awake()
     {
         col = GetComponentInChildren<Collider>();
@@ -81,7 +85,23 @@ public class Carriable : MonoBehaviour, IInteractable
 
     public void Highlight(bool value, InteractiveHand interactiveHand)
     {
+        highlighted = value;
         meshRend.material.color = value ? Color.yellow : Color.white;
+    }
+
+    public void Destroy()
+    {
+        StartCoroutine(WaitToDestroy());
+        enabled = false;
+    }
+
+    IEnumerator WaitToDestroy()
+    {
+        while (highlighted)
+        {
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 
     public void Interact(InteractiveHand hand) => hand.PickUp(this);

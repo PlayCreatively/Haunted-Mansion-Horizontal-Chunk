@@ -25,8 +25,6 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
         deathBounceCurve = Resources.Load<Curve>("EnemyDeathBounce");
-
-        //Invoke(nameof(Die), 1f);
     }
 
     protected virtual void OnEnable()
@@ -103,18 +101,21 @@ public class Enemy : MonoBehaviour
         {
             visuals.forward = moveDir;
         }
+
+        // check for wall
+        if (Physics.SphereCast(transform.position, .2f , moveDir, out RaycastHit hit, .25f, LayerMask.GetMask("Wall")))
+        {
+            ReflectOffWall(hit.normal);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        Vector3 dir = collision.contacts[0].point - transform.position;
-        ReflectOffWall(dir.normalized);
-
         if (collision.gameObject.CompareTag("Player"))
         {
             float heightDiff = collision.transform.position.y - transform.position.y;
 
-            if(heightDiff > 0)
+            if (heightDiff > 0)
             {
                 collision.gameObject.GetComponent<Player>().Jump();
                 Die();

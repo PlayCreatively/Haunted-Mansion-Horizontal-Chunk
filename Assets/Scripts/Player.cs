@@ -24,7 +24,6 @@ public class Player : MonoBehaviour
     float dashValue = 0.5f;
     float jumpSquash = 0.5f;
     bool stunned;
-    float skipForce;
 
 void Awake()
     {
@@ -119,7 +118,6 @@ void Awake()
         float stunDuration = GameSettings.Instance.playerStunDuration;
         yield return new WaitForSeconds(stunDuration);
         col.material.bounciness = 0f;
-        physicsMat.dynamicFriction = physicsMat.staticFriction = .6f;
         SetStunned(false);
         enabled = true;
     }
@@ -176,8 +174,14 @@ void Awake()
         if(walkParticles.isPlaying && (!isMoving || !grounded))
             walkParticles.Stop();
 
+        grounded = false;
 
-            grounded = false;
+        // check if out of bounds
+        if (transform.position.y < -10)
+        {
+            rb.linearVelocity = Vector3.zero;
+            transform.position = new Vector3(2.5f, 0, 12.25f);
+        }
     }
 
     void OnCollisionStay(Collision collision)

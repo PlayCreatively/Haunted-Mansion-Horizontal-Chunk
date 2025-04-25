@@ -25,18 +25,18 @@ public class DetectRoomEntrance : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item))
+        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item) && room.IsDirty)
         {
             room.ResourceEnter(item.type, true);
+            item.Destroy();
         }
     }
-    private void OnCollisionExit(Collision collision)
-    {
+    //private void OnCollisionExit(Collision collision)
+    //{
 
-        if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item))
-        {
-            room.ResourceEnter(item.type, false);
-        }
-    }
+    //    if (TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item) && room.IsDirty)
+    //    {
+    //        room.ResourceEnter(item.type, false);
+    //    }
+    //}
 }

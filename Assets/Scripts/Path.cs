@@ -197,7 +197,7 @@ public class Path : MonoBehaviour
         Debug.Log($"Computed normals for {connections.Count} connections using centroid method.");
     }
 
-
+# if UNITY_EDITOR
     [ContextMenu("Recenter room")]
     public void RecenterRoom()
     {
@@ -218,5 +218,6 @@ public class Path : MonoBehaviour
 
         UnityEditor.EditorUtility.SetDirty(this);
     }
+#endif
 
 }

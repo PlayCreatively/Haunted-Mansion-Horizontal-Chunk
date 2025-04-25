@@ -76,7 +76,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     /// TODO: validate
     bool IsCloserThanFocused(IInteractable other)
     {
-        if(focusedInteractable is MonoBehaviour focused) // not null
+        if(focusedInteractable is MonoBehaviour focused && focused != null) // not null
         {
             var otherMono = other as MonoBehaviour;
 

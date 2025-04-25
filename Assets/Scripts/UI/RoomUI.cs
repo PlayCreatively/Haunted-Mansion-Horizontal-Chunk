@@ -20,6 +20,8 @@ public class RoomUI : MonoBehaviour
         bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
         room.OnStateChange += UpdateRequirementsUI;
         room.OnRequirementsChange += UpdateRequirementsUI;
+
+        gameObject.SetActive(false);
     }
 
     void Update()

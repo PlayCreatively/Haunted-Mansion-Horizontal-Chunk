@@ -17,9 +17,9 @@ MonoBehaviour:
   playerThrowForce: 6.5
   playerThrowAngle: 45
   playerDashSpeed: 7
-  playerDashDuration: 0.5
+  playerDashDuration: 0.8
   playerStunForce: 2.5
-  playerStunDuration: 1.8
+  playerStunDuration: 1.5
   Ghost:
     speed: 1
   Mummy:
@@ -39,7 +39,7 @@ MonoBehaviour:
   maxBookedTime: 70
   minStayTime: 5
   maxStayTime: 180
-  minNonBookedTime: 60
+  minNonBookedTime: 30
   maxNonBookedTime: 120
   requirementSettings:
     minAmount: 1

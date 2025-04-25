@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public int playerIndex = 0;
+    public bool controller = false;
 
     PlayerInput playerInput;
     Rigidbody rb;
@@ -42,9 +43,11 @@ void Awake()
     {
         List<InputDevice> devices = new(2);
         for (int i = 0; i < Gamepad.all.Count; i++)
-        {
-            devices.Add(Gamepad.all[playerIndex]);
-        }
+            if (i == playerIndex)
+            {
+                devices.Add(Gamepad.all[playerIndex]);
+                break;
+            }
 
         if(Keyboard.current != null)
             devices.Add(Keyboard.current);
@@ -101,7 +104,7 @@ void Awake()
         dir *= GameSettings.Instance.playerStunForce;
         dir.y = 5;
 
-        rb.AddForce(dir, ForceMode.VelocityChange);
+        rb.linearVelocity = dir;
 
         StartCoroutine(StunRoutine());
     }

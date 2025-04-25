@@ -6,8 +6,6 @@ public class DetectRoomEntrance : MonoBehaviour
     {
         // Get the MeshFilter component attached to this GameObject
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        var meshCollider = gameObject.AddComponent<MeshCollider>();
-        meshCollider.sharedMesh = meshFilter.mesh;
         // Check if the MeshFilter is not null and has a mesh
         //if (meshFilter != null && meshFilter.mesh != null)
         //{

@@ -262,6 +262,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6032488525284559525, guid: d357d5dbd9941d84389eb944ff4cced3, type: 3}
+      propertyPath: playerIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6805378075776128681, guid: d357d5dbd9941d84389eb944ff4cced3, type: 3}
+      propertyPath: m_DefaultControlScheme
+      value: P2Keyboard
+      objectReference: {fileID: 0}
     - target: {fileID: 6805378075776128681, guid: d357d5dbd9941d84389eb944ff4cced3, type: 3}
       propertyPath: m_NeverAutoSwitchControlSchemes
       value: 1
@@ -346,7 +354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6805378075776128681, guid: d357d5dbd9941d84389eb944ff4cced3, type: 3}
       propertyPath: m_DefaultControlScheme
-      value: P2Keyboard
+      value: Keyboard&Mouse
       objectReference: {fileID: 0}
     - target: {fileID: 6805378075776128681, guid: d357d5dbd9941d84389eb944ff4cced3, type: 3}
       propertyPath: m_NeverAutoSwitchControlSchemes

@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f957d0c9e274e941b94b0870a86b2cb, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
+  UsingControllers: 1
   playerSpeed: 2
   playerJumpForce: 6
   playerThrowForce: 6.5
   playerThrowAngle: 45
-  playerDashSpeed: 7
-  playerDashDuration: 0.8
+  playerDashSpeed: 6
+  playerDashDuration: 0.6
   playerStunForce: 2.5
-  playerStunDuration: 1.5
+  playerStunDuration: 1.25
   Ghost:
     speed: 1
   Mummy:
@@ -38,7 +39,7 @@ MonoBehaviour:
   minBookedTime: 50
   maxBookedTime: 70
   minStayTime: 5
-  maxStayTime: 180
+  maxStayTime: 60
   minNonBookedTime: 30
   maxNonBookedTime: 120
   requirementSettings:

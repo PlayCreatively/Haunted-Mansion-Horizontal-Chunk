@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public interface IInteractable : IHighlightable
 {
@@ -91,12 +92,23 @@ public class Carriable : MonoBehaviour, IInteractable
 
     public void Destroy()
     {
-        StartCoroutine(WaitToDestroy());
-        enabled = false;
+        EnablePhysics(false);
+
+        StartCoroutine(DestroyRoutine());
     }
 
-    IEnumerator WaitToDestroy()
+    IEnumerator DestroyRoutine()
     {
+        Timer shrinkTimer = new(.5f);
+
+        while(!shrinkTimer.Finished)
+        {
+            yield return null;
+            transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, shrinkTimer);
+        }
+
+        EnableVisibility(false);
+
         while (highlighted)
         {
             yield return null;
@@ -108,7 +120,11 @@ public class Carriable : MonoBehaviour, IInteractable
 
     public void EnableCollider(bool value) => col.enabled = value;
 
-    public void EnableRigidbody(bool value) => rb.isKinematic = !value;
+    public void EnableRigidbody(bool value)
+    {
+        rb.detectCollisions = value;
+        rb.isKinematic = !value;
+    }
 
     public void EnablePhysics(bool value)
     {

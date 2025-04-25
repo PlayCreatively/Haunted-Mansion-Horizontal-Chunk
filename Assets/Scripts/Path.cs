@@ -202,11 +202,13 @@ public class Path : MonoBehaviour
     public void RecenterRoom()
     {
         Vector3 center = Vector3.zero;
-        foreach (var node in nodes)
-        {
-            center += new Vector3(node.x, 0, node.y);
-        }
-        center /= nodes.Count;
+
+        center = GetComponent<MeshFilter>().sharedMesh.bounds.center;
+        //foreach (var node in nodes)
+        //{
+        //    center += new Vector3(node.x, 0, node.y);
+        //}
+        //center /= nodes.Count;
 
         center = Snapping.Snap(center, UnityEditor.EditorSnapSettings.move);
 

@@ -1,32 +1,29 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(Path))]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
 public class PathPolygonMeshGenerator : MonoBehaviour
 {
 #if UNITY_EDITOR
-    public Material meshMaterial;
-
-    private Path pathComponent;
-    private MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
+    Path pathComponent;
+    MeshFilter meshFilter;
+    MeshRenderer meshRenderer;
+    MeshCollider meshCollider;
 
     [Header("Debugging")]
     public bool enableDebugLogging = true;
     public bool visualizeTriangles = true;
     public Color triangleGizmoColor = Color.yellow;
 
-    private List<Vector2> lastGenerated2DVertices = null;  // Store 2D vertices
-    private List<int> lastGeneratedTriangles = null;
+    List<Vector2> lastGenerated2DVertices = null;  // Store 2D vertices
+    List<int> lastGeneratedTriangles = null;
 
     // regenerate the path on engine start
-    [InitializeOnLoadMethod]
+    [UnityEditor.InitializeOnLoadMethod]
     static void OnProjectLoadedInEditor()
     {
         // Find all Path components in the scene and regenerate them.
@@ -42,10 +39,15 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         pathComponent = GetComponent<Path>();
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        MeshCollider meshCollider = GetComponent<MeshCollider>();
-        meshCollider.sharedMesh = meshFilter.sharedMesh;
-
         meshRenderer.staticShadowCaster = true;
+        
+        if(!TryGetComponent(out meshCollider))
+        {
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+            UnityEditor.EditorUtility.SetDirty(meshCollider);
+        }
+
+        meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
     }
 
     void Update()
@@ -101,6 +103,42 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         }
 
         Generate2DPolygonMesh();
+    }
+
+    public Mesh ExtrudeOnY(Mesh mesh, float units)
+    {
+        if (mesh == null)
+        {
+            Debug.LogError("Mesh is null.", this);
+            return null;
+        }
+        // Create a new mesh for the extruded version
+        Mesh extrudedMesh = new Mesh();
+        extrudedMesh.name = "ExtrudedMesh";
+        // Get the original vertices and triangles
+        Vector3[] originalVertices = mesh.vertices;
+        int[] originalTriangles = mesh.triangles;
+        // Create new vertices for the extruded mesh
+        Vector3[] extrudedVertices = new Vector3[originalVertices.Length * 2];
+        for (int i = 0; i < originalVertices.Length; i++)
+        {
+            extrudedVertices[i] = originalVertices[i];
+            extrudedVertices[i + originalVertices.Length] = originalVertices[i] + Vector3.up * units; // Extrude up by units
+        }
+        // Create new triangles for the extruded mesh
+        int[] extrudedTriangles = new int[originalTriangles.Length * 2];
+        for (int i = 0; i < originalTriangles.Length; i++)
+        {
+            extrudedTriangles[i] = originalTriangles[i];
+            extrudedTriangles[i + originalTriangles.Length] = originalTriangles[i] + originalVertices.Length; // Offset by the number of vertices in the first half
+        }
+        // Set the vertices and triangles of the new mesh
+        extrudedMesh.vertices = extrudedVertices;
+        extrudedMesh.triangles = extrudedTriangles;
+        // Recalculate normals and bounds
+        extrudedMesh.RecalculateNormals();
+        extrudedMesh.RecalculateBounds();
+        return extrudedMesh;
     }
 
     /// <summary>
@@ -160,56 +198,12 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
         // 7. Assign
         meshFilter.sharedMesh = mesh;
-        if (meshMaterial != null) meshRenderer.sharedMaterial = meshMaterial;
-        else meshRenderer.enabled = true;
 
         if (enableDebugLogging)
             Debug.Log($"Successfully generated mesh with {finalVertices3D.Count} vertices and {triangles.Count / 3} triangles.", this);
         pathComponent.dirty = false;
 
         SpawnConnectionPrefabs();
-    }
-
-    /// <summary>
-    /// Moves the floor mesh collider slightly towards the camera and tags all overlapping child walls.
-    /// </summary>
-    void TagNearCameraWalls()
-    {
-        // Ensure the MeshCollider exists
-        MeshCollider floorCollider = GetComponent<MeshCollider>();
-        if (floorCollider == null || floorCollider.sharedMesh == null)
-        {
-            Debug.LogError("Floor MeshCollider or its shared mesh is missing.");
-            return;
-        }
-
-        // Create a temporary collider slightly offset towards the camera
-        Vector3 cameraDirection = (Camera.main != null) ? Camera.main.transform.forward : new Vector3(-1, -1, 1);
-        Vector3 offset = cameraDirection.normalized * 0.1f; // Small offset towards the camera
-
-        GameObject tempColliderObject = new GameObject("TempCollider");
-        tempColliderObject.transform.SetParent(transform, false);
-        tempColliderObject.transform.position = transform.position + offset;
-
-        MeshCollider tempCollider = tempColliderObject.AddComponent<MeshCollider>();
-        tempCollider.sharedMesh = floorCollider.sharedMesh;
-        tempCollider.convex = true; // Convex is required for overlap checks
-
-        // Find and tag overlapping child walls
-        foreach (Transform child in transform)
-        {
-            if (child.CompareTag("Wall")) // Assuming walls are tagged as "Wall"
-            {
-                Collider wallCollider = child.GetComponent<Collider>();
-                if (wallCollider != null && tempCollider.bounds.Intersects(wallCollider.bounds))
-                {
-                    child.tag = "NearCameraWall"; // Tag the wall as "NearCameraWall"
-                }
-            }
-        }
-
-        // Clean up the temporary collider
-        DestroyImmediate(tempColliderObject);
     }
 
     /// <summary>
@@ -417,97 +411,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         return (sideA == sideB) && (sideB == sideC);
     }
     #endregion
-
-    [Header("Room Trigger Settings")]
-    public float triggerHeight = 3f; // How high the trigger volume should be
-
-    [ContextMenu("Generate Room Trigger")]
-    public void GenerateRoomTrigger()
-    {
-        // Ensure the floor mesh is generated and we have the 2D vertices.
-        if (lastGenerated2DVertices == null || lastGenerated2DVertices.Count < 3)
-        {
-            Generate2DPolygonMesh();
-            if (lastGenerated2DVertices == null || lastGenerated2DVertices.Count < 3)
-            {
-                Debug.LogError("Not enough vertices to generate room trigger.");
-                return;
-            }
-        }
-
-        // Create an extruded mesh from the 2D polygon.
-        Mesh triggerMesh = new Mesh();
-        List<Vector3> vertices = new List<Vector3>();
-        int n = lastGenerated2DVertices.Count;
-
-        // Bottom vertices (y = 0)
-        for (int i = 0; i < n; i++)
-        {
-            Vector2 v = lastGenerated2DVertices[i];
-            vertices.Add(new Vector3(v.x, 0f, v.y));
-        }
-        // Top vertices (y = triggerHeight)
-        for (int i = 0; i < n; i++)
-        {
-            Vector2 v = lastGenerated2DVertices[i];
-            vertices.Add(new Vector3(v.x, triggerHeight, v.y));
-        }
-
-        List<int> tris = new List<int>();
-
-        // Bottom face: use the original triangulation (assumed to be in proper winding order).
-        tris.AddRange(lastGeneratedTriangles);
-
-        // Top face: reverse the winding order, offset by n (top vertices start at index n).
-        for (int i = 0; i < lastGeneratedTriangles.Count; i += 3)
-        {
-            int a = lastGeneratedTriangles[i] + n;
-            int b = lastGeneratedTriangles[i + 1] + n;
-            int c = lastGeneratedTriangles[i + 2] + n;
-            // Reverse order so normals point outward.
-            tris.Add(c);
-            tris.Add(b);
-            tris.Add(a);
-        }
-
-        // Side faces: for each edge in the polygon, create a quad (two triangles).
-        for (int i = 0; i < n; i++)
-        {
-            int next = (i + 1) % n;
-            int bottomA = i;
-            int bottomB = next;
-            int topA = i + n;
-            int topB = next + n;
-
-            // First triangle of the side quad.
-            tris.Add(bottomA);
-            tris.Add(bottomB);
-            tris.Add(topB);
-
-            // Second triangle of the side quad.
-            tris.Add(bottomA);
-            tris.Add(topB);
-            tris.Add(topA);
-        }
-
-        triggerMesh.SetVertices(vertices);
-        triggerMesh.SetTriangles(tris, 0);
-        triggerMesh.RecalculateNormals();
-        triggerMesh.RecalculateBounds();
-
-        // Create a child GameObject to hold the trigger collider.
-        GameObject triggerObj = new GameObject("RoomTrigger");
-        triggerObj.transform.SetParent(transform, false);
-        triggerObj.transform.localPosition = Vector3.zero;
-
-        // Add a MeshCollider, assign the extruded mesh, and set it as a trigger.
-        MeshCollider mc = triggerObj.AddComponent<MeshCollider>();
-        mc.sharedMesh = triggerMesh;
-        mc.convex = false;  // Allows concave shape for static triggers.
-        mc.isTrigger = true;
-
-        Debug.Log("Room trigger generated.");
-    }
 
     #region UV Calculation
     private Vector2[] CalculatePlanarUVs2D(List<Vector2> vertices2D)

@@ -9,7 +9,6 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public int playerIndex = 0;
-    public bool controller = false;
 
     PlayerInput playerInput;
     Rigidbody rb;
@@ -41,21 +40,20 @@ void Awake()
 
     void Start()
     {
-        List<InputDevice> devices = new(2);
-        for (int i = 0; i < Gamepad.all.Count; i++)
-            if (i == playerIndex)
-            {
-                devices.Add(Gamepad.all[playerIndex]);
-                break;
-            }
-
-        if(Keyboard.current != null)
-            devices.Add(Keyboard.current);
-
-        playerInput.SwitchCurrentControlScheme(
-            playerInput.defaultControlScheme,
-            devices.ToArray() // Use the devices array
-        );
+        if(GameSettings.Instance.UsingControllers)
+        {
+            for (int i = 0; i < Gamepad.all.Count; i++)
+                if (i == playerIndex)
+                {
+                    Debug.Log($"Player {playerIndex} using {Gamepad.all[i].name}");
+                    playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.all[playerIndex]);
+                    break;
+                }
+        }
+        else
+        {
+            playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "KeyboardMouse" : "P2Keyboard", Keyboard.current);
+        }
 
         playerInput.actions["Move"].performed += ctx => moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
         playerInput.actions["Move"].canceled += _ => moveInput = Vector2.zero;

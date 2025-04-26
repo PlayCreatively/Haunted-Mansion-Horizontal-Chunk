@@ -8,38 +8,43 @@ public class FMODAudioManager : MonoBehaviour
     public static FMODAudioManager Instance { get; private set; } //Singleton instance
 
     //Event Instances for enemy SFX
-    private EventInstance landingOnTheGhostInstance;
-    private EventInstance landingOnTheSpiderInstance;
-    private EventInstance landingOnTheGreenGooInstance;
-    private EventInstance landingOnTheLTrashMonsterInstance;
-    private EventInstance landingOnTheMTrashMonsterInstance;
-    private EventInstance landingOnTheSTrashMonsterInstance;
-    private EventInstance landingOnTheMummyInstance;
-    private EventInstance landingOnTheCarpetMonsterInstance;
-    
+    EventInstance landingOnTheGhostInstance;
+    EventInstance landingOnTheSpiderInstance;
+    EventInstance landingOnTheGreenGooInstance;
+    EventInstance landingOnTheLTrashMonsterInstance;
+    EventInstance landingOnTheMTrashMonsterInstance;
+    EventInstance landingOnTheSTrashMonsterInstance;
+    EventInstance landingOnTheMummyInstance;
+    EventInstance landingOnTheCarpetMonsterInstance;
+
     //Event instances for character SFX
-    private EventInstance jumpingOffTheBalconyInstance;
-    private EventInstance onDashStartsInstance;
-    private EventInstance itemThrownInstance;
-    private EventInstance itemPickedUpInstance;
-    private EventInstance itemDroppedInstance;
-    private EventInstance stunnedInstance;
-    
+    EventInstance jumpingOffTheBalconyInstance;
+    EventInstance onDashStartsInstance;
+    EventInstance itemThrownInstance;
+    EventInstance itemPickedUpInstance;
+    EventInstance itemDroppedInstance;
+    EventInstance stunnedInstance;
+
     //Event instances for new spawn SFX
-    private EventInstance newGhostSpawnedInstance;
-    private EventInstance newMummySpawnedInstance;
-    private EventInstance newGreenGooSpawnedInstance;
-    private EventInstance newSpiderSpawnedInstance;
-    private EventInstance newTrashMonsterSpawnedInstance;
-    
+    EventInstance newGhostSpawnedInstance;
+    EventInstance newMummySpawnedInstance;
+    EventInstance newGreenGooSpawnedInstance;
+    EventInstance newSpiderSpawnedInstance;
+    EventInstance newTrashMonsterSpawnedInstance;
+
     //Event instances for environment
-    private EventInstance bgMusicInstance;
-    private EventInstance roomCleanedInstance;
+    EventInstance bgMusicInstance;
+
+    //Event instances for room
+    EventInstance roomCleanedInstance;
+    EventInstance roomCheckOutInstance; // TODO: Implement in FMOD
+    EventInstance roomBookedInstance; // TODO: Implement in FMOD
+    EventInstance ResourcePlacedInRoomInstance; // TODO: Implement in FMOD
 
     //Assigning paths
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -143,36 +148,32 @@ public class FMODAudioManager : MonoBehaviour
     }
 
     //Public methods: CHARACTER
-    public void TriggerItemThrownSfx() //Plays an item thrown SFX. No parameter
-    {
-        itemThrownInstance.start();
-    }
-    public void TriggerJumpingOffTheBalconySfx() //Plays a jumping off the balcony SFX. No parameter
-    {
-        jumpingOffTheBalconyInstance.start();
-    }
-    public void TriggerOnDashStartsSfx() //Plays a dash SFX. No parameter
-    {
-        onDashStartsInstance.start();
-    }
-    public void TriggerItemDroppedSfx() //Plays an item dropped SFX. No parameter
-    {
-        itemDroppedInstance.start();
-    }
-    public void TriggerItemPickedUpSfx() //Plays an item picked up SFX. No parameter
-    {
-        itemPickedUpInstance.start();
-    }
-    public void TriggerStunnedSfx() //Plays a stunned SFX. No parameter
-    {
-        stunnedInstance.start();
-    }
-    
-    //Public methods: Environment
-    public void TriggerRoomCleanedSfx() //Plays room cleaned SFX. No parameter
-    {
-        roomCleanedInstance.start();
-    }
+    //Plays an item thrown SFX. No parameter
+    public void TriggerItemThrownSfx() => itemThrownInstance.start();
+    //Plays a jumping off the balcony SFX. No parameter
+    public void TriggerJumpingOffTheBalconySfx() => jumpingOffTheBalconyInstance.start();
+    //Plays a dash SFX. No parameter
+    public void TriggerOnDashStartsSfx() => onDashStartsInstance.start();
+    //Plays an item dropped SFX. No parameter
+    public void TriggerItemDroppedSfx() => itemDroppedInstance.start();
+    //Plays an item picked up SFX. No parameter
+    public void TriggerItemPickedUpSfx() => itemPickedUpInstance.start();
+    //Plays a stunned SFX. No parameter
+    public void TriggerStunnedSfx() => stunnedInstance.start();
+
+    ///----Public methods: Environment-----///
+    //Plays room cleaned SFX. No parameter
+    public void TriggerRoomCleanedSfx() => roomCleanedInstance.start();
+
+    //Plays room check out SFX. No parameter
+    public void TriggerRoomCheckOutSfx() => roomCheckOutInstance.start();
+
+    //Plays room booked SFX. No parameter
+    public void TriggerRoomBookedSfx() => roomBookedInstance.start();
+
+    public void TriggerResourcePlacedInRoom() => ResourcePlacedInRoomInstance.start(); 
+
+
     //Cleanup
     private void OnDestroy()
     {

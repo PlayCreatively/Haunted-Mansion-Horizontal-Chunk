@@ -114,6 +114,7 @@ public class Room : MonoBehaviour
         state = RoomState.Booked;
         BookedTime = GameSettings.Instance.GetRandomBookedTime;
 
+        FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
     }
@@ -140,6 +141,7 @@ public class Room : MonoBehaviour
 
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
+        FMODAudioManager.Instance.TriggerRoomCheckOutSfx();
     }
 
     public void ResourceEnter(CarriableType type, bool enter)
@@ -155,6 +157,8 @@ public class Room : MonoBehaviour
                 Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
                 Clean();
             }
+            else if(enter)
+                FMODAudioManager.Instance.TriggerResourcePlacedInRoom();
         }
     }
 

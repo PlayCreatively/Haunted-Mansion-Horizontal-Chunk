@@ -18,6 +18,7 @@ public struct Connection
     public bool isCardinal; // If true, the connection is a straight line (cardinal direction)
     public Vector3 normal; // Normal vector for the connection
     public bool flipFacing; // If true, the normal is flipped
+    public bool isShortWall;
 
     public int lineType;
 
@@ -29,6 +30,7 @@ public struct Connection
         this.isCardinal = isCardinal;
         this.normal = normal;
         this.flipFacing = flipFacing;
+        isShortWall = false;
         lineType = 0; // Default to Normal
     }
 
@@ -159,7 +161,13 @@ public class Path : MonoBehaviour
                 Vector3 a = GetPos(con.nodeA);
                 Vector3 b = GetPos(con.nodeB);
 
-                DrawLine(a, b, (int)con.LineType);
+                if(con.isShortWall)
+                {
+                    UnityEditor.Handles.color = Color.yellow;
+                    UnityEditor.Handles.DrawLine(a, b, 5f);
+                }
+                else
+                    DrawLine(a, b, (int)con.LineType);
 
                 // draw normal
                 Debug.DrawRay((a + b) * .5f, con.normal, Color.red);

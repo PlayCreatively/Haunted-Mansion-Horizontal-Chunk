@@ -232,21 +232,23 @@ public class PathEditor : Editor
         {
             Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
             con.lineType = (con.lineType - 1 + wallTypeCount) % wallTypeCount;
-
-            path.connections[selectedConnection] = con;
-            EditorUtility.SetDirty(path);
-            path.dirty = true;
-            e.Use();
         }
         else if (e.keyCode == KeyCode.RightArrow || e.keyCode == KeyCode.DownArrow)
         {
             Undo.RegisterCompleteObjectUndo(path, "Change Connection Type");
             con.lineType = (con.lineType + 1) % wallTypeCount;
-            path.connections[selectedConnection] = con;
-            EditorUtility.SetDirty(path);
-            path.dirty = true;
-            e.Use();
         }
+        else if (e.keyCode == KeyCode.Space)
+        {
+            Undo.RegisterCompleteObjectUndo(path, "Change Connection Outerwall State");
+            con.isShortWall = !con.isShortWall;
+        }
+        else return;
+
+        path.connections[selectedConnection] = con;
+        EditorUtility.SetDirty(path);
+        path.dirty = true;
+        e.Use();
 
         // Debug log to show the current wall type.
         var wallType = GameSettings.Instance.wallPrefabs[con.lineType];

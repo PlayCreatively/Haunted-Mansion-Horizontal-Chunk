@@ -76,6 +76,7 @@ public class Carriable : MonoBehaviour, IInteractable
     MeshRenderer meshRend;
 
     bool highlighted = false;
+    bool destroyed = false;
 
     protected virtual void Awake()
     {
@@ -93,6 +94,7 @@ public class Carriable : MonoBehaviour, IInteractable
     public void Destroy()
     {
         EnablePhysics(false);
+        destroyed = true;
 
         StartCoroutine(DestroyRoutine());
     }
@@ -116,7 +118,12 @@ public class Carriable : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    public void Interact(InteractiveHand hand) => hand.PickUp(this);
+    public void Interact(InteractiveHand hand)
+    {
+        if (destroyed) return; // if the object is invisible, don't interact with it
+
+        hand.PickUp(this);
+    }
 
     public void EnableCollider(bool value) => col.enabled = value;
 

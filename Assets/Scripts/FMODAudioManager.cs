@@ -34,6 +34,8 @@ public class FMODAudioManager : MonoBehaviour
 
     //Event instances for environment
     EventInstance bgMusicInstance;
+    EventInstance GameOverInstance; // TODO: Implement in FMOD
+
 
     //Event instances for room
     EventInstance roomCleanedInstance;
@@ -173,6 +175,11 @@ public class FMODAudioManager : MonoBehaviour
 
     public void TriggerResourcePlacedInRoom() => ResourcePlacedInRoomInstance.start(); 
 
+    public void TriggerGameOver()
+    {
+        GameOverInstance.start();
+        bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
 
     //Cleanup
     private void OnDestroy()
@@ -218,4 +225,5 @@ public class FMODAudioManager : MonoBehaviour
         newGreenGooSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         newGreenGooSpawnedInstance.release();
     }
+
 }

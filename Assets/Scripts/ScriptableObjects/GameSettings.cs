@@ -1,6 +1,56 @@
 using System;
 using UnityEngine;
 
+public static class Game
+{
+    static GameManager _gameManager;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    public static void Init()
+    {
+        _gameManager = GameObject.Find("GameManager").AddComponent<GameManager>();
+    }
+
+    public static void GameOver()
+    {
+        _gameManager.canvas.transform.Find("GameOverOverlay").gameObject.SetActive(true);
+        FMODAudioManager.Instance.TriggerGameOver();
+    }
+        
+}
+
+class GameManager: MonoBehaviour
+{
+    public static GameManager Instance { get; private set; }
+    public Canvas canvas;
+    public Player[] players;
+    public Room[] rooms;
+    //public Enemy[] enemies;
+    //public Carriable[] items;
+
+    void GetAllReferences()
+    {
+        players = FindObjectsByType<Player>(0);
+        Debug.Log($"{players.Length} players found");
+
+        rooms = FindObjectsByType<Room>(0);
+        Debug.Log($"{rooms.Length} rooms found");
+
+        canvas = FindFirstObjectByType<Canvas>();
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+    void Start()
+    {
+        GetAllReferences();
+    }
+}
 
 [CreateAssetMenu(fileName = "NewGameSettings", menuName = "Scriptable Objects/GameSettings")]
 public class GameSettings : ScriptableObject
@@ -18,12 +68,14 @@ public class GameSettings : ScriptableObject
         }
     }
 
+    public bool UsingControllers;
     // player settings
     [Header("Player Settings")]
     public float playerSpeed = 5f;
     public float playerJumpForce = 5f;
     public float playerThrowForce = 1f;
     public float playerThrowAngle = 45f;
+    public float playerThrowChargeTime = 1f;
     public float playerDashSpeed = 5;
     public float playerDashDuration = 0.5f;
     public float playerStunForce = 1;

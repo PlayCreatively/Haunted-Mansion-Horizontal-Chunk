@@ -107,17 +107,26 @@ public class Path : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+
+    Room __roomRef;
     // Visualize nodes and connections in the Scene view.
     void OnDrawGizmos()
     {
         DrawConnections();
 
-        UnityEditor.Handles.Label(transform.position, string.Format("Floor {0:F0}", transform.position.y), style: new GUIStyle
+        if(__roomRef == null)
+            __roomRef = GetComponent<Room>();
+
+        string roomName = __roomRef != null ? "<color=yellow>Guest Room\nFloor {0:F0}</color>" : "Floor {0:F0}";
+
+        UnityEditor.Handles.Label(transform.position, string.Format(roomName, transform.position.y), style: new GUIStyle
         {
             fontSize = 10,
             normal = new GUIStyleState { textColor = Color.white },
             alignment = TextAnchor.MiddleCenter,
-            fontStyle = FontStyle.Bold
+            fontStyle = FontStyle.Bold,
+            richText = true
+
 
         });
     }

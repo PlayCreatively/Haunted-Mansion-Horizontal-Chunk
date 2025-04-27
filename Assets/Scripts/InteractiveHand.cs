@@ -52,13 +52,13 @@ public class InteractiveHand : MonoBehaviour, IInventory
             DestroyBackpack();
     }
 
-    public void Throw()
+    public void Throw(float force)
     {
         var item = backpack.RemoveAtSelected();
 
         if (item != null)
         {
-            var newVelocity = (Quaternion.AngleAxis(-GameSettings.Instance.playerThrowAngle, transform.right) * transform.forward) * GameSettings.Instance.playerThrowForce;
+            var newVelocity = (Quaternion.AngleAxis(-GameSettings.Instance.playerThrowAngle, transform.right) * transform.forward) * force;
             Debug.DrawLine(transform.position, transform.position + newVelocity, Color.red, 1f);
             item.SetVelocity(newVelocity);
         }

@@ -47,7 +47,7 @@ public class Room : MonoBehaviour
         roomUI = Resources.Load<RoomUI>("RoomUI");
         Assert.IsNotNull(roomUI, "RoomUI prefab not found in Resources folder");
         GameObject canvas = GameObject.Find("Canvas");
-        roomUI = Instantiate(roomUI, Vector3.zero, Quaternion.identity, canvas.transform);
+        roomUI = Instantiate(roomUI, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI"));
         roomUI.name = gameObject.name + " UI";
         roomUI.room = this;
 
@@ -64,29 +64,13 @@ public class Room : MonoBehaviour
         {
             case RoomState.NonBooked:
                 nonBookedTime -= Time.deltaTime;
-                //Debug.Log($"{gameObject.name} dirty. Waiting for cleaning.\n {nonBookedTime} time left", gameObject);
-                if(nonBookedTime <= 0)
-                {
-                    Book();
-                    Debug.Log($"{gameObject.name} dirty. Someone booked it. Clean it!", gameObject);
-                }
-                break;
+                if(nonBookedTime <= 0) Book(); break;
             case RoomState.Booked:
                 BookedTime -= Time.deltaTime;
-                if (BookedTime <= 0)
-                {
-                    CheckIn();
-                    if(isDirty)
-                        Debug.Log($"{gameObject.name} booking time expired. You lose!", gameObject);
-                }
-                break;
+                if (BookedTime <= 0) CheckIn(); break;
             case RoomState.Occupied:
                 stayTime -= Time.deltaTime;
-                if (stayTime <= 0)
-                {
-                    CheckOut();
-                }
-                break;
+                if (stayTime <= 0) CheckOut(); break;
         }
     }
 
@@ -122,6 +106,12 @@ public class Room : MonoBehaviour
     public void CheckIn()
     {
         Debug.Log($"{gameObject.name} checked in", gameObject);
+
+        if(isDirty)
+        {
+            Game.GameOver();
+        }
+
         state = RoomState.Occupied;
         stayTime = GameSettings.Instance.GetRandomStayTime;
 

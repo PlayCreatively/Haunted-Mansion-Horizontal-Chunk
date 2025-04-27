@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
 
             if (heightDiff > 0)
             {
-                collision.gameObject.GetComponent<Player>().Jump();
+                collision.gameObject.GetComponent<Player>().Jump(1.25f);
                 Die();
             }
             else // player stunned

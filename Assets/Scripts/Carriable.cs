@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public interface IInteractable : IHighlightable
 {

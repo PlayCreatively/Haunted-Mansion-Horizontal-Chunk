@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -24,8 +23,9 @@ public class Player : MonoBehaviour
     float dashValue = 0.5f;
     float jumpSquash = 0.5f;
     bool stunned;
+    float holdCharge = 0f;
 
-void Awake()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
         hand = GetComponentInChildren<InteractiveHand>();
@@ -35,13 +35,14 @@ void Awake()
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
-
     }
 
     void Start()
     {
         if(GameSettings.Instance.UsingControllers)
         {
+            Debug.Log($"{Gamepad.all.Count} controllers found");
+
             for (int i = 0; i < Gamepad.all.Count; i++)
                 if (i == playerIndex)
                 {
@@ -60,10 +61,41 @@ void Awake()
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
-        playerInput.actions["Throw"].performed += _ => hand.Throw();
+        playerInput.actions["Throw"].canceled += _ => StartCoroutine(Throw());
         playerInput.actions["Dash"].performed += _ => DashInput();
         playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
+    }
+
+    void ChargeThrow()
+    {
+        if(hand.ItemInHand == null) return;
+
+        float chargeTime = GameSettings.Instance.playerThrowChargeTime;
+
+        if (holdCharge < 1f)
+        {
+            holdCharge += Time.deltaTime / chargeTime;
+            holdCharge = Mathf.Min(holdCharge, chargeTime);
+        }
+
+        if (holdCharge > .25f)
+            visuals.Squash(1f - (holdCharge * .25f));
+    }
+
+    IEnumerator Throw()
+    {
+        if(holdCharge < .35f)
+        {
+            hand.Throw(0);
+            yield break;
+        }
+
+        Jump(holdCharge);
+        yield return new WaitForSeconds(0.1f * holdCharge);
+        hand.Throw(GameSettings.Instance.playerThrowForce * holdCharge);
+        holdCharge = 0;
+        visuals.Squash(1f);
     }
 
     void ProcessDash()
@@ -99,11 +131,18 @@ void Awake()
         var dir = transform.position - origin;
         dir.y = 0;
         dir.Normalize();
+
         dir *= GameSettings.Instance.playerStunForce;
+        var item = hand.DropFromHand();
+        if(item != null)
+        {
+            item.SetVelocity(-dir + Vector3.up * 5);
+        }
         dir.y = 5;
 
         rb.linearVelocity = dir;
 
+        FMODAudioManager.Instance.TriggerStunnedSfx();
         StartCoroutine(StunRoutine());
     }
 
@@ -130,23 +169,26 @@ void Awake()
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
     }
 
-    public void Jump()
+    public void Jump(float force = 1f)
     {
         var velocity = rb.linearVelocity;
-        velocity.y = GameSettings.Instance.playerJumpForce;
+        velocity.y = GameSettings.Instance.playerJumpForce * force;
         rb.linearVelocity = velocity;
         grounded = false;
 
         jumpSquash = .5f;
     }
 
-    private void Update()
+    void Update()
     {
         if (jumpSquash > 0)
         {
             jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
             //visuals.Squash(1f + jumpSquash);
         }
+
+        if(playerInput.actions["Throw"].IsPressed())
+            ChargeThrow();
 
     }
 
@@ -162,7 +204,7 @@ void Awake()
 
         ProcessDash();
 
-        Vector3 deltaMove = moveInput * GameSettings.Instance.playerSpeed;
+        Vector3 deltaMove = moveInput * (GameSettings.Instance.playerSpeed - holdCharge * .9f);
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
         bool isMoving = moveInput.magnitude > 0.02f;

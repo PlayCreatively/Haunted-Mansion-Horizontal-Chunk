@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     float jumpSquash = 0.5f;
     bool stunned;
     float holdCharge = 0f;
+    bool canMove = true;
 
     void Awake()
     {
@@ -91,11 +92,16 @@ public class Player : MonoBehaviour
             yield break;
         }
 
-        Jump(holdCharge);
-        yield return new WaitForSeconds(0.1f * holdCharge);
+        if(grounded)
+            Jump(holdCharge);
+
+        yield return new WaitForSeconds(0.14f * holdCharge);
         hand.Throw(GameSettings.Instance.playerThrowForce * holdCharge);
+        rb.AddForce(2 * holdCharge * -visuals.forward, ForceMode.VelocityChange);
         holdCharge = 0;
-        visuals.Squash(1f);
+        canMove = false;
+        yield return new WaitUntil(() => grounded);
+        canMove = true;
     }
 
     void ProcessDash()
@@ -194,7 +200,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(stunned)
+        if(stunned || !canMove)
             return;
 
         visuals.Squash(rb.linearVelocity.y / 15f + 1);

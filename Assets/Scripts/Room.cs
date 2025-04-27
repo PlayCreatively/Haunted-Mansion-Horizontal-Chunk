@@ -44,11 +44,13 @@ public class Room : MonoBehaviour
 
     void Awake()
     {
-        roomUI = Resources.Load<RoomUI>("RoomUI");
-        Assert.IsNotNull(roomUI, "RoomUI prefab not found in Resources folder");
+        var roomUIObj = Resources.Load<GameObject>("RoomUI");
+        Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
+
         GameObject canvas = GameObject.Find("Canvas");
-        roomUI = Instantiate(roomUI, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI"));
-        roomUI.name = gameObject.name + " UI";
+        roomUI = Instantiate(roomUIObj, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI")).GetComponentInChildren<RoomUI>();
+        roomUI.transform.parent.name = gameObject.name + " UI";
+        roomUI.transform.parent.localPosition = Vector3.zero;
         roomUI.room = this;
 
     }

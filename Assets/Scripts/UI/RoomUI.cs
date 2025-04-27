@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [DefaultExecutionOrder(-500)]
 public class RoomUI : MonoBehaviour
 {
     public Room room;
+    public Image roomArrowUI;
     public GameObject bookingUI;
     TextMeshProUGUI bookingTimeUI;
     [SerializeField]
@@ -27,12 +29,41 @@ public class RoomUI : MonoBehaviour
     void Update()
     {
         (transform as RectTransform).position = GetRoomPosInScreenSpace();
+
+        UpdateArrow();
     }
 
-    public Vector2 GetRoomPosInScreenSpace()
+    public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.transform.position);
+
+    public void UpdateArrow()
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(room.transform.position);
-        return new (screenPos.x, screenPos.y);
+        var viewport = Camera.main.WorldToViewportPoint(room.transform.position) - (Vector3.one * .5f);
+        var rectTrans = transform as RectTransform;
+        var parentRect = (rectTrans.parent.parent as RectTransform).rect;
+        
+        var extents = parentRect.size * .525f;
+
+        bool isOutsideScreenX = rectTrans.anchoredPosition.x < -extents.x || rectTrans.anchoredPosition.x > extents.x;
+        bool isOutsideScreenY = rectTrans.anchoredPosition.y < -extents.y || rectTrans.anchoredPosition.y > extents.y;
+        bool isOutsideScreen = isOutsideScreenX || isOutsideScreenY;
+
+        roomArrowUI.gameObject.SetActive(isOutsideScreen);
+        if (!isOutsideScreen) return;
+
+        roomArrowUI.transform.up = rectTrans.anchoredPosition;
+
+        extents *= .9f;
+
+        roomArrowUI.rectTransform.anchoredPosition = new Vector2(
+            Mathf.Clamp(rectTrans.anchoredPosition.x, -extents.x, extents.x),
+            Mathf.Clamp(rectTrans.anchoredPosition.y, -extents.y, extents.y)
+        );
+
+        var dif = Vector2.Distance(roomArrowUI.rectTransform.anchoredPosition, rectTrans.anchoredPosition * 0.885f);
+        dif = Mathf.Min(dif, 200f);
+        dif /= 200f;
+
+        roomArrowUI.rectTransform.localScale = new Vector2(dif, dif);
     }
 
     public void UpdateRequirementsUI(Room.Requirements requirements)
@@ -46,18 +77,12 @@ public class RoomUI : MonoBehaviour
         //checkInUI.SetActive(room.IsOccupied);
         requirementsParent.SetActive(room.IsDirty);
 
-        for (int i = 0; i < requirementsParent.transform.childCount; i++)
-        {
-            ResourceCountUI[i].text = requirements[i].ToString();
-        }
-
         if (room.IsDirty)
         {
             for (int i = 0; i < ResourceCountUI.Length; i++)
             {
                 ResourceCountUI[i].transform.parent.gameObject.SetActive(room.requirements[i] > 0);
                 ResourceCountUI[i].text = requirements[i].ToString();
-                //requirementsParent.transform.GetChild(i).gameObject.SetActive(room.requirements[i] > 0);
             }
         }
 
@@ -76,5 +101,16 @@ public class RoomUI : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
 
         bookingTimeUI.text = $"{minutes:D2}:{seconds:D2}";
+
+        const float YELLOW_MARK = 60F, RED_MARK = 30F;
+
+        bookingTimeUI.color 
+            = time < RED_MARK
+            ? new Color(1, .2f, .2f, 1) // red
+                : time < YELLOW_MARK
+                ? new Color(1, .8f, .2f, 1) // yellow
+                    : Color.white;
+
+        roomArrowUI.color = bookingTimeUI.color;
     }
 }

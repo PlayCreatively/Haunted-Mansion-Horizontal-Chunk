@@ -24,6 +24,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
     // regenerate the path on engine start
     [UnityEditor.InitializeOnLoadMethod]
+    [UnityEditor.MenuItem("Game/Regenerate Paths")]
     static void OnProjectLoadedInEditor()
     {
         // Find all Path components in the scene and regenerate them.

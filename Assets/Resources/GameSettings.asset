@@ -19,7 +19,7 @@ MonoBehaviour:
   playerThrowAngle: 45
   playerThrowChargeTime: 1
   playerDashSpeed: 6
-  playerDashDuration: 0.6
+  playerDashDuration: 0.55
   playerStunForce: 2.5
   playerStunDuration: 1.25
   Ghost:

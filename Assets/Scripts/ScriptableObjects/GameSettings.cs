@@ -81,8 +81,9 @@ public class GameSettings : ScriptableObject
     public float playerStunForce = 1;
     public float playerStunDuration = 1;
     [Header("Enemy Settings")]
+    public float hurtEnemyMoveMultiplier = 1.5f;
     public EnemySettings Ghost;
-    public EnemySettings Mummy, GreenGoo, Spider, TrashMonster;
+    public EnemySettings Mummy, GreenGoo, Spider, Worm, TrashMonster;
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
     [Header("Room Settings")]
@@ -153,6 +154,20 @@ public class GameSettings : ScriptableObject
             CarriableTypeMask.ToiletPaper => toiletPaper,
             CarriableTypeMask.Towel => towel,
             CarriableTypeMask.BedSheet => bedSheet,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+    }
+
+    public EnemySettings GetEnemySettings(EnemyType type)
+    {
+        return type switch
+        {
+            EnemyType.Ghost => Ghost,
+            EnemyType.Mummy => Mummy,
+            EnemyType.Goo => GreenGoo,
+            EnemyType.Spider => Spider,
+            EnemyType.Worm => Worm,
+            EnemyType.Trash => TrashMonster,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

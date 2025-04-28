@@ -1,16 +1,29 @@
 using System.Collections;
 using UnityEngine;
 
+public enum EnemyType
+{
+    Ghost,
+    Mummy,
+    Worm,
+    Spider,
+    Goo,
+    Trash,
+}
+
 [System.Serializable]
 public class EnemySettings
 {
-    public float speed = 1.0f;
+    public int hp = 1;
+    public float speed = .7f;
 }
 
 [SelectionBase]
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
+    int hp = 1;
+    public EnemyType enemyType;
     public Carriable resourceDrop;
     protected float speed;
     protected Vector3 moveDir = Vector3.zero;
@@ -18,6 +31,7 @@ public class Enemy : MonoBehaviour
     protected Rigidbody rb;
     protected Transform visuals;
     Curve deathBounceCurve;
+    EnemySettings settings;
 
     protected virtual void Awake()
     {
@@ -25,6 +39,10 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
         deathBounceCurve = Resources.Load<Curve>("EnemyDeathBounce");
+
+        settings = GameSettings.Instance.GetEnemySettings(enemyType);
+        speed = settings.speed;
+        hp = settings.hp;
     }
 
     protected virtual void OnEnable()
@@ -38,9 +56,35 @@ public class Enemy : MonoBehaviour
         moveDir = new Vector3(Mathf.Cos(randAngle), 0, Mathf.Sin(randAngle));
     }
 
+    public void Hit() => StartCoroutine(HitRoutine());
+
+    IEnumerator HitRoutine()
+    {
+        hp--;
+        FMODAudioManager.Instance.TriggerLandingOnEnemySfx(enemyType, hp);
+        yield return HitSquashRoutine();
+        if (hp <= 0)
+        {
+            Die();
+           yield break;
+        }
+        speed *= GameSettings.Instance.hurtEnemyMoveMultiplier;
+    }
+
+    IEnumerator HitSquashRoutine()
+    {
+        Timer hitSquashTimer = new(.09f);
+        while (!hitSquashTimer.Finished)
+        {
+            float t = deathBounceCurve.Evaluate(hitSquashTimer.Normal);
+            visuals.Squash(t);
+            yield return null;
+        }
+        visuals.Squash(1);
+    }
+
     public void Die()
     {
-        FMODAudioManager.Instance.TriggerLandingOnTheMummySfx(0);
         rb.detectCollisions = false;
         rb.freezeRotation = false;
         rb.useGravity = false;
@@ -51,14 +95,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DieRoutine()
     {
-        Timer deathTimer = new (.1f);
-
-        while (!deathTimer.Finished)
-        {
-            yield return null;
-            float t = deathBounceCurve.Evaluate(deathTimer.Normal);
-            visuals.Squash(t);
-        }
+        yield return HitSquashRoutine();
 
         rb.useGravity = true;
         rb.AddForce(Vector3.up * 8, ForceMode.VelocityChange);
@@ -118,7 +155,7 @@ public class Enemy : MonoBehaviour
             if (heightDiff > 0)
             {
                 collision.gameObject.GetComponent<Player>().Jump(1.25f);
-                Die();
+                Hit();
             }
             else // player stunned
             {

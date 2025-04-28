@@ -135,6 +135,39 @@ public class FMODAudioManager : MonoBehaviour
     {
         newTrashMonsterSpawnedInstance.start();
     }
+    public void TriggerLandingOnEnemySfx(EnemyType type, int hp)
+    {
+        switch (type)
+        {
+            case EnemyType.Ghost:
+                TriggerLandingOnTheGhostSfx(hp);
+                break;
+            case EnemyType.Mummy:
+                TriggerLandingOnTheMummySfx(hp);
+                break;
+            case EnemyType.Spider:
+                TriggerLandingOnTheSpiderSfx();
+                break;
+            case EnemyType.Goo:
+                TriggerLandingOnTheGreenGooSfx(hp);
+                break;
+            case EnemyType.Trash:
+                TriggerLandingOnTheLTrashMonsterSfx(hp);
+                break;
+            case EnemyType.Worm:
+                TriggerLandingOnTheWormMonsterSfx(hp);
+                break;
+            default:
+                Debug.LogError("Invalid enemy type");
+                break;
+        }
+    }
+
+    private void TriggerLandingOnTheWormMonsterSfx(int hp)
+    {
+        return; // TODO: Implement in FMOD
+    }
+
     public void TriggerLandingOnTheMummySfx(int mummyHp) //Plays a SFX based on mummy's HP. Mummy HP [0;2]
     {
         landingOnTheMummyInstance.setParameterByName("Mummy HP", mummyHp);

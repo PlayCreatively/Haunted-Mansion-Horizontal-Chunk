@@ -22,16 +22,25 @@ MonoBehaviour:
   playerDashDuration: 0.55
   playerStunForce: 2.5
   playerStunDuration: 1.25
+  hurtEnemyMoveMultiplier: 3.5
   Ghost:
-    speed: 1
+    hp: 2
+    speed: 0.7
   Mummy:
-    speed: 1
+    hp: 2
+    speed: 0.7
   GreenGoo:
-    speed: 1
+    hp: 2
+    speed: 0.7
   Spider:
-    speed: 1
+    hp: 2
+    speed: 0.7
+  Worm:
+    hp: 2
+    speed: 0.7
   TrashMonster:
-    speed: 1
+    hp: 2
+    speed: 0.7
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}

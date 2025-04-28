@@ -21,6 +21,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     }
 
     GameObject backpackVisual;
+    Vector3 defaultLocalPosition;
 
     public Carriable? ItemInHand => backpack.SelectedItem;
     //public bool HasBackpack => backpack != null;
@@ -33,6 +34,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     /// TODO: validate
     void Awake()
     {
+        defaultLocalPosition = transform.localPosition;
         backpackUI = InventoryUI.CreateUI(4, transform.parent);
         backpackUI.gameObject.SetActive(false);
 
@@ -50,6 +52,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
         if (Input.GetKeyDown(KeyCode.Alpha6)) SetSelection(5);
         if (Input.GetKeyDown(KeyCode.B))
             DestroyBackpack();
+
+        UpdatePositionOfHand();
     }
 
     public void Throw(float force)
@@ -86,6 +90,33 @@ public class InteractiveHand : MonoBehaviour, IInventory
         }
         else 
             return true;
+    }
+
+    /// <summary>
+    /// Moves hands backwards to avoid clipping with other colliders
+    /// </summary>
+    void UpdatePositionOfHand()
+    {
+        if(ItemInHand == null) return;
+
+        Vector3 itemSize = ItemInHand.GetSize();
+
+        const float rayBackDistance = .3f;
+        float rayCastDistance = rayBackDistance + itemSize.z;
+        Vector3 rayBackOffset = Vector3.forward * rayBackDistance;
+        Debug.DrawRay(transform.parent.position + transform.TransformVector(defaultLocalPosition - rayBackOffset), transform.forward * rayCastDistance);
+        if(Physics.Raycast(transform.parent.position + transform.TransformVector(defaultLocalPosition - rayBackOffset), transform.forward, out RaycastHit hit, rayCastDistance, ~LayerMask.GetMask("Player", "Enemy"), QueryTriggerInteraction.Ignore))
+        {
+            float zScale = (hit.distance - rayBackDistance) / itemSize.z;
+            float zOffset = ((1f - zScale) * .5f * itemSize.z);
+            transform.localScale = new (1, 1, (zScale * .5f) + .5f);
+            transform.localPosition = defaultLocalPosition + Vector3.forward * (hit.distance - rayBackDistance - itemSize.z + zOffset);
+        }
+        else
+        {
+            transform.localPosition = defaultLocalPosition;
+            transform.localScale = Vector3.one;
+        } 
     }
 
     void CreateNewBackpack()

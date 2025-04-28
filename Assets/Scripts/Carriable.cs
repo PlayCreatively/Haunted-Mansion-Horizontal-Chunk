@@ -83,6 +83,17 @@ public class Carriable : MonoBehaviour, IInteractable
         meshRend = GetComponentInChildren<MeshRenderer>();
     }
 
+    public Vector3 GetSize()
+    {
+        return col switch
+        {
+            BoxCollider box => box.size,
+            SphereCollider sphere => new Vector3(sphere.radius, sphere.radius, sphere.radius) * 2f,
+            CapsuleCollider capsule => new Vector3(capsule.radius * 2f, capsule.height, capsule.radius * 2f),
+            _ => Vector3.one
+        };
+    }
+
     public void Highlight(bool value, InteractiveHand interactiveHand)
     {
         highlighted = value;

@@ -78,6 +78,7 @@ public class Room : MonoBehaviour
 
     public float StayTime => stayTime;
     public float NonBookedTime => nonBookedTime;
+    public float Bookedtime => _bookedTime;
     public static List<Room> Rooms => rooms;
 
     public bool IsClean => !isDirty;
@@ -98,7 +99,7 @@ public class Room : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} booked", gameObject);
         state = RoomState.Booked;
-        BookedTime = GameSettings.Instance.GetRandomBookedTime;
+        BookedTime = GameSettings.Instance.GetBookedTime();
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public static class Game
@@ -89,7 +90,10 @@ public class GameSettings : ScriptableObject
     [Header("Room Settings")]
     public float minBookedTime = 60;
     public float maxBookedTime = 60 * 4;
-    public float GetRandomBookedTime => UnityEngine.Random.Range(minBookedTime, maxBookedTime);
+    public float GetBookedTime()
+    {
+        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * 35;
+    }
     public float minStayTime = 20;
     public float maxStayTime = 60;
     public float GetRandomStayTime => UnityEngine.Random.Range(minStayTime, maxStayTime);

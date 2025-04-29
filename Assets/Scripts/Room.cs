@@ -38,6 +38,7 @@ public class Room : MonoBehaviour
     public Action<RoomState> OnStateChange;
     public Action<Requirements> OnRequirementsChange;
     public static Action<Room> OnRoomStateChange;
+    Animator shineAnimator;
 
     void OnEnable() => rooms.Add(this);
     void OnDisable() => rooms.Remove(this);
@@ -45,6 +46,7 @@ public class Room : MonoBehaviour
     void Awake()
     {
         var roomUIObj = Resources.Load<GameObject>("RoomUI");
+        shineAnimator = GetComponent<Animator>();
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
 
         GameObject canvas = GameObject.Find("Canvas");
@@ -86,6 +88,7 @@ public class Room : MonoBehaviour
     public bool IsBooked => state == RoomState.Booked;
     public bool IsOccupied => state == RoomState.Occupied;
 
+    [ContextMenu("Clean")]
     public void Clean()
     {
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
@@ -93,6 +96,7 @@ public class Room : MonoBehaviour
         isDirty = false;
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
+        shineAnimator.Play("GlassAnimation", 0, 0f);
     }
 
     public void Book()

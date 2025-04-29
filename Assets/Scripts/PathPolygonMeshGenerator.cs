@@ -507,16 +507,26 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 #endif
                 instance.name = $"ConnectionInstance {con.nodeA}-{con.nodeB}";
                 instance.transform.SetPositionAndRotation(connectionPrefabs[wallIndex].transform.position + midpoint + Vector3.up * .5f, finalRotation);
+                BoxCollider boxCollider = instance.GetComponent<BoxCollider>();
                 // if short, rescale collider to be 1 unit
-                if (con.isShortWall && instance.TryGetComponent<BoxCollider>(out var boxCollider))
+                if (con.isShortWall && boxCollider != null)
                 {
                     boxCollider.size = new Vector3(boxCollider.size.x, 1, boxCollider.size.z);
                     boxCollider.center = Vector3.zero;
                 }
+                if (con.WallType == WallType.Handrail && boxCollider != null)
+                {
+                    var size = boxCollider.size;
+                    size.x = length;
+                    boxCollider.size = size;
 
-                // Stretch the prefab along its local X axis (the connection direction) to match the connection length.
-                Vector3 originalScale = instance.transform.localScale;
-                instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z);
+                }
+                else // not handrail
+                {
+                    // Stretch the prefab along its local X axis (the connection direction) to match the connection length.
+                    Vector3 originalScale = instance.transform.localScale;
+                    instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z);
+                }
 
                 instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
 

@@ -30,4 +30,9 @@ public static class ExtensionMethods
         CarriableTypeMask typeAsMask = (CarriableTypeMask)(1 << (int)type);
         return (typeAsMask & mask) > 0;
     }
+
+    public static Vector3 Divide(this Vector3 a, Vector3 b)
+    {
+        return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
 }

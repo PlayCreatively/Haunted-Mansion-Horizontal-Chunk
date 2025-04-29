@@ -25,6 +25,7 @@ public class FMODAudioManager : MonoBehaviour
         EventInstance itemPickedUpInstance;
         EventInstance itemDroppedInstance;
         EventInstance stunnedInstance;
+        EventInstance itemSelectionInTheBagInstance;
     #endregion
     #region NewEnemySpawnsSFXInstances
         EventInstance newGhostSpawnedInstance;
@@ -38,6 +39,8 @@ public class FMODAudioManager : MonoBehaviour
         EventInstance bgMusicInstance;
         EventInstance gameOverInstance; //Rename where needed!
         EventInstance runningOutOfTimeInstance;
+        EventInstance laundryDoneInstance;
+        EventInstance soapBarDoneInstance;
     #endregion
     #region RoomSFXInstances
         EventInstance roomCleanedInstance;
@@ -84,6 +87,7 @@ public class FMODAudioManager : MonoBehaviour
                 itemThrownInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item thrown");
                 itemDroppedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item dropped");
                 stunnedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/stunned");
+                itemSelectionInTheBagInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item selection in the bag");
         #endregion
         #region EnvironmentAndRoomsPaths
                 bgMusicInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/bg music");
@@ -93,7 +97,10 @@ public class FMODAudioManager : MonoBehaviour
                 resourcePlacedInRoomInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/resource placed in the room");
                 roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
                 runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/running out of time");
-        #endregion
+                laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
+                soapBarDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/soap bar done");
+
+                #endregion
     }
     void Start()
     {
@@ -192,6 +199,8 @@ public class FMODAudioManager : MonoBehaviour
         public void TriggerItemPickedUpSfx() => itemPickedUpInstance.start();
         //Plays a stunned SFX. No parameter
         public void TriggerStunnedSfx() => stunnedInstance.start();
+        //Plays an item selection in the bag SFX. No parameter
+        public void TriggerItemSelectionInTheBagSfx() => itemSelectionInTheBagInstance.start();
     #endregion
     #region ROOMSFX
         //Plays room cleaned SFX. No parameter
@@ -213,6 +222,10 @@ public class FMODAudioManager : MonoBehaviour
             runningOutOfTimeInstance.setParameterByName("Time Left", timeLeft);
             runningOutOfTimeInstance.start();
         }
+        //Plays a laundry done SFX. No parameter
+        public void TriggerLaundryDoneSfx() => laundryDoneInstance.start();
+        //Plays a soap bar done SFX. No parameter
+        public void TriggerSoapBarDoneSfx() => soapBarDoneInstance.start();
     #endregion
     public void TriggerLandingOnEnemySfx(EnemyType type, int hp) 
     {
@@ -258,6 +271,10 @@ public class FMODAudioManager : MonoBehaviour
                 gameOverInstance.release();
                 runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 runningOutOfTimeInstance.release();
+                laundryDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                laundryDoneInstance.release();
+                soapBarDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                soapBarDoneInstance.release();
         #endregion
         #region LandingOnEnemiesDestroys
                 landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -292,6 +309,8 @@ public class FMODAudioManager : MonoBehaviour
                 itemPickedUpInstance.release();
                 stunnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 stunnedInstance.release();
+                itemSelectionInTheBagInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                itemSelectionInTheBagInstance.release();
         #endregion
         #region NewMonsterSpawnsDestroy
                 newTrashMonsterSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

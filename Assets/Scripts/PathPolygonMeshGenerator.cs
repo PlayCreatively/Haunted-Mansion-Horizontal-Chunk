@@ -457,7 +457,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Transform child = transform.GetChild(i);
-            if (child.gameObject.name.StartsWith("ConnectionInstance"))
+            if (child.gameObject.name.StartsWith("ConnectionInstance") || child.gameObject.name.StartsWith("Handrail"))
             {
 #if UNITY_EDITOR
                 DestroyImmediate(child.gameObject);

@@ -214,7 +214,7 @@ public class FMODAudioManager : MonoBehaviour
             runningOutOfTimeInstance.start();
         }
     #endregion
-    public void TriggerLandingOnEnemySfx(EnemyType type, int hp) // TO DO: Spider is missing
+    public void TriggerLandingOnEnemySfx(EnemyType type, int hp) 
     {
         switch (type)
         {

@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "KeyboardMouse" : "P2Keyboard", Keyboard.current);
+            playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "Keyboard&Mouse" : "P2Keyboard", Keyboard.current);
         }
 
         playerInput.actions["Move"].performed += ctx => moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();

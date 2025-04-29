@@ -112,7 +112,10 @@ public class Room : MonoBehaviour
 
         if(isDirty)
         {
-            Game.GameOver();
+            roomUI.UpdateBookingTimeUI(0);
+            Game.GameOver(this);
+            enabled = false;
+            return;
         }
 
         state = RoomState.Occupied;

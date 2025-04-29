@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[DefaultExecutionOrder(-500)]
+[DefaultExecutionOrder(+500)]
 public class RoomUI : MonoBehaviour
 {
     public Room room;
@@ -20,7 +20,7 @@ public class RoomUI : MonoBehaviour
         //checkInUI.SetActive(false);
 
         bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
-        room.OnStateChange += UpdateRequirementsUI;
+        room.OnStateChange += UpdateStateUI;
         room.OnRequirementsChange += UpdateRequirementsUI;
 
         gameObject.SetActive(false);
@@ -89,10 +89,9 @@ public class RoomUI : MonoBehaviour
         gameObject.SetActive(!requirements.IsFulfilled());
     }
 
-    public void UpdateRequirementsUI(RoomState state)
+    public void UpdateStateUI(RoomState state)
     {
         bookingUI.SetActive(state == RoomState.Booked);
-        //checkInUI.SetActive(state == RoomState.Occupied);
     }
 
     public void UpdateBookingTimeUI(float time)

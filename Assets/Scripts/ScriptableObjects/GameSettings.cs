@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Game
 {
@@ -12,12 +14,60 @@ public static class Game
         _gameManager = GameObject.Find("GameManager").AddComponent<GameManager>();
     }
 
-    public static void GameOver()
+    public static void GameOver(Room failedRoom)
     {
-        _gameManager.canvas.transform.Find("GameOverOverlay").gameObject.SetActive(true);
         FMODAudioManager.Instance.TriggerGameOver();
+        _gameManager.StartCoroutine(GameOverRoutine(failedRoom));
     }
+
+    static IEnumerator GameOverRoutine(Room failedRoom)
+    {
+        float timeT = 1f;
+        while (timeT > 0)
+        {
+            Debug.Log(Time.timeScale);
+            timeT -= Time.unscaledDeltaTime * .75f;
+            Time.timeScale = timeT * timeT;
+            yield return null;
+        }
+        Time.timeScale = 0f;
+
+        yield return PanCamera(failedRoom.transform.position, 5f);
+        yield return new WaitForSecondsRealtime(5f);
+        var gameOverScreen = _gameManager.canvas.transform.Find("GameOverOverlay").GetComponent<Image>();
+        gameOverScreen.gameObject.SetActive(true);
+        gameOverScreen.color = new Color(1, 1, 1, 0);
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime;
+            gameOverScreen.color = new Color(1, 1, 1, t);
+            yield return null;
+        }
+        gameOverScreen.color = Color.white;
+    }
+
+    static IEnumerator PanCamera(Vector3 target, float time)
+    {
+        var cam = Camera.main;
+        var dynamicCam = cam.GetComponent<DynamicCamera>();
+        dynamicCam.enabled = false;
+        var startPos = cam.transform.position;
+        var endPos = target - cam.transform.forward * 10f;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / time;
+            cam.transform.position = Smoothing(startPos, endPos, t * t);
+            yield return null;
+        }
         
+        static Vector3 Smoothing(Vector3 from, Vector3 to, float t) => new (
+                Mathf.SmoothStep(from.x, to.x, t),
+                Mathf.SmoothStep(from.y, to.y, t),
+                Mathf.SmoothStep(from.z, to.z, t)
+            );
+    }
 }
 
 class GameManager: MonoBehaviour
@@ -92,7 +142,7 @@ public class GameSettings : ScriptableObject
     public float maxBookedTime = 60 * 4;
     public float GetBookedTime()
     {
-        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * 35;
+        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * 5;
     }
     public float minStayTime = 20;
     public float maxStayTime = 60;

@@ -54,7 +54,7 @@ MonoBehaviour:
   maxNonBookedTime: 120
   requirementSettings:
     minAmount: 1
-    maxAmount: 1
+    maxAmount: 5
     minTypes: 1
     maxTypes: 3
   smartElevator: 1

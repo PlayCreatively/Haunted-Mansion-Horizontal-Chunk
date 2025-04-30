@@ -199,10 +199,12 @@ public class Room : MonoBehaviour
 
             Requirements requirements = new(0,0,0);
 
-            for (int i = 0; i < 5; i++)
+            int resourceCount = Random.Range(minAmount, maxAmount + 1);
+
+            for (int i = 0; i < resourceCount; i++)
             {
                 int resourceType = Random.Range(0, resourceTypeCount);
-                requirements[resourceType] += Random.Range(minAmount, maxAmount);
+                requirements[resourceType]++;
             }
 
             return requirements;

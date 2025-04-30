@@ -67,6 +67,34 @@ public class Player : MonoBehaviour
         playerInput.actions["Dash"].performed += _ => DashInput();
         playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
+        playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
+        playerInput.actions["ArcSelect"].started += _ => hand.DisplayBackpack = true;
+        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayBackpack = false;
+    }
+
+    public int UpdateSelected(Vector2 dir)
+    {
+        Debug.Log($"ArcSelect: {dir}");
+
+        const float selectionEndDegree = -90f;
+        const float selectionStartDegree = 90;
+        const int slotCount = 5;
+        const float arcWidth = 180f;
+        const float selectionWidth = arcWidth / slotCount;
+
+        Vector2 selectionStartAngle = new(Mathf.Cos(selectionStartDegree), Mathf.Sin(selectionStartDegree));
+        float angle = -Vector2.SignedAngle(selectionStartAngle, dir);
+        Debug.Log($"Angle: {angle}");
+        angle = Mathf.Clamp(angle, 0, arcWidth);
+        int index = (int)((angle) / selectionWidth);
+        Debug.Log($"Index: {index}");
+
+
+        if (index != slotCount - 1)
+            hand.UpdateSelection(index);
+        else return index; // TODO: drop bag
+
+        return index;
     }
 
     void ChargeThrow()

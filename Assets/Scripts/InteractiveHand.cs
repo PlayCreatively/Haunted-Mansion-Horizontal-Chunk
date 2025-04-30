@@ -25,7 +25,16 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     public Carriable? ItemInHand => backpack.SelectedItem;
     //public bool HasBackpack => backpack != null;
-    public bool DisplayBackpack => backpack.Count > 1;
+    bool __displayBackpack = false;
+    public bool DisplayBackpack
+    {
+        get => __displayBackpack && backpack.Count > 1;
+        set
+        {
+            __displayBackpack = value;
+            backpackUI.gameObject.SetActive(DisplayBackpack);
+        }
+    }
 
     public Inventory Inventory => backpack.Inventory;
 
@@ -35,7 +44,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     void Awake()
     {
         defaultLocalPosition = transform.localPosition;
-        backpackUI = InventoryUI.CreateUI(4, transform.parent);
+        backpackUI = InventoryUI.CreateUI(5, transform.parent);
         backpackUI.gameObject.SetActive(false);
 
         CreateNewBackpack();
@@ -47,13 +56,21 @@ public class InteractiveHand : MonoBehaviour, IInventory
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetSelection(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetSelection(2);
         if (Input.GetKeyDown(KeyCode.Alpha4)) SetSelection(3);
-        if (Input.GetKeyDown(KeyCode.Alpha5)) 
-            SetSelection(4);
+        if (Input.GetKeyDown(KeyCode.Alpha5)) SetSelection(4);
         if (Input.GetKeyDown(KeyCode.Alpha6)) SetSelection(5);
         if (Input.GetKeyDown(KeyCode.B))
             DestroyBackpack();
 
         UpdatePositionOfHand();
+    }
+
+    public void UpdateSelection(int index)
+    {
+        if (index == backpack.Selected) return; // same selection, do nothing
+
+        FMODAudioManager.Instance.TriggerItemSelectionInTheBagSfx();
+        backpack.SetSelected(index);
+        backpackUI.UpdateSelected(index);
     }
 
     public void Throw(float force)
@@ -314,8 +331,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
             backpack.Inventory[selection]!.EnableVisibility(true);
         }
 
-        backpack.SetSelected(newSelection);
-        backpackUI.UpdateSelected(newSelection);
+        UpdateSelection(newSelection);
     }
 
     /// TODO: validate

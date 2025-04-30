@@ -18,7 +18,7 @@ public class InventoryUI : MonoBehaviour
         inventoryUI.icons = new Image[count];
         inventoryUI.target = target;
 
-        float degreePadding = 180f / count;
+        float rotSteps = 180f / (count - 1);
 
         GameObject slotUI = inventoryUI.transform.GetChild(0).gameObject;
         inventoryUI.icons[0] = slotUI.transform.GetChild(0).GetComponent<Image>();
@@ -31,7 +31,7 @@ public class InventoryUI : MonoBehaviour
             newSlotUI.name = $"ItemSlot_{i}";
             newSlotUI.SetActive(true);
             float distance = slotUI.transform.localPosition.magnitude;
-            newSlotUI.transform.localPosition = Quaternion.Euler(0, 0, -degreePadding * i) * Vector2.up * distance;
+            newSlotUI.transform.localPosition = Quaternion.Euler(0, 0, -rotSteps * i) * Vector2.up * distance;
         }
 
         return inventoryUI;
@@ -65,9 +65,9 @@ public class InventoryUI : MonoBehaviour
     public void Setup(Inventory newInventory, int selected)
     {
         Assert.IsNotNull(newInventory, "Inventory cannot be null");
-        Assert.IsTrue(newInventory.MaxSize == icons.Length, "Inventory size does not match UI slots");
+        Assert.IsTrue(newInventory.MaxSize == icons.Length - 1, "Inventory size does not match UI slots");
 
-        for (int i = 0; i < icons.Length; i++)
+        for (int i = 0; i < newInventory.MaxSize; i++)
         {
             if (newInventory[i] != null)
             {
@@ -78,6 +78,10 @@ public class InventoryUI : MonoBehaviour
                 UpdateSlot(i, (CarriableType)(-1));
             }
         }
+
+        //TODO: set last slot as bag
+        int bagSlot = icons.Length - 1;
+        UpdateSlot(bagSlot, CarriableType.Backpack);
 
         UpdateSelected(selected);
     }

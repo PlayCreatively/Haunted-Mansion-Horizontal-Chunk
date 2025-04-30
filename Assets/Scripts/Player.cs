@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
     InteractiveHand hand;
     Transform visuals;
     ParticleSystem[] dashParticles;
-    ParticleSystem walkParticles;
+    ParticleSystem[] walkParticles;
 
 
     Vector3 moveInput;
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
         visuals = transform.Find("Visuals");
         col = GetComponent<Collider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
-        walkParticles = visuals.GetChild(0).GetComponentInChildren<ParticleSystem>();
+        walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
     }
 
@@ -216,12 +217,19 @@ public class Player : MonoBehaviour
         bool isMoving = moveInput.magnitude > 0.02f;
         if (isMoving)
         {
-            if(!walkParticles.isPlaying && grounded)
-                walkParticles.Play();
+            if(!walkParticles[0].isPlaying && grounded)
+                foreach (var particle in walkParticles)
+                {
+                    particle.Emit(1);
+                    particle.Play();
+                }
             visuals.LookAt(transform.position + moveInput, Vector3.up);
         }
-        if(walkParticles.isPlaying && (!isMoving || !grounded))
-            walkParticles.Stop();
+        if (walkParticles[0].isPlaying && (!isMoving || !grounded))
+            foreach (var particle in walkParticles)
+            {
+                particle.Stop();
+            }
 
         grounded = false;
 

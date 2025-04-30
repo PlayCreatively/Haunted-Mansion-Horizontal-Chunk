@@ -58,7 +58,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     public void Throw(float force)
     {
-        var item = backpack.RemoveAtSelected();
+        var item = DropFromHand();
 
         if (item != null)
         {
@@ -75,7 +75,46 @@ public class InteractiveHand : MonoBehaviour, IInventory
     }
 
     public bool InsertToHand(Carriable carriable) => InsertAt(backpack.Selected, carriable);
-    public Carriable? DropFromHand() => backpack.RemoveAtSelected();
+    public Carriable? DropFromHand()
+    {
+        if(ItemInHand != null)
+        {
+            var removedItem = backpack.RemoveAtSelected();
+
+            if(Inventory.Count == 1)
+            {
+                // move last item to selection
+
+                int itemFound = Inventory.FindAny();
+                if(itemFound != -1)
+                {
+                    Debug.Log($"Swapping {ItemInHand} with {Inventory[itemFound]}");
+                    SwapItems(itemFound, backpack.Selected);
+                }
+
+                return removedItem;
+            }
+            else return removedItem;
+        }
+        else return null;
+
+    }
+
+    void SwapItems(int from, int to)
+    {
+        var fromRef = backpack.Inventory[from];
+        var toRef = backpack.Inventory[to];
+
+        backpackUI.UpdateSlot(from, toRef != null ? toRef!.type : (CarriableType)(-1));
+        backpackUI.UpdateSlot(to, fromRef != null ? fromRef!.type : (CarriableType)(-1));
+
+        if(fromRef != null)
+            fromRef!.EnableVisibility(to == backpack.Selected);
+        if (toRef != null)
+            toRef!.EnableVisibility(from == backpack.Selected);
+
+        backpack.Inventory.Swap(from, to);
+    }
 
     /// TODO: validate
     bool IsCloserThanFocused(IInteractable other)
@@ -213,10 +252,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
             DropFromHand();
             InsertAt(backpack.Selected, item);
         }
-        else
-        {
-            UpdateAllItemsVisibility();
-        }
+
+        UpdateAllItemsVisibility();
 
         // if item picked up is highlighted
         if (item == focusedInteractable as Carriable)
@@ -244,7 +281,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
         if (newSelection == backpack.Selected) return; // same selection, do nothing
 
-        Debug.Log($"SetSelection from {backpack.Selected} to {newSelection}");
+        //Debug.Log($"SetSelection from {backpack.Selected} to {newSelection}");
 
         int backPackIndex = backpack.MaxSize;
 
@@ -263,7 +300,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         }
 
         
-        if (newSelection == backPackIndex) // selected backpack
+        if (newSelection == backPackIndex && false /*disabled*/) // selected backpack
         {
             // this removes the backpack and creates a new empty backpack and places the old one in the new backpack (at hand index)
             var oldBackpack = backpack;
@@ -323,7 +360,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         readonly int count;
         public int selected = 0;
 
-        public Carriable Selected => hand.Inventory[selected];
+        public Carriable? Selected => hand.Inventory[selected];
 
         const float selectionEndDegree = 180f;
         const float selectionStartDegree = 0f;

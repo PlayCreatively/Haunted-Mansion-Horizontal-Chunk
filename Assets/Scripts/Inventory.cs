@@ -100,6 +100,8 @@ public class Inventory : MonoBehaviour, IInventory
     }
 
     public int FindSpace() => items.FindSpace();
+    public int FindAny() => items.FindAny();
+    public void Swap(int from, int to) => items.Swap(from, to);
 
     public int TransferItem(Carriable item, IInventory targetInventory)
     {
@@ -211,6 +213,19 @@ public class ManagedArray<T> where T : class
 
     //    return false; // Item not found
     //}
+
+    public int FindAny()
+    {
+        for (int i = 0; i < size; i++)
+            if (array[i] != null)
+                return i;
+        return -1; // No item found
+    }
+
+    public void Swap(int from, int to)
+    {
+        (array[to], array[from]) = (array[from], array[to]);
+    }
 
     public int Find(T item)
     {

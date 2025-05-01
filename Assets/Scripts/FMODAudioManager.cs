@@ -217,10 +217,19 @@ public class FMODAudioManager : MonoBehaviour
             gameOverInstance.start();
             bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
-        public void TriggerRunningOutOfTimeSfx(int urgency) //Plays a SFX based on how much time is left. Urgency [0;1]
+        public void UpdateRunningOutOfTimeSfx(int urgency) //Plays a SFX based on how much time is left. Urgency [0;1]
         {
-            runningOutOfTimeInstance.setParameterByName("Urgency", urgency);
-            runningOutOfTimeInstance.start();
+            if (urgency == 0)
+            {
+                runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
+            }
+            else
+            {
+              runningOutOfTimeInstance.setParameterByName("Urgency", urgency-1);
+              runningOutOfTimeInstance.start();  
+            }
+            
         }
         //Plays a laundry done SFX. No parameter
         public void TriggerLaundryDoneSfx() => laundryDoneInstance.start();

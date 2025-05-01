@@ -47,6 +47,12 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             meshCollider = gameObject.AddComponent<MeshCollider>();
             UnityEditor.EditorUtility.SetDirty(meshCollider);
         }
+        else // check if more than one collider component
+        {
+            var colliders = GetComponents<MeshCollider>();
+            if(colliders.Length > 1)
+                DestroyImmediate(colliders[1]);
+        }
 
         meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
     }

@@ -96,7 +96,7 @@ public class FMODAudioManager : MonoBehaviour
                 roomBookedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room booked");
                 resourcePlacedInRoomInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/resource placed in the room");
                 roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
-                runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/running out of time");
+                runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ticktack");
                 laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
                 soapBarDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/soap bar done");
 
@@ -217,9 +217,9 @@ public class FMODAudioManager : MonoBehaviour
             gameOverInstance.start();
             bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
-        public void TriggerRunningOutOfTimeSfx(int timeLeft) //Plays a SFX based on how much time is left. Time Left [??]
+        public void TriggerRunningOutOfTimeSfx(int urgency) //Plays a SFX based on how much time is left. Urgency [0;1]
         {
-            runningOutOfTimeInstance.setParameterByName("Time Left", timeLeft);
+            runningOutOfTimeInstance.setParameterByName("Urgency", urgency);
             runningOutOfTimeInstance.start();
         }
         //Plays a laundry done SFX. No parameter

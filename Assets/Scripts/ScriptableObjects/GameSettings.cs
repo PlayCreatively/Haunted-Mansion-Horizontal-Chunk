@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public static class Game
@@ -18,6 +19,12 @@ public static class Game
     {
         FMODAudioManager.Instance.TriggerGameOver();
         _gameManager.StartCoroutine(GameOverRoutine(failedRoom));
+    }
+
+    public static void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 
     static IEnumerator GameOverRoutine(Room failedRoom)
@@ -52,7 +59,7 @@ public static class Game
         var dynamicCam = cam.GetComponent<DynamicCamera>();
         dynamicCam.enabled = false;
         var startPos = cam.transform.position;
-        var endPos = target - cam.transform.forward * 10f;
+        var endPos = target - cam.transform.forward * 30f;
         float t = 0f;
         while (t < 1f)
         {
@@ -119,6 +126,7 @@ public class GameSettings : ScriptableObject
     }
 
     public bool UsingControllers;
+    public bool RoomCleaning = true;
     // player settings
     [Header("Player Settings")]
     public float playerSpeed = 5f;
@@ -138,18 +146,20 @@ public class GameSettings : ScriptableObject
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
     [Header("Room Settings")]
-    public float minBookedTime = 60;
-    public float maxBookedTime = 60 * 4;
-    public float GetBookedTime()
+    [Tooltip("Takes into consideration how many rooms are already booked")]
+    public int PostBookedTime = 45;
+    public float GetPostBookedTime()
     {
-        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * 5;
+        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * PostBookedTime;
     }
+    //public float minPostBookedTime = 60;
+    //public float maxPostBookedTime = 60 * 4;
     public float minStayTime = 20;
     public float maxStayTime = 60;
     public float GetRandomStayTime => UnityEngine.Random.Range(minStayTime, maxStayTime);
-    public float minNonBookedTime = 5;
-    public float maxNonBookedTime = 20;
-    public float GetRandomNonBookedTime => UnityEngine.Random.Range(minNonBookedTime, maxNonBookedTime);
+    public float minPreBookedTime = 5;
+    public float maxPreBookedTime = 20;
+    public float GetRandomPreBookedTime => UnityEngine.Random.Range(minPreBookedTime, maxPreBookedTime);
     [Header("Room Requirements Settings")]
     public RoomRequirementSettings requirementSettings = new()
     {

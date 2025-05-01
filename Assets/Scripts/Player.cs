@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody)), SelectionBase]
 public class Player : MonoBehaviour
@@ -65,17 +65,17 @@ public class Player : MonoBehaviour
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
         playerInput.actions["Throw"].canceled += _ => StartCoroutine(Throw());
         playerInput.actions["Dash"].performed += _ => DashInput();
-        playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
-        playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
+        //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
+        //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["ArcSelect"].started += _ => hand.DisplayBackpack = true;
         playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayBackpack = false;
+        playerInput.actions["Pause"].performed += _ => Game.RestartGame();
+        playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
     }
 
     public int UpdateSelected(Vector2 dir)
     {
-        Debug.Log($"ArcSelect: {dir}");
-
         const float selectionEndDegree = -90f;
         const float selectionStartDegree = 90;
         const int slotCount = 5;
@@ -84,11 +84,8 @@ public class Player : MonoBehaviour
 
         Vector2 selectionStartAngle = new(Mathf.Cos(selectionStartDegree), Mathf.Sin(selectionStartDegree));
         float angle = -Vector2.SignedAngle(selectionStartAngle, dir);
-        Debug.Log($"Angle: {angle}");
         angle = Mathf.Clamp(angle, 0, arcWidth);
         int index = (int)((angle) / selectionWidth);
-        Debug.Log($"Index: {index}");
-
 
         if (index != slotCount - 1)
             hand.UpdateSelection(index);
@@ -156,6 +153,7 @@ public class Player : MonoBehaviour
             }
 
             dashValue = GameSettings.Instance.playerDashDuration;
+            FMODAudioManager.Instance.TriggerOnDashStartsSfx();
         }
     }
 
@@ -265,7 +263,7 @@ public class Player : MonoBehaviour
         if (transform.position.y < -10)
         {
             rb.linearVelocity = Vector3.zero;
-            transform.position = new Vector3(2.5f, 0, 12.25f);
+            transform.localPosition = Vector3.zero;
         }
     }
 

@@ -74,6 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8998525a7c641d45b92fe584dd8e18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   resourceDrop: {fileID: 893317953373309965, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
 --- !u!136 &7907561961344033214
 CapsuleCollider:
@@ -194,7 +195,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a02120d731d5c9e429ac6e64beb675cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

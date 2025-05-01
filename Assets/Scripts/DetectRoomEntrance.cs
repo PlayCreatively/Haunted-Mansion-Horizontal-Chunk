@@ -23,7 +23,7 @@ public class DetectRoomEntrance : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item) && room.IsDirty)
+        if(TryGetComponent(out Room room) && collision.gameObject.TryGetComponent(out Carriable item) && room.IsRequired(item.type))
         {
             room.ResourceEnter(item.type, true);
             item.Destroy();

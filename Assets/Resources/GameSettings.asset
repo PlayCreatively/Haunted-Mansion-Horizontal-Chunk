@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   UsingControllers: 1
+  RoomCleaning: 1
   playerSpeed: 2
   playerJumpForce: 6
   playerThrowForce: 8
@@ -22,7 +23,7 @@ MonoBehaviour:
   playerDashDuration: 0.55
   playerStunForce: 2.5
   playerStunDuration: 1.25
-  hurtEnemyMoveMultiplier: 3
+  hurtEnemyMoveMultiplier: 2
   Ghost:
     hp: 2
     speed: 0.7
@@ -41,21 +42,20 @@ MonoBehaviour:
   GreenGoo:
     hp: 2
     speed: 1
-    frequency: 0.8
+    frequency: 1.6
     distance: 1.8
-    waitDelay: 0.5
+    waitDelay: 0.6
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}
   - {fileID: 1830926890520701604, guid: a7ed6f98d047dd240b343c273e04a5a8, type: 3}
   - {fileID: 0}
   - {fileID: 8803960671301444383, guid: a599cdcd912ad3e4eb08811058333e47, type: 3}
-  minBookedTime: 50
-  maxBookedTime: 70
-  minStayTime: 5
-  maxStayTime: 60
-  minNonBookedTime: 30
-  maxNonBookedTime: 120
+  PostBookedTime: 45
+  minStayTime: 30
+  maxStayTime: 180
+  minPreBookedTime: 5
+  maxPreBookedTime: 120
   requirementSettings:
     minAmount: 1
     maxAmount: 5

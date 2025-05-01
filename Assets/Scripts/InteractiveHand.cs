@@ -28,7 +28,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     bool __displayBackpack = false;
     public bool DisplayBackpack
     {
-        get => __displayBackpack && backpack.Count > 1;
+        get => __displayBackpack;
         set
         {
             __displayBackpack = value;
@@ -193,13 +193,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         // UI
         backpackUI.gameObject.SetActive(false);
         backpack.Inventory.OnInventoryUpdate += backpackUI.UpdateSlot;
-        backpack.Inventory.OnInventoryUpdate += (_,__) => UpdateBackpackVisibility();
         backpackUI.Setup(backpack.Inventory, backpack.Selected);
-    }
-    void UpdateBackpackVisibility()
-    {
-        backpackUI.gameObject.SetActive(DisplayBackpack);
-        backpack.EnableVisibility(DisplayBackpack);
     }
 
     public bool InsertAt(int index, Carriable carriable)
@@ -224,7 +218,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     {
         Assert.IsTrue(carriableBackpack != backpack, "Cannot insert backpack into itself");
 
-        if (!DisplayBackpack)
+        if (!(backpack.Count > 1))
             return MergeBackpack(carriableBackpack);
 
         else // we already have a backpack
@@ -292,8 +286,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
     /// TODO: validate
     void SetSelection(int selection)
     {
-        if(!DisplayBackpack) return;
-
         int newSelection = Mathf.Clamp(selection, 0, backpack.MaxSize);
 
         if (newSelection == backpack.Selected) return; // same selection, do nothing

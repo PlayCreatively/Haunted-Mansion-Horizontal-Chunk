@@ -27,7 +27,7 @@ public class DynamicCamera : MonoBehaviour
 
         // Set the camera position to be halfway between the two players
         Vector3 cameraPosition = (player1Pos + player2Pos) * .5f;
-        Vector3 targetPosDelta = -transform.position + cameraPosition + transform.forward * -10;
+        Vector3 targetPosDelta = -transform.position + cameraPosition + transform.forward * -30;
         transform.position += targetPosDelta * _smoothing; // Keep the camera at the same distance
 
         // Align with camera angle

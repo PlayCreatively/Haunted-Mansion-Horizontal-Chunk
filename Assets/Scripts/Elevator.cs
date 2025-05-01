@@ -99,6 +99,7 @@ public class Elevator : MonoBehaviour
                 case State.Moving:
                     Assert.IsTrue(targetFloor != -1);
                     Assert.IsTrue(moveDir != 0, "Elevator has no set move direction but is in 'moving' state");
+                    if(moveDir == 0) moveDir = UnityEngine.Random.value < .5f ? 1 : -1;
                     UpdateFloorTraversal();
 
                     if ((currentY - (int)currentY) == 0)

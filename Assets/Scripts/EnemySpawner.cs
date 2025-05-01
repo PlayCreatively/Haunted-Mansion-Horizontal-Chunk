@@ -38,6 +38,14 @@ public class EnemySpawner : MonoBehaviour
         return Instantiate(enemyPrefab, transform.position, transform.rotation);
     }
 
+    void OnValidate()
+    {
+        if (enemyPrefab == null)
+            return;
+
+        gameObject.name = enemyPrefab.name + " Spawner";
+    }
+
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
@@ -61,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
         if(sharedMesh == null)
             sharedMesh = enemyPrefab.GetComponentInChildren<SkinnedMeshRenderer>()?.sharedMesh;
 
-        Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, Vector3.one);
+        //Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, Vector3.one);
     }
 #endif
 }

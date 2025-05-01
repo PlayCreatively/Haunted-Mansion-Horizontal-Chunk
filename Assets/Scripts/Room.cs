@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public enum RoomState
 {
-    NonBooked,
+    PreBooked,
     Booked,
     Occupied,
     //Locked
@@ -23,10 +23,26 @@ public class Room : MonoBehaviour
         set
         {
             _bookedTime = value;
+            if(UrgencyState < 2 && _bookedTime < 15f)
+                UrgencyState = 2;
+            else if(UrgencyState < 1 && _bookedTime < 30f)
+                UrgencyState = 1;
+            
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
     }
-    float nonBookedTime = 0f;
+    float preBookedTime = 0f;
+    int _urgencyState = 0;
+    int UrgencyState
+    {
+        get => _urgencyState;
+        set
+        {
+            if (_urgencyState == value) return;
+            _urgencyState = value;
+            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(value);
+        }
+    }
 
     bool isDirty = false;
     public RoomState state;
@@ -34,7 +50,7 @@ public class Room : MonoBehaviour
 
     RoomUI roomUI;
 
-    protected readonly static List<Room> rooms = new(4);
+    protected readonly static List<Room> rooms = new(8);
     public Action<RoomState> OnStateChange;
     public Action<Requirements> OnRequirementsChange;
     public static Action<Room> OnRoomStateChange;
@@ -53,22 +69,30 @@ public class Room : MonoBehaviour
         roomUI = Instantiate(roomUIObj, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI")).GetComponentInChildren<RoomUI>();
         roomUI.transform.parent.name = gameObject.name + " UI";
         roomUI.transform.parent.localPosition = Vector3.zero;
-        roomUI.room = this;
 
+        roomUI.AssignRoom(this);
+
+        if(GameSettings.Instance.RoomCleaning == false)
+            enabled = false;
     }
 
     void Start()
     {
-        CheckIn();
+        if (Random.value < (2f / rooms.Count)) // likely that the game will start with 2 rooms checked out
+            Invoke(nameof(CheckOut), 1);
+        else
+            CheckIn();
+
+
     }
 
     void Update()
     {
         switch (state)
         {
-            case RoomState.NonBooked:
-                nonBookedTime -= Time.deltaTime;
-                if(nonBookedTime <= 0) Book(); break;
+            case RoomState.PreBooked:
+                preBookedTime -= Time.deltaTime;
+                if(preBookedTime <= 0) Book(); break;
             case RoomState.Booked:
                 BookedTime -= Time.deltaTime;
                 if (BookedTime <= 0) CheckIn(); break;
@@ -79,7 +103,7 @@ public class Room : MonoBehaviour
     }
 
     public float StayTime => stayTime;
-    public float NonBookedTime => nonBookedTime;
+    public float NonBookedTime => preBookedTime;
     public float Bookedtime => _bookedTime;
     public static List<Room> Rooms => rooms;
 
@@ -91,6 +115,7 @@ public class Room : MonoBehaviour
     [ContextMenu("Clean")]
     public void Clean()
     {
+        UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         isDirty = false;
@@ -103,7 +128,7 @@ public class Room : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} booked", gameObject);
         state = RoomState.Booked;
-        BookedTime = GameSettings.Instance.GetBookedTime();
+        BookedTime = GameSettings.Instance.GetPostBookedTime();
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
@@ -112,6 +137,8 @@ public class Room : MonoBehaviour
 
     public void CheckIn()
     {
+        UrgencyState = 0;
+
         Debug.Log($"{gameObject.name} checked in", gameObject);
 
         if(isDirty)
@@ -133,9 +160,9 @@ public class Room : MonoBehaviour
     public void CheckOut()
     {
         Debug.Log($"{gameObject.name} checked out", gameObject);
-        state = RoomState.NonBooked;
+        state = RoomState.PreBooked;
         isDirty = true;
-        nonBookedTime = GameSettings.Instance.GetRandomNonBookedTime;
+        preBookedTime = GameSettings.Instance.GetRandomPreBookedTime;
         requirements = Requirements.CreateRandom();
         OnRequirementsChange?.Invoke(requirements);
 
@@ -161,6 +188,8 @@ public class Room : MonoBehaviour
                 FMODAudioManager.Instance.TriggerResourcePlacedInRoom();
         }
     }
+
+    public bool IsRequired(CarriableType type) => isDirty && requirements.IsRequired(type);
 
     bool TryGetAvailableRoom(out Room availableRoom)
     {
@@ -228,6 +257,8 @@ public class Room : MonoBehaviour
                     return false;
             return true;
         }
+
+        public readonly bool IsRequired(CarriableType type) => resourceRequirement[(int)type] > 0;
 
         public readonly int this[CarriableType type]
         {

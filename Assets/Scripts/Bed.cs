@@ -7,7 +7,7 @@ public class Bed : MonoBehaviour, IInteractable
 
     void Start()
     {
-        MakeDirty(true);
+        //MakeDirty(true);
     }
 
     // assuming there's no bedsheet when its dirty

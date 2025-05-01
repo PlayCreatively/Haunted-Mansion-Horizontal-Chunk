@@ -14,16 +14,23 @@ public class RoomUI : MonoBehaviour
     //public GameObject checkInUI;
     public GameObject requirementsParent;
 
+    void Awake()
+    {
+        bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
     void Start()
     {
         bookingUI.SetActive(false);
         //checkInUI.SetActive(false);
+        gameObject.SetActive(false);
+    }
 
-        bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
+    public void AssignRoom(Room room)
+    {
+        this.room = room;
         room.OnStateChange += UpdateStateUI;
         room.OnRequirementsChange += UpdateRequirementsUI;
-
-        gameObject.SetActive(false);
     }
 
     void Update()

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3995987442079346954}
   - component: {fileID: 2323194614721286599}
   m_Layer: 0
-  m_Name: Enemy Spawner
+  m_Name: Ghost Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

@@ -237,9 +237,6 @@ public class FMODAudioManager : MonoBehaviour
             case EnemyType.Mummy:
                 TriggerLandingOnTheMummySfx(hp);
                 break;
-            case EnemyType.Spider:
-                TriggerLandingOnTheSpiderSfx();
-                break;
             case EnemyType.Goo:
                 TriggerLandingOnTheGreenGooSfx(hp);
                 break;

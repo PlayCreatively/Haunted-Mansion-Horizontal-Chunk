@@ -55,7 +55,13 @@ public class EnemySpawner : MonoBehaviour
         // thing so select
         // draw a circle around the spawner
         Gizmos.color = new Color(1,0,0,.5f);
-        Gizmos.DrawMesh(enemyPrefab.GetComponentInChildren<MeshFilter>().sharedMesh, transform.position, transform.rotation, Vector3.one);
+        Mesh sharedMesh;
+
+        sharedMesh = enemyPrefab.GetComponentInChildren<MeshFilter>()?.sharedMesh;
+        if(sharedMesh == null)
+            sharedMesh = enemyPrefab.GetComponentInChildren<SkinnedMeshRenderer>()?.sharedMesh;
+
+        Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, Vector3.one);
     }
 #endif
 }

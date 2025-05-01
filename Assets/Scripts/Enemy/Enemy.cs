@@ -6,7 +6,6 @@ public enum EnemyType
     Ghost,
     Mummy,
     Worm,
-    Spider,
     Goo,
     Trash,
 }
@@ -18,6 +17,12 @@ public class EnemySettings
     public float speed = .7f;
 }
 
+[System.Serializable]
+public class GooSettings : EnemySettings
+{
+    public float frequency = .5f, distance = 1.5f, waitDelay = .8f;
+}
+
 [SelectionBase]
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
@@ -26,7 +31,19 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType;
     public Carriable resourceDrop;
     protected float speed;
-    protected Vector3 moveDir = Vector3.zero;
+    Vector3 __moveDir;
+    protected Vector3 MoveDir
+    {
+        get => __moveDir;
+        set
+        {
+            __moveDir = value;
+            if (value.sqrMagnitude > 0.01f)
+            {
+                visuals.forward = value;
+            }
+        }
+    }
     // components
     protected Rigidbody rb;
     protected Transform visuals;
@@ -53,7 +70,7 @@ public class Enemy : MonoBehaviour
     void SetRandomDirection()
     {
         float randAngle = Random.Range(0, Mathf.PI * 2);
-        moveDir = new Vector3(Mathf.Cos(randAngle), 0, Mathf.Sin(randAngle));
+        MoveDir = new Vector3(Mathf.Cos(randAngle), 0, Mathf.Sin(randAngle));
     }
 
     public void Hit() => StartCoroutine(HitRoutine());
@@ -61,6 +78,11 @@ public class Enemy : MonoBehaviour
     IEnumerator HitRoutine()
     {
         hp--;
+        if(dashingRoutine != null)
+        {
+            StopCoroutine(dashingRoutine);
+            dashingRoutine = null;
+        }
         FMODAudioManager.Instance.TriggerLandingOnEnemySfx(enemyType, hp);
         yield return HitSquashRoutine();
         if (hp <= 0)
@@ -85,6 +107,7 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        StopAllCoroutines();
         rb.detectCollisions = false;
         rb.freezeRotation = false;
         rb.useGravity = false;
@@ -102,47 +125,99 @@ public class Enemy : MonoBehaviour
         rb.AddTorque(Random.onUnitSphere * 5, ForceMode.VelocityChange);
         yield return new WaitForSeconds(.15f);
 
-
         yield return new Timer(.1f).GetRoutine(t => transform.localScale = Vector3.one * (1f - t));
 
-        Carriable resource = Instantiate(resourceDrop, rb.position, rb.rotation);
-        resource.SetVelocity(rb.linearVelocity);
-        resource.SetAngularVelocity(rb.angularVelocity);
+        if(resourceDrop != null)
+        {
+            Carriable resource = Instantiate(resourceDrop, rb.position, rb.rotation);
+            resource.SetVelocity(rb.linearVelocity);
+            resource.SetAngularVelocity(rb.angularVelocity);
 
-        yield return new Timer(.1f).GetRoutine(t => resource.transform.localScale = Vector3.one * t);
-
-        //resource.SetVelocity(Vector3.up * 4);
+            yield return new Timer(.1f).GetRoutine(t => resource.transform.localScale = Vector3.one * t);
+        }
 
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
 
+    Coroutine dashingRoutine = null;
+    IEnumerator DashRoutine(float distance, float frequency, float repeatDelay)
+    {
+        while (true)
+        {
+            float curTime = frequency; // one cycle
+            float smoothT = 1, lastSmoothT;
+
+            while (smoothT > .05f)
+            {
+                curTime -= Time.fixedDeltaTime;
+                float t = curTime / frequency;
+                lastSmoothT = smoothT;
+                smoothT = t*t*t;
+                float deltaSmoothT = lastSmoothT - smoothT;
+                rb.MovePosition(rb.position + deltaSmoothT * distance * MoveDir);
+                visuals.Squash(1f - (smoothT * .6f));
+
+                yield return new WaitForFixedUpdate();
+            }
+            yield return new WaitForSeconds(repeatDelay);
+        }
+    }
+
     void ReflectOffWall(Vector3 normal)
     {
         // Reflect the move direction off the wall normal
-        moveDir = Vector3.Reflect(moveDir, normal);
-        moveDir.y = 0;
-        moveDir.Normalize();
-        visuals.forward = moveDir;
+        Vector3 dir = MoveDir;
+        dir = Vector3.Reflect(dir, normal);
+        dir.y = 0;
+        MoveDir = dir.normalized;
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveDir * speed * Time.fixedDeltaTime);
+        Move();
 
-        if(moveDir.sqrMagnitude < 0.01f)
+        if (MoveDir.sqrMagnitude < 0.01f)
         {
             SetRandomDirection();
         }
-        else
-        {
-            visuals.forward = moveDir;
-        }
 
         // check for wall
-        if (Physics.SphereCast(transform.position, .2f , moveDir, out RaycastHit hit, .25f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .25f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
         {
             ReflectOffWall(hit.normal);
+        }
+    }
+
+    void Move()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Ghost:
+                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
+
+                break;
+            case EnemyType.Mummy:
+                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
+
+                break;
+            case EnemyType.Worm:
+                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
+
+                break;
+            case EnemyType.Goo:
+                if(dashingRoutine == null)
+                {
+                    var gooSettings = settings as GooSettings;
+                    dashingRoutine = StartCoroutine(DashRoutine(gooSettings.distance, gooSettings.frequency, hp > 1 ? gooSettings.waitDelay : 0));
+                }
+                break;
+            case EnemyType.Trash:
+                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
+
+                break;
+            default:
+                break;
         }
     }
 

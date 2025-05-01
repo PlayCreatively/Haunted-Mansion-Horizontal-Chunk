@@ -25,7 +25,6 @@ public static class Game
         float timeT = 1f;
         while (timeT > 0)
         {
-            Debug.Log(Time.timeScale);
             timeT -= Time.unscaledDeltaTime * .75f;
             Time.timeScale = timeT * timeT;
             yield return null;
@@ -134,7 +133,8 @@ public class GameSettings : ScriptableObject
     [Header("Enemy Settings")]
     public float hurtEnemyMoveMultiplier = 1.5f;
     public EnemySettings Ghost;
-    public EnemySettings Mummy, GreenGoo, Spider, Worm, TrashMonster;
+    public EnemySettings Mummy, Spider, Worm, TrashMonster;
+    public GooSettings GreenGoo;
     [Header("Level Settings")]
     public GameObject[] wallPrefabs = new GameObject[3];
     [Header("Room Settings")]
@@ -219,7 +219,6 @@ public class GameSettings : ScriptableObject
             EnemyType.Ghost => Ghost,
             EnemyType.Mummy => Mummy,
             EnemyType.Goo => GreenGoo,
-            EnemyType.Spider => Spider,
             EnemyType.Worm => Worm,
             EnemyType.Trash => TrashMonster,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)

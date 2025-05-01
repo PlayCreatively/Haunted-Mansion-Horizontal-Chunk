@@ -29,9 +29,6 @@ MonoBehaviour:
   Mummy:
     hp: 2
     speed: 0.7
-  GreenGoo:
-    hp: 2
-    speed: 0.7
   Spider:
     hp: 2
     speed: 0.7
@@ -41,6 +38,12 @@ MonoBehaviour:
   TrashMonster:
     hp: 2
     speed: 0.7
+  GreenGoo:
+    hp: 2
+    speed: 1
+    frequency: 0.8
+    distance: 1.8
+    waitDelay: 0.5
   wallPrefabs:
   - {fileID: 8803960671301444383, guid: 4707660cd0ec47546b15323279157314, type: 3}
   - {fileID: 1652439633196221176, guid: 6d25bdf10bb69d84aa8700a44c8eb2b3, type: 3}

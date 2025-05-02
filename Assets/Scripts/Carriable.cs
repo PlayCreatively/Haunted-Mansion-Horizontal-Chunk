@@ -73,6 +73,7 @@ public class Carriable : MonoBehaviour, IInteractable
     Rigidbody rb;
     MeshRenderer meshRend;
 
+    public bool pickedUp = false;
     bool highlighted = false;
     bool destroyed = false;
 
@@ -97,7 +98,8 @@ public class Carriable : MonoBehaviour, IInteractable
     public void Highlight(bool value, InteractiveHand interactiveHand)
     {
         highlighted = value;
-        meshRend.material.color = value ? Color.yellow : Color.white;
+        if(meshRend != null) // TODO: find out why this is needed, ugly fix
+            meshRend.material.color = value ? Color.yellow : Color.white;
     }
 
     public void Destroy()
@@ -131,7 +133,11 @@ public class Carriable : MonoBehaviour, IInteractable
     {
         if (destroyed) return; // if the object is invisible, don't interact with it
 
-        hand.PickUp(this);
+        if(!pickedUp)
+        {
+            hand.PickUp(this);
+            pickedUp = true;
+        }
     }
 
     public void EnableCollider(bool value) => col.enabled = value;

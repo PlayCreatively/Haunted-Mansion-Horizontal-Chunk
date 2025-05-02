@@ -68,6 +68,14 @@ public class Inventory : MonoBehaviour, IInventory
             Debug.Log("InsertAt() failed: No space");
             return false;
         }
+        else if(item.pickedUp)
+        {
+            Debug.LogWarning("InsertAt() failed: Item already held");
+            return false; // Item is already picked up
+        }
+
+        item.pickedUp = true;
+
         count++;
 
         item.transform.SetParent(transform, false);
@@ -152,6 +160,8 @@ public class Inventory : MonoBehaviour, IInventory
 
         if(item == null)
             return null;
+
+        item.pickedUp = false;
 
         count--;
         item.EnablePhysics(true);

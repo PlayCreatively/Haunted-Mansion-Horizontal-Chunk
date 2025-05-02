@@ -55,7 +55,7 @@ Rigidbody:
     serializedVersion: 2
     m_Bits: 0
   m_ImplicitCom: 1
-  m_ImplicitTensor: 1
+  m_ImplicitTensor: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -124,6 +124,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4338863352921455005, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4163827435879649538, guid: f39f927a86fe1584586f8ca3f696c281, type: 3}
+    - target: {fileID: -4338863352921455005, guid: 006b77ad47ee242478f9683559182866, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1772ba23973036c4c90ff26570c4e242, type: 2}
@@ -138,6 +142,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 006b77ad47ee242478f9683559182866, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8630028930492621245}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 331074241039049066}
   m_SourcePrefab: {fileID: 100100000, guid: 006b77ad47ee242478f9683559182866, type: 3}
 --- !u!1 &7069419680552646582 stripped
 GameObject:
@@ -167,6 +174,28 @@ CapsuleCollider:
   m_Height: 0.64
   m_Direction: 2
   m_Center: {x: 0.06, y: 0, z: 0}
+--- !u!95 &331074241039049066
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7069419680552646582}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b85e446228458284299ba310dd57d091, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &7588652314635709708 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 006b77ad47ee242478f9683559182866, type: 3}

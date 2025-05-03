@@ -68,14 +68,19 @@ public class Player : MonoBehaviour
         //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
-        playerInput.actions["ArcSelect"].started += _ => hand.DisplayBackpack = true;
-        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayBackpack = false;
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
     }
 
     public int UpdateSelected(Vector2 dir)
     {
+        if( dir.sqrMagnitude < .1f)
+        {
+            hand.DisplayBackpack = false;
+            return -1;
+        }
+        hand.DisplayBackpack = true;
+
         const float selectionEndDegree = -90f;
         const float selectionStartDegree = 90;
         const int slotCount = 5;
@@ -83,7 +88,7 @@ public class Player : MonoBehaviour
         const float selectionWidth = arcWidth / slotCount;
 
         Vector2 selectionStartAngle = new(Mathf.Cos(selectionStartDegree), Mathf.Sin(selectionStartDegree));
-        float angle = -Vector2.SignedAngle(selectionStartAngle, dir);
+        float angle = -Vector2.SignedAngle(selectionStartAngle, dir) - selectionWidth * .5f;
         angle = Mathf.Clamp(angle, 0, arcWidth);
         int index = (int)((angle) / selectionWidth);
 
@@ -103,7 +108,7 @@ public class Player : MonoBehaviour
         if (holdCharge < 1f)
         {
             holdCharge += Time.deltaTime / chargeTime;
-            holdCharge = Mathf.Min(holdCharge, chargeTime);
+            holdCharge = Mathf.Min(holdCharge, 1f);
         }
 
         if (holdCharge > .25f)
@@ -112,17 +117,20 @@ public class Player : MonoBehaviour
 
     IEnumerator Throw()
     {
-        if(holdCharge < .35f)
+        float throwForce = GameSettings.Instance.playerThrowForce;
+        const float minHoldCharge = .45f;
+
+        if (holdCharge < minHoldCharge)
         {
-            hand.Throw(0);
+            hand.Throw(throwForce * minHoldCharge);
+            holdCharge = 0;
             yield break;
         }
-
-        if(grounded)
+        else if(grounded)
             Jump(holdCharge);
 
         yield return new WaitForSeconds(0.14f * holdCharge);
-        hand.Throw(GameSettings.Instance.playerThrowForce * holdCharge);
+        hand.Throw(throwForce * holdCharge);
         rb.AddForce(2 * holdCharge * -visuals.forward, ForceMode.VelocityChange);
         holdCharge = 0;
         canMove = false;
@@ -237,7 +245,8 @@ public class Player : MonoBehaviour
 
         ProcessDash();
 
-        Vector3 deltaMove = moveInput * (GameSettings.Instance.playerSpeed - holdCharge * .9f);
+        // slow player down when charging
+        Vector3 deltaMove = moveInput * (GameSettings.Instance.playerSpeed - holdCharge * .95f);
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
         bool isMoving = moveInput.magnitude > 0.02f;

@@ -19,6 +19,7 @@ MonoBehaviour:
   playerThrowForce: 8
   playerThrowAngle: 45
   playerThrowChargeTime: 1
+  playerThrowChargeTime: 0.8
   playerDashSpeed: 6
   playerDashDuration: 0.55
   playerStunForce: 2.5

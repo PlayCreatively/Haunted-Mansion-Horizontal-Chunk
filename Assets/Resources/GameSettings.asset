@@ -18,7 +18,6 @@ MonoBehaviour:
   playerJumpForce: 6
   playerThrowForce: 8
   playerThrowAngle: 45
-  playerThrowChargeTime: 1
   playerThrowChargeTime: 0.8
   playerDashSpeed: 6
   playerDashDuration: 0.55
@@ -59,7 +58,7 @@ MonoBehaviour:
   maxPreBookedTime: 120
   requirementSettings:
     minAmount: 1
-    maxAmount: 5
+    maxAmount: 3
     minTypes: 1
     maxTypes: 3
   smartElevator: 1

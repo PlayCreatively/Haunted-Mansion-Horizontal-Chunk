@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Dash"].performed += _ => DashInput();
         //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
+        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayBackpack = false;
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;

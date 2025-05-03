@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour
     }
     // components
     protected Rigidbody rb;
+    protected Collider col;
     protected Transform visuals;
     Curve deathBounceCurve;
     EnemySettings settings;
@@ -54,6 +55,9 @@ public class Enemy : MonoBehaviour
     {
         visuals = transform.GetChild(0);
         rb = GetComponent<Rigidbody>();
+        if(!TryGetComponent(out col))
+            col = GetComponentInChildren<Collider>();
+
         rb.isKinematic = false;
         deathBounceCurve = Resources.Load<Curve>("EnemyDeathBounce");
 
@@ -225,9 +229,21 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            float heightDiff = collision.transform.position.y - transform.position.y;
+            Collider playerCol = collision.collider;
+            Debug.Log(playerCol.bounds.extents);
+            Vector3 playerFeetPos = playerCol.bounds.center - Vector3.up * playerCol.bounds.extents.y;
+            Debug.DrawRay(playerFeetPos, collision.transform.forward * 2, Color.red, 1f);
+            Vector3 enemyCenterPos = col.bounds.center;
+            Debug.DrawRay(enemyCenterPos, transform.forward * 2, Color.red, 1f);
 
-            if (heightDiff > 0)
+            // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
+            float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
+
+            Debug.Log($"touchHeightPercent: {touchHeightPercent}");
+            Debug.Log($"velocity: {collision.rigidbody.linearVelocity.y}");
+            //Debug.Break();
+
+            if (touchHeightPercent > 0f)
             {
                 collision.gameObject.GetComponent<Player>().Jump(1.25f);
                 Hit();
@@ -236,6 +252,14 @@ public class Enemy : MonoBehaviour
             {
                 collision.gameObject.GetComponent<Player>().Stun(transform.position);
             }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Hit();
         }
     }
 }

@@ -40,6 +40,7 @@ public class Room : MonoBehaviour
         {
             if (_urgencyState == value) return;
             _urgencyState = value;
+            roomUI.OnUrgencyUpdated(value);
             FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(value);
         }
     }
@@ -71,17 +72,17 @@ public class Room : MonoBehaviour
         roomUI.transform.parent.localPosition = Vector3.zero;
 
         roomUI.AssignRoom(this);
+        roomUI.transform.parent.gameObject.SetActive(false);
 
-        if(GameSettings.Instance.RoomCleaning == false)
+        if (GameSettings.Instance.RoomCleaning == false)
             enabled = false;
     }
 
     void Start()
     {
+        CheckIn();
         if (Random.value < (2f / rooms.Count)) // likely that the game will start with 2 rooms checked out
             Invoke(nameof(CheckOut), 1);
-        else
-            CheckIn();
 
 
     }
@@ -118,10 +119,10 @@ public class Room : MonoBehaviour
         UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
-        isDirty = false;
-        OnStateChange?.Invoke(state);
-        OnRoomStateChange?.Invoke(this);
         shineAnimator.Play("GlassAnimation", 0, 0f);
+
+        isDirty = false;
+        CheckIn();
     }
 
     public void Book()
@@ -143,6 +144,8 @@ public class Room : MonoBehaviour
 
         if(isDirty)
         {
+            Clean();
+            return;
             roomUI.UpdateBookingTimeUI(0);
             Game.GameOver(this);
             enabled = false;

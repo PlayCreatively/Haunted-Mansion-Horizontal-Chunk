@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Room;
 
 [DefaultExecutionOrder(+500)]
 public class RoomUI : MonoBehaviour
@@ -11,19 +12,11 @@ public class RoomUI : MonoBehaviour
     TextMeshProUGUI bookingTimeUI;
     [SerializeField]
     TextMeshProUGUI[] ResourceCountUI;
-    //public GameObject checkInUI;
     public GameObject requirementsParent;
 
     void Awake()
     {
         bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    void Start()
-    {
-        bookingUI.SetActive(false);
-        //checkInUI.SetActive(false);
-        gameObject.SetActive(false);
     }
 
     public void AssignRoom(Room room)
@@ -44,7 +37,6 @@ public class RoomUI : MonoBehaviour
 
     public void UpdateArrow()
     {
-        var viewport = Camera.main.WorldToViewportPoint(room.transform.position) - (Vector3.one * .5f);
         var rectTrans = transform as RectTransform;
         var parentRect = (rectTrans.parent.parent as RectTransform).rect;
         
@@ -75,30 +67,46 @@ public class RoomUI : MonoBehaviour
 
     public void UpdateRequirementsUI(Room.Requirements requirements)
     {
-        Debug.Log($"Updating requirements UI for {room.gameObject.name}.\n" +
-            $"State: {room.state}\n" +
-            $"IsDirty: {room.IsDirty}\n" +
-            $"IsOccupied: {room.IsOccupied}\n" +
-            $"Requirements: {requirements}");
-
-        //checkInUI.SetActive(room.IsOccupied);
-        requirementsParent.SetActive(room.IsDirty);
-
         if (room.IsDirty)
-        {
             for (int i = 0; i < ResourceCountUI.Length; i++)
             {
                 ResourceCountUI[i].transform.parent.gameObject.SetActive(room.requirements[i] > 0);
                 ResourceCountUI[i].text = requirements[i].ToString();
             }
-        }
-
-        gameObject.SetActive(!requirements.IsFulfilled());
     }
 
     public void UpdateStateUI(RoomState state)
     {
-        bookingUI.SetActive(state == RoomState.Booked);
+        Debug.Log($"Updating state UI to {state}.");
+
+        if (state == RoomState.Occupied)
+        {
+            transform.parent.gameObject.SetActive(false);
+        }
+
+        else if (state == RoomState.PreBooked)
+        {
+            transform.parent.gameObject.SetActive(true);
+            bookingTimeUI.transform.parent.gameObject.SetActive(false);
+            bookingTimeUI.color = Color.white;
+            roomArrowUI.color = Color.white;
+        }
+
+        else if (state == RoomState.Booked)
+        {
+            bookingTimeUI.transform.parent.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnUrgencyUpdated(int urgency)
+    {
+        bookingTimeUI.color = roomArrowUI.color = urgency switch
+        {
+            0 => Color.white,
+            1 => new Color(1, .8f, .2f, 1),
+            2 => new Color(1, .2f, .2f, 1),
+            _ => throw new System.ArgumentOutOfRangeException(nameof(urgency), urgency, null)
+        };
     }
 
     public void UpdateBookingTimeUI(float time)
@@ -107,16 +115,5 @@ public class RoomUI : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
 
         bookingTimeUI.text = $"{minutes:D2}:{seconds:D2}";
-
-        const float YELLOW_MARK = 60F, RED_MARK = 30F;
-
-        bookingTimeUI.color 
-            = time < RED_MARK
-            ? new Color(1, .2f, .2f, 1) // red
-                : time < YELLOW_MARK
-                ? new Color(1, .8f, .2f, 1) // yellow
-                    : Color.white;
-
-        roomArrowUI.color = bookingTimeUI.color;
     }
 }

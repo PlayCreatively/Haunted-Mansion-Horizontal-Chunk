@@ -373,6 +373,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7717505733673945393, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7c41d2adeb6173140bd390ef4af3f751, type: 2}
     - target: {fileID: 9028769281574132737, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: m_Name
       value: Walk Particle System

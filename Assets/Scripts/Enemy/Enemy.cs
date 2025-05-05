@@ -187,7 +187,7 @@ public class Enemy : MonoBehaviour
         }
 
         // check for wall
-        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .25f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .25f, ~LayerMask.GetMask("Player", "Enemy"), QueryTriggerInteraction.Ignore))
         {
             ReflectOffWall(hit.normal);
         }

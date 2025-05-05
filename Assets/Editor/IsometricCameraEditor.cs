@@ -26,14 +26,16 @@ public class SnapButton : EditorToolbarButton
     [MenuItem("Game/Isometric/Default snap settings")]
     static void SetSnapSettings()
     {
+        const float snapValue = 0.70710678118654752440084436210485f / 2f;
+
         EditorSnapSettings.gridSize
             = EditorSnapSettings.move
-            = new Vector3(.1f, 1f, .1f);
+            = new Vector3(snapValue, .5f, snapValue);
 
         EditorSnapSettings.gridSnapEnabled = true;
         EditorSnapSettings.snapEnabled = true;
         EditorSnapSettings.rotate = 45f;
-        EditorSnapSettings.scale = .1f;
+        EditorSnapSettings.scale = .5f;
     }
 }
 

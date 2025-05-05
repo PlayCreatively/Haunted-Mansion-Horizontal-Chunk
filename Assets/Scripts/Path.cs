@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using System.Linq;
-using System.IO;
 
 [Serializable]
 public enum LineType { Normal, Path, Shortcut }
@@ -76,6 +74,32 @@ public class Path : MonoBehaviour
     public bool isPath = false; // Flag to indicate if this is a path or a floor editor
     public bool dirty = false;
 #endif
+
+    [UnityEditor.MenuItem("Game/ReSnapAllNodesToGrid")]
+    static void ReSnapAllNodes()
+    {
+        const float snapValue = 0.70710678118654752440084436210485f / 2f;
+
+        // create undo group
+        UnityEditor.Undo.IncrementCurrentGroup();
+        UnityEditor.Undo.SetCurrentGroupName("Resnap nodes to grid");
+
+        Path[] paths = FindObjectsByType<Path>(FindObjectsSortMode.None);
+        foreach (var path in paths)
+        {
+            for (int i = 0; i < path.nodes.Count; i++)
+            {
+                Vector2 node = path.nodes[i];
+                node.x = Snapping.Snap(node.x, snapValue);
+                node.y = Snapping.Snap(node.y, snapValue);
+                path.nodes[i] = node;
+            }
+            UnityEditor.EditorUtility.SetDirty(path);
+            UnityEditor.Undo.RegisterCompleteObjectUndo(path, "Resnap nodes to grid");
+        }
+
+        UnityEditor.Undo.CollapseUndoOperations(UnityEditor.Undo.GetCurrentGroup());
+    }
 
     // Helper: Convert stored Vector2 to world space Vector3 (using transform.position.y as the height)
     public Vector3 GetPos(int i)
@@ -215,27 +239,41 @@ public class Path : MonoBehaviour
     }
 
 # if UNITY_EDITOR
+
+    [UnityEditor.MenuItem("Game/RecenterAllRooms")]
+    public static void RecenterAllRooms()
+    {
+        Path[] paths = FindObjectsByType<Path>(FindObjectsSortMode.None);
+        foreach (var path in paths)
+        {
+            path.RecenterRoom();
+        }
+    }
+
     [ContextMenu("Recenter room")]
     public void RecenterRoom()
     {
-        Vector3 center = Vector3.zero;
+        float snapValue = 0.70710678118654752440084436210485f / 2f;
 
-        center = GetComponent<MeshFilter>().sharedMesh.bounds.center;
-        //foreach (var node in nodes)
-        //{
-        //    center += new Vector3(node.x, 0, node.y);
-        //}
-        //center /= nodes.Count;
+        Vector3 center = GetComponent<MeshFilter>().sharedMesh.bounds.center;
 
-        center = Snapping.Snap(center, UnityEditor.EditorSnapSettings.move);
+        Vector3 centPos = center;
+        centPos.x = Snapping.Snap(centPos.x, snapValue);
+        centPos.z = Snapping.Snap(centPos.z, snapValue);
+        center = new Vector3(centPos.x, center.y, centPos.z);
 
         for (int i = 0; i < nodes.Count; i++)
         {
             nodes[i] -= new Vector2(center.x, center.z);
         }
         transform.position += center;
+        Vector3 pos = transform.position;
+        pos.x = Snapping.Snap(pos.x, snapValue);
+        pos.z = Snapping.Snap(pos.z, snapValue);
+        transform.position = pos;
 
         UnityEditor.EditorUtility.SetDirty(this);
+        UnityEditor.EditorUtility.SetDirty(transform);
     }
 #endif
 

@@ -239,11 +239,7 @@ public class Enemy : MonoBehaviour
             // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
             float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
 
-            Debug.Log($"touchHeightPercent: {touchHeightPercent}");
-            Debug.Log($"velocity: {collision.rigidbody.linearVelocity.y}");
-            //Debug.Break();
-
-            if (touchHeightPercent > 0f)
+            if (touchHeightPercent > 0f && collision.rigidbody.linearVelocity.y < 1f)
             {
                 collision.gameObject.GetComponent<Player>().Jump(1.25f);
                 Hit();

@@ -303,6 +303,17 @@
                 {
                     "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3bcdb3d-337f-415b-b4dd-60e96f5fb81e",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",

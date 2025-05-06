@@ -24,8 +24,8 @@ public class Player : MonoBehaviour
     float dashValue = 0.5f;
     float jumpSquash = 0.5f;
     bool stunned;
-    float holdCharge = 0f;
-    bool canMove = true;
+    const float boostRunDuration = 1f;
+    float boostRunEnergy = 0;
 
     void Awake()
     {
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        if(GameSettings.Instance.UsingControllers)
+        if (GameSettings.Instance.UsingControllers)
         {
             Debug.Log($"{Gamepad.all.Count} controllers found");
 
@@ -63,8 +63,7 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
-        playerInput.actions["Throw"].canceled += _ => StartCoroutine(Throw());
-        playerInput.actions["Dash"].performed += _ => DashInput();
+        playerInput.actions["Throw"].performed += _ => Throw();
         //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
         playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
@@ -100,43 +99,13 @@ public class Player : MonoBehaviour
         return index;
     }
 
-    void ChargeThrow()
-    {
-        if(hand.ItemInHand == null) return;
-
-        float chargeTime = GameSettings.Instance.playerThrowChargeTime;
-
-        if (holdCharge < 1f)
-        {
-            holdCharge += Time.deltaTime / chargeTime;
-            holdCharge = Mathf.Min(holdCharge, 1f);
-        }
-
-        if (holdCharge > .25f)
-            visuals.Squash(1f - (holdCharge * .25f));
-    }
-
-    IEnumerator Throw()
+    void Throw()
     {
         float throwForce = GameSettings.Instance.playerThrowForce;
-        const float minHoldCharge = .45f;
+        const float minThrowForce = .45f;
 
-        if (holdCharge < minHoldCharge)
-        {
-            hand.Throw(throwForce * minHoldCharge);
-            holdCharge = 0;
-            yield break;
-        }
-        else if(grounded)
-            Jump(holdCharge);
-
-        yield return new WaitForSeconds(0.14f * holdCharge);
-        hand.Throw(throwForce * holdCharge);
-        rb.AddForce(2 * holdCharge * -visuals.forward, ForceMode.VelocityChange);
-        holdCharge = 0;
-        canMove = false;
-        yield return new WaitUntil(() => grounded);
-        canMove = true;
+        float chargeMul = rb.linearVelocity.y > .2f || boostRunEnergy > 0 ? 1f : minThrowForce;
+        hand.Throw(throwForce * chargeMul);
     }
 
     void ProcessDash()
@@ -168,7 +137,7 @@ public class Player : MonoBehaviour
 
     public void Stun(Vector3 origin)
     {
-        if(stunned) return;
+        if (stunned) return;
 
         var dir = transform.position - origin;
         dir.y = 0;
@@ -176,7 +145,7 @@ public class Player : MonoBehaviour
 
         dir *= GameSettings.Instance.playerStunForce;
         var item = hand.DropFromHand();
-        if(item != null)
+        if (item != null)
         {
             item.SetVelocity(-dir + Vector3.up * 5);
         }
@@ -213,6 +182,9 @@ public class Player : MonoBehaviour
 
     public void Jump(float force = 1f)
     {
+        if (!grounded) // means the player landed on an enemy
+            boostRunEnergy = boostRunDuration;
+
         var velocity = rb.linearVelocity;
         velocity.y = GameSettings.Instance.playerJumpForce * force;
         rb.linearVelocity = velocity;
@@ -228,32 +200,53 @@ public class Player : MonoBehaviour
             jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
             //visuals.Squash(1f + jumpSquash);
         }
-
-        if(playerInput.actions["Throw"].IsPressed())
-            ChargeThrow();
-
     }
 
     void FixedUpdate()
     {
-        if(stunned || !canMove)
+        if (stunned)
             return;
 
         visuals.Squash(rb.linearVelocity.y / 15f + 1);
 
-        if (grounded && playerInput.actions.FindAction("Jump").IsPressed())
-            Jump();
+
+        var jumpAction = playerInput.actions.FindAction("Jump");
+        if (jumpAction.IsPressed())
+        {
+            if (grounded)
+            {
+                DashInput();
+                Jump();
+            }
+        }
+
+        bool isRunBoosting = grounded && boostRunEnergy > 0;
+        if (isRunBoosting)
+            boostRunEnergy -= Time.deltaTime;
+
+        float runBoost = isRunBoosting ? 2f : 1f;
+
+        foreach (var particle in dashParticles)
+        {
+            var main = particle.main;
+            main.startColor = isRunBoosting ? Color.white * .5f : Color.white;
+        }
+        foreach (var particle in walkParticles)
+        {
+            var main = particle.main;
+            main.startColor = isRunBoosting ? Color.white * .5f : Color.white;
+        }
 
         ProcessDash();
 
         // slow player down when charging
-        Vector3 deltaMove = moveInput * (GameSettings.Instance.playerSpeed - holdCharge * .95f);
+        Vector3 deltaMove = GameSettings.Instance.playerSpeed * runBoost * moveInput;
         deltaMove.y = rb.linearVelocity.y;
         rb.linearVelocity = deltaMove;
         bool isMoving = moveInput.magnitude > 0.02f;
         if (isMoving)
         {
-            if(!walkParticles[0].isPlaying && grounded)
+            if (!walkParticles[0].isPlaying && grounded)
                 foreach (var particle in walkParticles)
                 {
                     particle.Emit(1);
@@ -282,6 +275,10 @@ public class Player : MonoBehaviour
         foreach (var contact in collision.contacts)
         {
             grounded |= contact.normal.y > .8f && Physics.Raycast(transform.position + Vector3.up * .2f, Vector3.down, 1);
+        }
+        if(grounded)
+        {
+            //Debug.Log(collision.impulse.y);
         }
     }
 }

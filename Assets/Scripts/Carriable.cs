@@ -2,10 +2,18 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#nullable enable
 public interface IInteractable : IHighlightable
 {
-    void Interact(InteractiveHand hand);
+    bool Interact(InteractiveHand hand)
+    {
+        bool successful = hand.ItemInHand != null && Interact(hand.ItemInHand);
+        if (successful) hand.DropFromHand();
+        return successful;
+    }
+    bool Interact(Carriable carriable);
 }
+#nullable disable
 
 public interface IInteractableObject : IInteractable
 {
@@ -51,7 +59,8 @@ public enum CarriableType
     Towel,
     BedSheet,
     Backpack,
-    Trash
+    DirtyTowel,
+    DirtyBedSheet,
 }
 
 [Flags]
@@ -60,9 +69,10 @@ public enum CarriableTypeMask
     ToiletPaper = 1,
     Towel = 2,
     BedSheet = 4,
-    AllResources = ToiletPaper | Towel | BedSheet,
+    AllResources = ToiletPaper | Towel | BedSheet | DirtyTowel | DirtyBedsheet,
     Backpack = 8,
-    Trash = 16
+    DirtyTowel = 16,
+    DirtyBedsheet = 32,
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -74,7 +84,7 @@ public class Carriable : MonoBehaviour, IInteractable
     MeshRenderer meshRend;
 
     public bool pickedUp = false;
-    bool highlighted = false;
+    public bool highlighted = false;
     bool destroyed = false;
 
     protected virtual void Awake()
@@ -129,16 +139,20 @@ public class Carriable : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    public void Interact(InteractiveHand hand)
+    public bool Interact(InteractiveHand hand)
     {
-        if (destroyed) return; // if the object is invisible, don't interact with it
+        if (destroyed) return false; // if the object is invisible, don't interact with it
 
         if(!pickedUp)
         {
             hand.PickUp(this);
             pickedUp = true;
         }
+
+        return pickedUp;
     }
+
+    public bool Interact(Carriable carriable) { return false; }
 
     public void EnableCollider(bool value) => col.enabled = value;
 
@@ -164,8 +178,30 @@ public class Carriable : MonoBehaviour, IInteractable
         rb.angularVelocity = velocity;
     }
 
-    internal void EnableVisibility(bool isItemsVisible)
+    public void EnableVisibility(bool isItemsVisible)
     {
         meshRend.enabled = isItemsVisible;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log($"{gameObject.name} colliding with {collision.gameObject.name}");
+        const float minInteractionSpeed = .2f;
+
+        if (!pickedUp && rb.angularVelocity.sqrMagnitude > minInteractionSpeed)
+        {
+            if (collision.rigidbody != null && collision.rigidbody.TryGetComponent(out IInteractable interactable))
+            {
+                interactable.Interact(this);
+                Debug.Log($"Interacting with {collision.gameObject.name} using {gameObject.name}");
+            }
+            
+            else if (collision.gameObject.TryGetComponent(out interactable))
+            {
+                interactable.Interact(this);
+                Debug.Log($"Interacting with {collision.gameObject.name} using {gameObject.name}");
+
+            }
+        }
     }
 }

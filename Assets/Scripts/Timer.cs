@@ -46,6 +46,15 @@ public struct Timer
         }
     }
 
+    public readonly IEnumerator GetRoutinePro(Action<float, float> action)
+    {
+        while (!Finished)
+        {
+            yield return null;
+            action.Invoke(Normal, GetTime - startTime);
+        }
+    }
+
     public readonly bool Finished => GetTime >= startTime + duration;
 
     public readonly float Normal => Mathf.Clamp01(UnClampedNormal);

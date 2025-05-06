@@ -31,15 +31,17 @@ public class Bed : MonoBehaviour, IInteractable
         }
     }
 
-    public void Interact(InteractiveHand hand)
+    public bool Interact(Carriable carriable)
     {
-        var itemInHand = hand.ItemInHand;
-        if (itemInHand != null && hand.ItemInHand.type == CarriableType.BedSheet && IsDirty())
+        bool correct = carriable.type == CarriableType.BedSheet && IsDirty();
+
+        if (correct)
         {
-            hand.DropFromHand();
-            Destroy(itemInHand.gameObject);
+            Destroy(carriable);
             MakeDirty(false);
         }
+
+        return correct;
     }
 
     public void Highlight(bool value, InteractiveHand interactiveHand)

@@ -200,6 +200,8 @@ public class GameSettings : ScriptableObject
     public ResourceInfo toiletPaper;
     public ResourceInfo towel;
     public ResourceInfo bedSheet;
+    public ResourceInfo dirtyTowel;
+    public ResourceInfo dirtyBedSheet;
 
     public ResourceInfo GetResourceInfo(CarriableType type)
     {
@@ -208,6 +210,8 @@ public class GameSettings : ScriptableObject
             CarriableType.ToiletPaper => toiletPaper,
             CarriableType.Towel => towel,
             CarriableType.BedSheet => bedSheet,
+            CarriableType.DirtyTowel => dirtyTowel,
+            CarriableType.DirtyBedSheet => dirtyBedSheet,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

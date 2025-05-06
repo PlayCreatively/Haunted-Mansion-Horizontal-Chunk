@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class StackingInventory : Inventory, IInteractableObject
+public class StackingInventory : Inventory, IInteractable
 {
     public Vector3Int itemGrid = new(1, 1, 1); // Size of the grid for item placement
     public Vector3 padding; // Padding between items in the grid
@@ -102,12 +102,22 @@ public class StackingInventory : Inventory, IInteractableObject
         return base.InsertAt(index, item);
     }
 
-    public void Interact(InteractiveHand hand)
+    public bool Interact(InteractiveHand hand)
     {
-        if (hand.ItemInHand != null && allowedTypes.IsInMask(hand.ItemInHand.type))
-        {
+        bool successful = hand.ItemInHand != null && allowedTypes.IsInMask(hand.ItemInHand.type);
+
+        if (successful)
             hand.Inventory.TransferItem(hand.ItemInHand, this);
-        }
+
+        return successful;
+    }
+
+    public bool Interact(Carriable carriable)
+    {
+        bool successful = carriable != null && allowedTypes.IsInMask(carriable.type);
+        if (successful)
+            InsertAt(count, carriable);
+        return successful;
     }
 
     public void Highlight(bool value, InteractiveHand hand)

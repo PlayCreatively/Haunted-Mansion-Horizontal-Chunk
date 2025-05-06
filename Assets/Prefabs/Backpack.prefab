@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemLocation: {x: 0, y: 0, z: 1}
   isItemsVisible: 0
-  allowedTypes: 7
+  allowedTypes: 55
   maxSize: 4
 --- !u!114 &2177806074340410386
 MonoBehaviour:
@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  pickedUp: 0
 --- !u!54 &7424792150226642104
 Rigidbody:
   m_ObjectHideFlags: 0

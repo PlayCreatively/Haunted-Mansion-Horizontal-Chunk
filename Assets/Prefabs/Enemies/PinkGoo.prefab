@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3923314876375813597}
   - component: {fileID: 4260395273753613093}
   m_Layer: 7
-  m_Name: GreenGoo
+  m_Name: PinkGoo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

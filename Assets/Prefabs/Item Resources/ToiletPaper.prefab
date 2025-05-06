@@ -85,6 +85,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  pickedUp: 0
+  highlighted: 0
 --- !u!54 &4726038571546777400
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -111,4 +113,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1

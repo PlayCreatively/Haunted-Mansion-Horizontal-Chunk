@@ -261,7 +261,7 @@ public class Room : MonoBehaviour
             return true;
         }
 
-        public readonly bool IsRequired(CarriableType type) => resourceRequirement[(int)type] > 0;
+        public readonly bool IsRequired(CarriableType type) => (int)type < 3 && resourceRequirement[(int)type] > 0;
 
         public readonly int this[CarriableType type]
         {

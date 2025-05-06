@@ -210,6 +210,9 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             Debug.Log($"Successfully generated mesh with {finalVertices3D.Count} vertices and {triangles.Count / 3} triangles.", this);
         pathComponent.dirty = false;
 
+        bool isRoom = TryGetComponent<Room>(out var _);
+        gameObject.name = string.Format(isRoom ? "Floor {0:F0} (Guest Room)" : "Floor {0:F0}", transform.position.y);
+
         SpawnConnectionPrefabs();
     }
 

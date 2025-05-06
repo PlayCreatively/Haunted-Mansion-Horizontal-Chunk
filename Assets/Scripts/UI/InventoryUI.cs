@@ -57,8 +57,10 @@ public class InventoryUI : MonoBehaviour
 
         for (int i = 0; i < icons.Length; i++)
         {
-            icons[i].transform.parent.GetComponent<Image>().color = (index == i) ? Color.white : Color.gray;
-            //icons[i].color = (index == i) ? Color.white : Color.gray;
+            float brightness = (i == index) ? 1f : 0.4f;
+            var color = new Color(brightness, brightness, brightness, 1f);
+            icons[i].transform.parent.GetComponent<Image>().color = color;
+            icons[i].color = color;
         }
     }
 

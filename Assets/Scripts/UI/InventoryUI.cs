@@ -58,7 +58,9 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < icons.Length; i++)
         {
             float brightness = (i == index) ? 1f : 0.4f;
+            float scale = (i == index) ? 1.2f : 1f;
             var color = new Color(brightness, brightness, brightness, 1f);
+            icons[i].transform.parent.localScale = new Vector3(scale, scale, scale);
             icons[i].transform.parent.GetComponent<Image>().color = color;
             icons[i].color = color;
         }

@@ -86,6 +86,9 @@ MonoBehaviour:
   minSize: 3
   BorderSize: 3
   smoothing: 0.15
+  editMode: 0
+  zoom: 7.38
+  position: {x: -51.5, y: -13.5}
 --- !u!20 &3090532033303453529
 Camera:
   m_ObjectHideFlags: 0

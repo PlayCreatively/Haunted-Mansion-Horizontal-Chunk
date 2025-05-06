@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Dash"].performed += _ => DashInput();
         //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
         //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
-        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayBackpack = false;
+        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
@@ -75,12 +75,12 @@ public class Player : MonoBehaviour
 
     public int UpdateSelected(Vector2 dir)
     {
-        if( dir.sqrMagnitude < .1f)
+        if (dir.sqrMagnitude < .1f)
         {
-            hand.DisplayBackpack = false;
+            hand.DisplayInventoryUI(0);
             return -1;
         }
-        hand.DisplayBackpack = true;
+        hand.DisplayInventoryUI(dir.magnitude);
 
         const float selectionEndDegree = -90f;
         const float selectionStartDegree = 90;

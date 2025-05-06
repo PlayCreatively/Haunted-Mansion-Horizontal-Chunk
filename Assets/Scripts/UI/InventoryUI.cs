@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -9,6 +11,11 @@ public class InventoryUI : MonoBehaviour
 
     Image[] icons;
     Transform target;
+
+    void Awake()
+    {
+        transform.localScale = Vector3.zero;
+    }
 
     public static InventoryUI CreateUI(int count, Transform target)
     {
@@ -97,7 +104,16 @@ public class InventoryUI : MonoBehaviour
 
     public Vector2 GetTargetPosInScreenSpace()
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(target.position);
+        Vector3 offset = new(0, .5f, 0);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(target.position + offset);
         return new(screenPos.x, screenPos.y);
+    }
+
+    public void Activate(bool value, float scale)
+    {
+        gameObject.SetActive(value);
+        transform.localScale = Vector3.one * scale;
+
+        //StartCoroutine(transform.ScaleObject(0.075f, value ? 1f : 0f));
     }
 }

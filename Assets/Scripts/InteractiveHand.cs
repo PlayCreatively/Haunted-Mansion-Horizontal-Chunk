@@ -26,14 +26,10 @@ public class InteractiveHand : MonoBehaviour, IInventory
     public Carriable? ItemInHand => backpack.SelectedItem;
     //public bool HasBackpack => backpack != null;
     bool __displayBackpack = false;
-    public bool DisplayBackpack
+    public void DisplayInventoryUI(float scale)
     {
-        get => __displayBackpack;
-        set
-        {
-            __displayBackpack = value;
-            backpackUI.gameObject.SetActive(DisplayBackpack);
-        }
+        backpackUI.gameObject.SetActive(scale > .1f);
+        backpackUI.transform.localScale = Vector3.one * scale;
     }
 
     public Inventory Inventory => backpack.Inventory;

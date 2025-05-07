@@ -72,7 +72,7 @@ MonoBehaviour:
     visualPrefab: {fileID: 3870387949449623212, guid: 7354f380b42b45748ab276b066935954, type: 3}
     mesh: {fileID: 4887130443118080773, guid: 54c0f726de52dbb4ca8413afa34abeac, type: 3}
   bedSheet:
-    prefab: {fileID: 893317953373309965, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
+    prefab: {fileID: 8891036835039849118, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
     visualPrefab: {fileID: 3870387949449623212, guid: 103d16c9b8c06f545a836feb0e7e5c46, type: 3}
     mesh: {fileID: -1558037838122711689, guid: adce8986e54ddaf49a7c6fb11ad1765a, type: 3}
   dirtyTowel:

@@ -185,23 +185,16 @@ public class Carriable : MonoBehaviour, IInteractable
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"{gameObject.name} colliding with {collision.gameObject.name}");
-        const float minInteractionSpeed = .2f;
+        const float minInteractionSpeed = 100f;
 
-        if (!pickedUp && rb.angularVelocity.sqrMagnitude > minInteractionSpeed)
+        if (!pickedUp && (rb.angularVelocity.sqrMagnitude > minInteractionSpeed) || rb.angularVelocity.y < float.Epsilon)
         {
+
             if (collision.rigidbody != null && collision.rigidbody.TryGetComponent(out IInteractable interactable))
-            {
                 interactable.Interact(this);
-                Debug.Log($"Interacting with {collision.gameObject.name} using {gameObject.name}");
-            }
             
             else if (collision.gameObject.TryGetComponent(out interactable))
-            {
                 interactable.Interact(this);
-                Debug.Log($"Interacting with {collision.gameObject.name} using {gameObject.name}");
-
-            }
         }
     }
 }

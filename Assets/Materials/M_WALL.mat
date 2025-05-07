@@ -52,11 +52,12 @@ Material:
     m_Floats:
     - _Erect: 1
     - _Normal_Amount: 190.8
-    - _Normal_Strength: 4
+    - _Normal_Strength: 17
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smoothness: 0
     - _TileY: 0
-    - _Tiling: 0.7
+    - _Tiling: 0.5
     m_Colors:
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Tint: {r: 0.5540406, g: 0.67542243, b: 0.7433963, a: 1}

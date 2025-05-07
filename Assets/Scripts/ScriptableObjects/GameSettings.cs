@@ -233,7 +233,7 @@ public class GameSettings : ScriptableObject
             EnemyType.Ghost => Ghost,
             EnemyType.Mummy => Mummy,
             EnemyType.Goo => GreenGoo,
-            EnemyType.Worm => Worm,
+            EnemyType.TowelMonster => Worm,
             EnemyType.Trash => TrashMonster,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };

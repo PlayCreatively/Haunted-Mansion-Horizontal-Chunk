@@ -1,0 +1,246 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4116215913285328334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5640880379736053422}
+  m_Layer: 0
+  m_Name: Green Goo Spawners
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5640880379736053422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4116215913285328334}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -46.03454, y: 0, z: 30.80069}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3492821313225091625}
+  - {fileID: 9216426089203581212}
+  - {fileID: 8517641879463967235}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &507894187857697571
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5640880379736053422}
+    m_Modifications:
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: maxCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 2890557469251044016, guid: 10bb313edeae27e43b77b149c0f907a7, type: 3}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 49.923626
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -22.261366
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361181078838241062, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_Name
+      value: PinkGoo Spawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+--- !u!4 &3492821313225091625 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+  m_PrefabInstance: {fileID: 507894187857697571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4701801171528911625
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5640880379736053422}
+    m_Modifications:
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: maxCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 2890557469251044016, guid: 10bb313edeae27e43b77b149c0f907a7, type: 3}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 43.91322
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -33.45234
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361181078838241062, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_Name
+      value: PinkGoo Spawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+--- !u!4 &8517641879463967235 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+  m_PrefabInstance: {fileID: 4701801171528911625}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5229747732248326166
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5640880379736053422}
+    m_Modifications:
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: maxCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 2890557469251044016, guid: 10bb313edeae27e43b77b149c0f907a7, type: 3}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 45.680984
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -29.511366
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361181078838241062, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+      propertyPath: m_Name
+      value: PinkGoo Spawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+--- !u!4 &9216426089203581212 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
+  m_PrefabInstance: {fileID: 5229747732248326166}
+  m_PrefabAsset: {fileID: 0}

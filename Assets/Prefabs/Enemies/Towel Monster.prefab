@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2302318378833144967}
   - component: {fileID: 8146777531891385649}
-  - component: {fileID: -5011925487545830400}
+  - component: {fileID: 636504347077856553}
   m_Layer: 7
-  m_Name: Worm
+  m_Name: Towel Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &-5011925487545830400
+--- !u!114 &636504347077856553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,11 +70,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1679140350493611967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e5a2174b30eac449a1e0555516ba0d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cfa0b04fb14d8245a8ab867936c31c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  resourceDrop: {fileID: 1776415883596520742, guid: 0e6a4ae11c396ee46a74c56a7ac2eedb, type: 3}
+  resourceDrop: {fileID: -766079046467392610, guid: 0b3afa738b6b3214ab5444fea324936f, type: 3}
 --- !u!1001 &7987967848371964647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -123,6 +123,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8290514625156689841, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -7539040288873527896, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -6702753838260271493, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -5871399659104231388, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -4338863352921455005, guid: 006b77ad47ee242478f9683559182866, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -131,9 +147,33 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1772ba23973036c4c90ff26570c4e242, type: 2}
+    - target: {fileID: -3825582901345380450, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -2686718672124202295, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -1256172242784395621, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 006b77ad47ee242478f9683559182866, type: 3}
       propertyPath: m_Name
       value: towel_monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483935772499632483, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591683685382586174, guid: 006b77ad47ee242478f9683559182866, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -171,7 +211,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
-  m_Height: 0.64
+  m_Height: 0.95
   m_Direction: 2
   m_Center: {x: 0.06, y: 0, z: 0}
 --- !u!95 &331074241039049066

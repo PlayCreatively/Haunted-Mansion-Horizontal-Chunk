@@ -5,7 +5,7 @@ public enum EnemyType
 {
     Ghost,
     Mummy,
-    Worm,
+    TowelMonster,
     Goo,
     Trash,
 }
@@ -15,6 +15,7 @@ public class EnemySettings
 {
     public int hp = 1;
     public float speed = .7f;
+    public float hurtSpeedMultiplier = 2f;
 }
 
 [System.Serializable]
@@ -27,7 +28,7 @@ public class GooSettings : EnemySettings
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
-    int hp = 1;
+    protected int hp = 1;
     public EnemyType enemyType;
     public Carriable resourceDrop;
     protected float speed;
@@ -77,7 +78,7 @@ public class Enemy : MonoBehaviour
         MoveDir = new Vector3(Mathf.Cos(randAngle), 0, Mathf.Sin(randAngle));
     }
 
-    public void Hit() => StartCoroutine(HitRoutine());
+    public virtual void Hit() => StartCoroutine(HitRoutine());
 
     IEnumerator HitRoutine()
     {
@@ -94,7 +95,7 @@ public class Enemy : MonoBehaviour
             Die();
            yield break;
         }
-        speed *= GameSettings.Instance.hurtEnemyMoveMultiplier;
+        speed *= settings.hurtSpeedMultiplier;
     }
 
     IEnumerator HitSquashRoutine()
@@ -187,13 +188,13 @@ public class Enemy : MonoBehaviour
         }
 
         // check for wall
-        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .25f, ~LayerMask.GetMask("Player", "Enemy"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .4f, ~LayerMask.GetMask("Player", "Enemy"), QueryTriggerInteraction.Ignore))
         {
             ReflectOffWall(hit.normal);
         }
     }
 
-    void Move()
+    protected virtual void Move()
     {
         switch (enemyType)
         {
@@ -205,7 +206,7 @@ public class Enemy : MonoBehaviour
                 rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
 
                 break;
-            case EnemyType.Worm:
+            case EnemyType.TowelMonster:
                 rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
 
                 break;
@@ -248,14 +249,6 @@ public class Enemy : MonoBehaviour
             {
                 collision.gameObject.GetComponent<Player>().Stun(transform.position);
             }
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Hit();
         }
     }
 }

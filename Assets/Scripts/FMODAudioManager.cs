@@ -252,7 +252,7 @@ public class FMODAudioManager : MonoBehaviour
             case EnemyType.Trash:
                 TriggerLandingOnTheLTrashMonsterSfx(hp);
                 break;
-            case EnemyType.Worm:
+            case EnemyType.TowelMonster:
                 TriggerLandingOnTheWormMonsterSfx(hp);
                 break;
             default:

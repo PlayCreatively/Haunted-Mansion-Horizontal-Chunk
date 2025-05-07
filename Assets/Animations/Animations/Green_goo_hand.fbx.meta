@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3ae88ad994f9ee64da67752e1efbb9b1
+guid: f9a9fa8d2385174409c1e0b4cb2e8ec9
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -21,19 +21,19 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 0
+    importConstraints: 1
     animationCompression: 1
     animationRotationError: 0.5
-    animationPositionError: 0
+    animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Mball.002|Mball.002Action
-      takeName: Mball.002|Mball.002Action
-      internalID: -5459935336593310210
+      name: Mball.001|Action
+      takeName: Mball.001|Action
+      internalID: 8310513829667757399
       firstFrame: 0
       lastFrame: 73
       wrapMode: 0

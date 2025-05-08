@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  resourceDrop: {fileID: -766079046467392610, guid: 0b3afa738b6b3214ab5444fea324936f, type: 3}
+  resourceDrop: {fileID: 1776415883596520742, guid: 0e6a4ae11c396ee46a74c56a7ac2eedb, type: 3}
 --- !u!1001 &7987967848371964647
 PrefabInstance:
   m_ObjectHideFlags: 0

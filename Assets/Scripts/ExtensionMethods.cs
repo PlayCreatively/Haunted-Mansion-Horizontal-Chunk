@@ -113,9 +113,17 @@ public static class ExtensionMethods
         trans.localScale = Vector3.one * scale;
     }
 
-
-    public static IEnumerator ScaleUpObject(this Transform trans, float duration)
+    public static Coroutine ScaleObject<T>(this T mono, float duration, float scale) where T : MonoBehaviour
     {
+        return mono.StartCoroutine(mono.transform.ScaleObject(.1f, 0.05f));
+    }
+
+
+    public static IEnumerator ScaleUpObject(this Transform trans, float duration, bool changeActive = false)
+    {
+        if (changeActive)
+            trans.gameObject.SetActive(true);
+
         Vector3 defaultScale = trans.localScale;
         float t = 0f;
         while (t < 1f)
@@ -128,7 +136,7 @@ public static class ExtensionMethods
         trans.localScale = defaultScale;
     }
 
-    public static IEnumerator ScaleDownObject(this Transform trans, float duration)
+    public static IEnumerator ScaleDownObject(this Transform trans, float duration, bool changeActive = false)
     {
         Vector3 defaultScale = trans.localScale;
         float t = 1f;
@@ -140,6 +148,11 @@ public static class ExtensionMethods
             yield return null;
         }
         trans.localScale = Vector3.zero;
+        yield return null;
+        trans.localScale = defaultScale;
+
+        if (changeActive)
+            trans.gameObject.SetActive(false);
     }
 
     public static Vector3 Divide(this Vector3 a, Vector3 b)

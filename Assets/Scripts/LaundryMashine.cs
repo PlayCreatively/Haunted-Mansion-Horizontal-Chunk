@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 #nullable enable
 public class LaundryMashine : MonoBehaviour, IInteractable
@@ -10,17 +9,22 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     Renderer rend;
     Transform visual, spawnPoint;
     Renderer dirtyLaundryVisual;
-    const CarriableTypeMask allowedTypes = CarriableTypeMask.DirtyTowel | CarriableTypeMask.DirtyBedsheet;
+    GameObject gooVisual;
+    const CarriableTypeMask allowedCarriables = allowedLaundry | CarriableTypeMask.Goo;
+    const CarriableTypeMask allowedLaundry = CarriableTypeMask.DirtyTowel | CarriableTypeMask.DirtyBedsheet;
     const CarriableType none = (CarriableType)(-1);
 
     public float speed, offset;
 
     CarriableType currentItem = none;
+    bool hasGoo = false;
 
     void Awake()
     {
         visual = transform.Find("Visual");
         dirtyLaundryVisual = visual.Find("DirtyLaundry").GetComponent<Renderer>();
+        gooVisual = visual.Find("Goo").gameObject;
+        gooVisual.SetActive(false);
         dirtyLaundryVisual.enabled = false;
         spawnPoint = visual.Find("SpawnPoint");
         rend = visual.GetComponent<Renderer>();
@@ -41,6 +45,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             t *= speed;
             visual.Squash(1f + Mathf.Sin(t - offset) * .2f);
         });
+
+        StartCoroutine(gooVisual.transform.ScaleDownObject(.2f, true));
 
         yield return new Timer(2f).GetRoutinePro((a, t) =>
         {
@@ -74,28 +80,41 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         });
 
         currentItem = none;
+        hasGoo = false;
         dirtyLaundryVisual.enabled = false;
     }
 
     public void Highlight(bool value, InteractiveHand interactiveHand)
     {
-        value &= IsCorrectItem(interactiveHand.ItemInHand);
+        value &= IsDirtyLaundry(interactiveHand.ItemInHand);
         rend.material.color = value ? Color.yellow : Color.white;
     }
 
     public bool Interact(Carriable carriable)
     {
-        if (currentItem == none && IsCorrectItem(carriable))
+        bool successful = false;
+
+        if (currentItem == none && IsDirtyLaundry(carriable))
         {
             InsertLaundry(carriable.type);
             carriable.Destroy(transform.position, .1f);
-            return true;
+            successful = true;
+        }
+        else if (!hasGoo && carriable.type == CarriableType.Goo)
+        {
+            carriable.Destroy(transform.position, .1f);
+            StartCoroutine(gooVisual.transform.ScaleUpObject(.1f, true));
+            hasGoo = true;
+            successful = true;
         }
 
-        return false;
+        if(successful && hasGoo && currentItem != none)
+            StartCoroutine(LaunderingRoutine());
+
+        return successful;
     }
 
-    bool IsCorrectItem(Carriable? laundry) => laundry != null && allowedTypes.IsInMask(laundry.type);
+    bool IsDirtyLaundry(Carriable? laundry) => laundry != null && allowedLaundry.IsInMask(laundry.type);
 
     public void InsertLaundry(CarriableType type)
     {
@@ -105,13 +124,12 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             return;
         }
 
-        if (!allowedTypes.IsInMask(type)) return;
+        if (!allowedLaundry.IsInMask(type)) return;
 
         currentItem = type;
         dirtyLaundryVisual.material = dirtyLaundryMat[(int)type - 4];
         dirtyLaundryVisual.enabled = true;
         StartCoroutine(dirtyLaundryVisual.transform.ScaleUpObject(.3f));
-        StartCoroutine(LaunderingRoutine());
     }
 
     void SpawnLaundry(CarriableType type)

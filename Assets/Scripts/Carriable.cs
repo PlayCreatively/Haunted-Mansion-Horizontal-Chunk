@@ -61,6 +61,8 @@ public enum CarriableType
     Backpack,
     DirtyTowel,
     DirtyBedSheet,
+    Goo,
+    Soap,
 }
 
 [Flags]
@@ -69,10 +71,11 @@ public enum CarriableTypeMask
     ToiletPaper = 1,
     Towel = 2,
     BedSheet = 4,
-    AllResources = ToiletPaper | Towel | BedSheet | DirtyTowel | DirtyBedsheet,
+    AllResources = ToiletPaper | Towel | BedSheet | DirtyTowel | DirtyBedsheet | Goo,
     Backpack = 8,
     DirtyTowel = 16,
     DirtyBedsheet = 32,
+    Goo = 64,
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -81,7 +84,7 @@ public class Carriable : MonoBehaviour, IInteractable
     public CarriableType type;
     Collider col;
     Rigidbody rb;
-    MeshRenderer meshRend;
+    Renderer meshRend;
 
     public bool pickedUp = false;
     public bool highlighted = false;
@@ -91,7 +94,7 @@ public class Carriable : MonoBehaviour, IInteractable
     {
         col = GetComponentInChildren<Collider>();
         rb = GetComponent<Rigidbody>();
-        meshRend = GetComponentInChildren<MeshRenderer>();
+        meshRend = GetComponentInChildren<Renderer>();
     }
 
     public Vector3 GetSize()

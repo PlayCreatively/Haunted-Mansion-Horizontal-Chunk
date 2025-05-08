@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
     protected Collider col;
     protected Transform visuals;
     Curve deathBounceCurve;
-    EnemySettings settings;
+    protected EnemySettings settings;
 
     protected virtual void Awake()
     {
@@ -83,11 +83,7 @@ public class Enemy : MonoBehaviour
     IEnumerator HitRoutine()
     {
         hp--;
-        if(dashingRoutine != null)
-        {
-            StopCoroutine(dashingRoutine);
-            dashingRoutine = null;
-        }
+        visuals.GetComponentInChildren<Renderer>().material.SetFloat("_Angry", 1f);
         FMODAudioManager.Instance.TriggerLandingOnEnemySfx(enemyType, hp);
         yield return HitSquashRoutine();
         if (hp <= 0)
@@ -145,29 +141,7 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    Coroutine dashingRoutine = null;
-    IEnumerator DashRoutine(float distance, float frequency, float repeatDelay)
-    {
-        while (true)
-        {
-            float curTime = frequency; // one cycle
-            float smoothT = 1, lastSmoothT;
-
-            while (smoothT > .05f)
-            {
-                curTime -= Time.fixedDeltaTime;
-                float t = curTime / frequency;
-                lastSmoothT = smoothT;
-                smoothT = t*t*t;
-                float deltaSmoothT = lastSmoothT - smoothT;
-                rb.MovePosition(rb.position + deltaSmoothT * distance * MoveDir);
-                visuals.Squash(1f - (smoothT * .6f));
-
-                yield return new WaitForFixedUpdate();
-            }
-            yield return new WaitForSeconds(repeatDelay);
-        }
-    }
+    
 
     void ReflectOffWall(Vector3 normal)
     {
@@ -211,11 +185,7 @@ public class Enemy : MonoBehaviour
 
                 break;
             case EnemyType.Goo:
-                if(dashingRoutine == null)
-                {
-                    var gooSettings = settings as GooSettings;
-                    dashingRoutine = StartCoroutine(DashRoutine(gooSettings.distance, gooSettings.frequency, hp > 1 ? gooSettings.waitDelay : 0));
-                }
+                
                 break;
             case EnemyType.Trash:
                 rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
@@ -240,7 +210,7 @@ public class Enemy : MonoBehaviour
             // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
             float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
 
-            if (touchHeightPercent > 0f && collision.rigidbody.linearVelocity.y < 1f)
+            if (touchHeightPercent > 0f)
             {
                 collision.gameObject.GetComponent<Player>().Jump(1.25f);
                 Hit();

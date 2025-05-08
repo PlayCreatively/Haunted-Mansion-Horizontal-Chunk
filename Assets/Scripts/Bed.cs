@@ -44,10 +44,11 @@ public class Bed : MonoBehaviour, IInteractable
         return correct;
     }
 
-    public void Highlight(bool value, InteractiveHand interactiveHand)
+    public bool Highlight(bool value, InteractiveHand interactiveHand)
     {
-        if (!IsDirty()) return;
+        if (!IsDirty()) return false;
 
         // TODO: highlight bedsheet?
+        return true;
     }
 }

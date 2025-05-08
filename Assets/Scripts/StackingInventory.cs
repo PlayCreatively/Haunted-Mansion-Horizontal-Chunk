@@ -120,14 +120,16 @@ public class StackingInventory : Inventory, IInteractable
         return successful;
     }
 
-    public void Highlight(bool value, InteractiveHand hand)
+    public bool Highlight(bool value, InteractiveHand hand)
     {
         if (count >= maxSize || hand.ItemInHand == null || !allowedTypes.IsInMask(hand.ItemInHand.type))
         {
             itemMeshRends[count].sharedMaterial = grayedOutMaterial;
-            return;
+            return false;
         }
 
         itemMeshRends[count].sharedMaterial = value ? highlight : grayedOutMaterial;
+
+        return true;
     }
 }

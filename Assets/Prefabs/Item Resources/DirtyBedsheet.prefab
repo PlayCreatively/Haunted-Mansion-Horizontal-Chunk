@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c5853b1f971b6e4ea28f7377394a020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
+  type: 6
   pickedUp: 0
   highlighted: 0
 --- !u!33 &9102843618990963117

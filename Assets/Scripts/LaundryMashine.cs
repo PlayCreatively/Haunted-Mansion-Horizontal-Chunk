@@ -14,8 +14,6 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     const CarriableTypeMask allowedLaundry = CarriableTypeMask.DirtyTowel | CarriableTypeMask.DirtyBedsheet;
     const CarriableType none = (CarriableType)(-1);
 
-    public float speed, offset;
-
     CarriableType currentItem = none;
     bool hasGoo = false;
 
@@ -84,10 +82,11 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         dirtyLaundryVisual.enabled = false;
     }
 
-    public void Highlight(bool value, InteractiveHand interactiveHand)
+    public bool Highlight(bool value, InteractiveHand interactiveHand)
     {
-        value &= IsDirtyLaundry(interactiveHand.ItemInHand);
+        value &= IsAllowed(interactiveHand.ItemInHand);
         rend.material.color = value ? Color.yellow : Color.white;
+        return value;
     }
 
     public bool Interact(Carriable carriable)
@@ -115,6 +114,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     }
 
     bool IsDirtyLaundry(Carriable? laundry) => laundry != null && allowedLaundry.IsInMask(laundry.type);
+    bool IsAllowed(Carriable? laundry) => laundry != null && allowedCarriables.IsInMask(laundry.type);
 
     public void InsertLaundry(CarriableType type)
     {
@@ -127,7 +127,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         if (!allowedLaundry.IsInMask(type)) return;
 
         currentItem = type;
-        dirtyLaundryVisual.material = dirtyLaundryMat[(int)type - 4];
+        dirtyLaundryVisual.material = dirtyLaundryMat[(int)type - 5];
         dirtyLaundryVisual.enabled = true;
         StartCoroutine(dirtyLaundryVisual.transform.ScaleUpObject(.3f));
     }

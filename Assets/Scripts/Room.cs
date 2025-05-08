@@ -192,7 +192,11 @@ public class Room : MonoBehaviour
         }
     }
 
-    public bool IsRequired(CarriableType type) => isDirty && requirements.IsRequired(type);
+    public bool IsRequired(CarriableType type)
+    {
+        Debug.Log($"IsRequired: {type} {isDirty && requirements.IsRequired(type)}", gameObject);
+        return isDirty && requirements.IsRequired(type);
+    }
 
     bool TryGetAvailableRoom(out Room availableRoom)
     {
@@ -213,23 +217,24 @@ public class Room : MonoBehaviour
         public int[] resourceRequirement;
         public readonly int Count => resourceRequirement.Length;
 
-        static readonly int resourceTypeCount = 3;
+        static readonly int resourceTypeCount = 4;
 
         //bool cleaning;
 
-        public Requirements(int tpAmount, int tAmount, int bAmount)
+        public Requirements(int tpAmount, int tAmount, int bAmount, int sAmount)
         {
             resourceRequirement = new int[resourceTypeCount];
             this[CarriableType.ToiletPaper] = tpAmount;
             this[CarriableType.Towel] = tAmount;
             this[CarriableType.BedSheet] = bAmount;
+            this[CarriableType.Soap] = sAmount;
         }
 
         public static Requirements CreateRandom()
         {
             (int minAmount, int maxAmount, int minTypes, int maxTypes) = GameSettings.Instance.requirementSettings;
 
-            Requirements requirements = new(0,0,0);
+            Requirements requirements = new(0,0,0,0);
 
             int resourceCount = Random.Range(minAmount, maxAmount + 1);
 
@@ -261,7 +266,7 @@ public class Room : MonoBehaviour
             return true;
         }
 
-        public readonly bool IsRequired(CarriableType type) => (int)type < 3 && resourceRequirement[(int)type] > 0;
+        public readonly bool IsRequired(CarriableType type) => (int)type < 4 && resourceRequirement[(int)type] > 0;
 
         public readonly int this[CarriableType type]
         {

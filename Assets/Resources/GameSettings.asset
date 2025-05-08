@@ -81,6 +81,10 @@ MonoBehaviour:
     prefab: {fileID: 8891036835039849118, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
     visualPrefab: {fileID: 3870387949449623212, guid: 103d16c9b8c06f545a836feb0e7e5c46, type: 3}
     mesh: {fileID: -1558037838122711689, guid: adce8986e54ddaf49a7c6fb11ad1765a, type: 3}
+  soap:
+    prefab: {fileID: 1742999710040291878, guid: 768cf953414eac645b9166ba93f0dda6, type: 3}
+    visualPrefab: {fileID: 0}
+    mesh: {fileID: 0}
   dirtyTowel:
     prefab: {fileID: 1776415883596520742, guid: 0e6a4ae11c396ee46a74c56a7ac2eedb, type: 3}
     visualPrefab: {fileID: 0}

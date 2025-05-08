@@ -21,7 +21,7 @@ public interface IInteractableObject : IInteractable
 
 public interface IHighlightable
 {
-    void Highlight(bool value, InteractiveHand interactiveHand);
+    bool Highlight(bool value, InteractiveHand interactiveHand);
 }
 
 public interface ICarriable : IInteractable
@@ -58,11 +58,11 @@ public enum CarriableType
     ToiletPaper,
     Towel,
     BedSheet,
+    Soap,
     Backpack,
     DirtyTowel,
     DirtyBedSheet,
     Goo,
-    Soap,
 }
 
 [Flags]
@@ -71,11 +71,12 @@ public enum CarriableTypeMask
     ToiletPaper = 1,
     Towel = 2,
     BedSheet = 4,
-    AllResources = ToiletPaper | Towel | BedSheet | DirtyTowel | DirtyBedsheet | Goo,
-    Backpack = 8,
-    DirtyTowel = 16,
-    DirtyBedsheet = 32,
-    Goo = 64,
+    AllResources = ToiletPaper | Towel | BedSheet | DirtyTowel | DirtyBedsheet | Goo | Soap,
+    Soap = 8,
+    Backpack = 16,
+    DirtyTowel = 32,
+    DirtyBedsheet = 64,
+    Goo = 128,
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -108,15 +109,18 @@ public class Carriable : MonoBehaviour, IInteractable
         };
     }
 
-    public void Highlight(bool value, InteractiveHand interactiveHand)
+    public bool Highlight(bool value, InteractiveHand interactiveHand)
     {
         highlighted = value;
         if(meshRend != null) // TODO: find out why this is needed, ugly fix
             meshRend.material.color = value ? Color.yellow : Color.white;
+
+        return true;
     }
 
     public void Destroy()
     {
+        Debug.Log($"{type} destroyed", gameObject);
         EnablePhysics(false);
         destroyed = true;
 

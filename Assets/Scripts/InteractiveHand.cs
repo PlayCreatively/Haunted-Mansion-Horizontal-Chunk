@@ -340,9 +340,13 @@ public class InteractiveHand : MonoBehaviour, IInventory
         if (other.attachedRigidbody != null ? other.attachedRigidbody.TryGetComponent(out IInteractable interactable) : other.TryGetComponent(out interactable))
             if (IsCloserThanFocused(interactable))
             {
-                focusedInteractable?.Highlight(false, this);
-                focusedInteractable = interactable;
-                focusedInteractable.Highlight(true, this);
+                bool canHighlight = interactable.Highlight(true, this);
+
+                if(canHighlight)
+                {
+                    focusedInteractable?.Highlight(false, this);
+                    focusedInteractable = interactable;
+                }
             }
     }
 

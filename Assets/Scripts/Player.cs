@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(Rigidbody)), SelectionBase]
 public class Player : MonoBehaviour
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
     bool stunned;
     const float boostRunDuration = 1f;
     float boostRunEnergy = 0;
+    Gamepad gamepad;
 
     void Awake()
     {
@@ -49,7 +51,9 @@ public class Player : MonoBehaviour
                 if (i == playerIndex)
                 {
                     Debug.Log($"Player {playerIndex} using {Gamepad.all[i].name}");
-                    playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.all[playerIndex]);
+                    // vibrate controller
+                    gamepad = Gamepad.all[playerIndex];
+                    playerInput.SwitchCurrentControlScheme("Gamepad", gamepad);
                     break;
                 }
         }
@@ -135,9 +139,23 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Vibrate(float value, float duration = .5f, bool low = true, bool high = true)
+    {
+        if (gamepad == null)
+            return;
+
+        float lowValue = low ? value : 0;
+        float highValue = high ? value : 0;
+
+        StartCoroutine(new Timer(duration).GetRoutine(a => gamepad.SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
+    }
+
     public void Stun(Vector3 origin)
     {
         if (stunned) return;
+
+        //gamepad.ResumeHaptics();
+        Vibrate(1f);
 
         var dir = transform.position - origin;
         dir.y = 0;
@@ -270,13 +288,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if(stunned)
+        //    controller
+    }
+
     void OnCollisionStay(Collision collision)
     {
         foreach (var contact in collision.contacts)
         {
             grounded |= contact.normal.y > .8f && Physics.Raycast(transform.position + Vector3.up * .2f, Vector3.down, 1);
         }
-        if(grounded)
+        if (grounded)
         {
             //Debug.Log(collision.impulse.y);
         }

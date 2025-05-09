@@ -67,7 +67,8 @@ public class Room : MonoBehaviour
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
 
         GameObject canvas = GameObject.Find("Canvas");
-        roomUI = Instantiate(roomUIObj, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI")).GetComponentInChildren<RoomUI>();
+        var uiObj = Instantiate(roomUIObj, Vector3.zero, Quaternion.identity, canvas.transform.Find("RoomUI"));
+        roomUI = uiObj.GetComponentInChildren<RoomUI>(true);
         roomUI.transform.parent.name = gameObject.name + " UI";
         roomUI.transform.parent.localPosition = Vector3.zero;
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,18 +10,22 @@ public class RoomUI : MonoBehaviour
     public Room room;
     public Image roomArrowUI;
     public GameObject bookingUI;
+    public ResourceRequirementsUI[] resourceRequirementsUI;
     TextMeshProUGUI bookingTimeUI;
     [SerializeField]
-    TextMeshProUGUI[] ResourceCountUI;
+    Image[] ResourceUI;
     public GameObject requirementsParent;
+    int urgency = 0;
 
     void Awake()
     {
-        bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>();
+        bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>(true);
     }
 
     public void AssignRoom(Room room)
     {
+        Awake();
+
         this.room = room;
         room.OnStateChange += UpdateStateUI;
         room.OnRequirementsChange += UpdateRequirementsUI;
@@ -58,6 +63,10 @@ public class RoomUI : MonoBehaviour
             Mathf.Clamp(rectTrans.anchoredPosition.y, -extents.y, extents.y)
         );
 
+        float sinOffset = (Mathf.Sin(Time.time * urgency * 4f) * .5f - .5f) * 2 * 35;
+
+        roomArrowUI.rectTransform.anchoredPosition += roomArrowUI.rectTransform.anchoredPosition.normalized * sinOffset;
+
         var dif = Vector2.Distance(roomArrowUI.rectTransform.anchoredPosition, rectTrans.anchoredPosition * 0.885f);
         dif = Mathf.Min(dif, 200f);
         dif /= 200f;
@@ -68,11 +77,8 @@ public class RoomUI : MonoBehaviour
     public void UpdateRequirementsUI(Room.Requirements requirements)
     {
         if (room.IsDirty)
-            for (int i = 0; i < ResourceCountUI.Length; i++)
-            {
-                ResourceCountUI[i].transform.parent.gameObject.SetActive(room.requirements[i] > 0);
-                ResourceCountUI[i].text = requirements[i].ToString();
-            }
+            foreach (var requirementsUI in resourceRequirementsUI)
+                requirementsUI.UpdateRequirements(requirements);
     }
 
     public void UpdateStateUI(RoomState state)
@@ -100,6 +106,7 @@ public class RoomUI : MonoBehaviour
 
     public void OnUrgencyUpdated(int urgency)
     {
+        this.urgency = urgency;
         bookingTimeUI.color = roomArrowUI.color = urgency switch
         {
             0 => Color.white,

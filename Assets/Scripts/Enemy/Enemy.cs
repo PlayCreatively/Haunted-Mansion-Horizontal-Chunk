@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections;
 using UnityEngine;
 
@@ -128,20 +129,24 @@ public class Enemy : MonoBehaviour
 
         yield return new Timer(.1f).GetRoutine(t => transform.localScale = Vector3.one * (1f - t));
 
-        if(resourceDrop != null)
-        {
-            Carriable resource = Instantiate(resourceDrop, rb.position, rb.rotation);
-            resource.SetVelocity(rb.linearVelocity);
-            resource.SetAngularVelocity(rb.angularVelocity);
-
-            yield return new Timer(.1f).GetRoutine(t => resource.transform.localScale = Vector3.one * t);
-        }
+        var resource = DropResource();
+        yield return new Timer(.1f).GetRoutine(t => resource.transform.localScale = Vector3.one * t);
 
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
 
-    
+    protected Carriable DropResource()
+    {
+        if (resourceDrop != null)
+        {
+            Carriable resource = Instantiate(resourceDrop, rb.position, rb.rotation);
+            resource.SetVelocity(rb.linearVelocity);
+            resource.SetAngularVelocity(rb.angularVelocity);
+            return resource;
+        }
+        return null;
+    }
 
     void ReflectOffWall(Vector3 normal)
     {
@@ -210,14 +215,17 @@ public class Enemy : MonoBehaviour
             // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
             float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
 
+            var player = collision.gameObject.GetComponent<Player>();
             if (touchHeightPercent > 0f)
             {
-                collision.gameObject.GetComponent<Player>().Jump(1.25f);
+                player.Jump(1.25f);
+                player.Vibrate(1f, .25f, false, true);
                 Hit();
             }
             else // player stunned
             {
-                collision.gameObject.GetComponent<Player>().Stun(transform.position);
+                player.Stun(transform.position);
+                player.Vibrate(1f);
             }
         }
     }

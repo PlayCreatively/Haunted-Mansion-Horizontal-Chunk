@@ -75,7 +75,7 @@ public class DynamicCamera : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         // draw player rect
 

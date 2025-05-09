@@ -65,7 +65,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             visual.Squash(1f + (a * .35f));
         });
 
-        SpawnLaundry(currentItem - 3);
+        SpawnLaundry(currentItem - 4);
         currentItem = none;
 
         yield return new Timer(.2f).GetRoutinePro((a, t) =>
@@ -84,7 +84,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
     public bool Highlight(bool value, InteractiveHand interactiveHand)
     {
-        value &= IsAllowed(interactiveHand.ItemInHand);
+        var item = interactiveHand.ItemInHand;
+        value &= IsAllowed(item) && (currentItem == none && allowedLaundry.IsInMask(item!.type) || (!hasGoo && item!.type == CarriableType.Goo));
         rend.material.color = value ? Color.yellow : Color.white;
         return value;
     }
@@ -134,7 +135,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
     void SpawnLaundry(CarriableType type)
     {
-        var laundry = GameSettings.Instance.GetResourceInfo(type).prefab;
+        var laundry = ResourceInfo.Instance.Get(type).prefab;
         laundry = laundry.Spawn(spawnPoint.position, Quaternion.identity, .1f);
         laundry.SetVelocity(visual.forward * 5f);
     }

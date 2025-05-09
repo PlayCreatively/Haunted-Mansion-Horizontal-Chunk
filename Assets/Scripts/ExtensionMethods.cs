@@ -115,7 +115,13 @@ public static class ExtensionMethods
 
     public static Coroutine ScaleObject<T>(this T mono, float duration, float scale) where T : MonoBehaviour
     {
-        return mono.StartCoroutine(mono.transform.ScaleObject(.1f, 0.05f));
+        return mono.StartCoroutine(mono.transform.ScaleObject(duration, scale));
+    }
+
+    public static Coroutine ScaleObject<T>(this T mono, float duration, float from, float to) where T : MonoBehaviour
+    {
+        mono.transform.localScale = Vector3.one * from;
+        return mono.StartCoroutine(mono.transform.ScaleObject(duration, to));
     }
 
 

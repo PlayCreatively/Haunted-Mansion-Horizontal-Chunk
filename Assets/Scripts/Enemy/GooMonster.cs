@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Goo : Enemy
+public class GooMonster : Enemy
 {
     float curRepeatDelay;
 
@@ -18,6 +18,12 @@ public class Goo : Enemy
     public override void Hit()
     {
         base.Hit();
+
+        if(hp != 0)
+        {
+            DropResource().ScaleObject(.1f, 0f, 1f);
+        }
+
 
         curRepeatDelay = 0;
     }

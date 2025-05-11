@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     Collider col;
     InteractiveHand hand;
     Transform visuals;
+    Animator animator;
     ParticleSystem[] dashParticles;
     ParticleSystem[] walkParticles;
 
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         hand = GetComponentInChildren<InteractiveHand>();
         playerInput = GetComponent<PlayerInput>();
+        animator = GetComponentInChildren<Animator>();
         visuals = transform.Find("Visuals");
         col = GetComponent<Collider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
@@ -62,7 +64,7 @@ public class Player : MonoBehaviour
             playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "Keyboard&Mouse" : "P2Keyboard", Keyboard.current);
         }
 
-        playerInput.actions["Move"].performed += ctx => moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
+        playerInput.actions["Move"].performed += MoveInput;
         playerInput.actions["Move"].canceled += _ => moveInput = Vector2.zero;
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
@@ -74,6 +76,13 @@ public class Player : MonoBehaviour
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
+    }
+
+
+    void MoveInput(InputAction.CallbackContext ctx)
+    {
+        moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
+        animator.SetFloat("Speed", moveInput.magnitude);
     }
 
     public int UpdateSelected(Vector2 dir)

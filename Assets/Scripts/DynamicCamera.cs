@@ -10,10 +10,12 @@ public class DynamicCamera : MonoBehaviour
     float smoothing = 0.1f; // Smoothing factor for camera movement
 
     Player[] players;
+    Camera mainCamera;
 
     void Start()
     {
         players = FindObjectsByType<Player>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        mainCamera = GetComponent<Camera>();
     }
 
     public float zoom = 5f;
@@ -23,7 +25,7 @@ public class DynamicCamera : MonoBehaviour
         float _smoothing = smoothing;
 
 #if UNITY_EDITOR
-        if (players.Length == 0)
+        if (players.Length == 0 || mainCamera == null)
             Start();
 
         if (Application.isEditor && !Application.isPlaying)
@@ -39,7 +41,7 @@ public class DynamicCamera : MonoBehaviour
 
         {
             //// worldBounds
-            Vector2 worldSize = new(2f * zoom * Camera.main.aspect, 2f * zoom);
+            Vector2 worldSize = new(2f * zoom * mainCamera.aspect, 2f * zoom);
             Rect worldBounds = new(position - worldSize * .5f, worldSize);
             //// playersRect
             Vector2 p1 = AlignWithCamera(GetPlayerPos(0));
@@ -48,16 +50,18 @@ public class DynamicCamera : MonoBehaviour
             Vector2 playersSize = new(MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
             Rect playerRect = new(playersCenter - playersSize * .5f, playersSize);
 
-            playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(Camera.main.aspect).Restrict(worldBounds);
+            playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(mainCamera.aspect).Restrict(worldBounds);
 
-            transform.position = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
+            Vector3 targetPos = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
+            transform.position = Vector3.Lerp(transform.position, targetPos, _smoothing);
 
-            Camera.main.orthographicSize = playerRect.height * .5f;
+            float targetZoom = playerRect.height * .5f;
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetZoom, _smoothing * .5f);
             return;
         }
     }
-    Vector3 AlignWithCamera(Vector3 pos) => Quaternion.Inverse(Camera.main.transform.rotation) * pos;
-    Vector3 InverseAlignWithCamera(Vector3 pos) => Camera.main.transform.rotation * pos;
+    Vector3 AlignWithCamera(Vector3 pos) => Quaternion.Inverse(mainCamera.transform.rotation) * pos;
+    Vector3 InverseAlignWithCamera(Vector3 pos) => mainCamera.transform.rotation * pos;
 
     Vector3 GetPlayerPos(int i)
     {
@@ -72,7 +76,7 @@ public class DynamicCamera : MonoBehaviour
 
     void UpdateEditModeView()
     {
-        Camera.main.orthographicSize = zoom;
+        mainCamera.orthographicSize = zoom;
         Vector3 targetPos = new(position.x, position.y, -10);
 
         transform.position = transform.forward * -30 + transform.right * targetPos.x + transform.up * targetPos.y;

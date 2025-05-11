@@ -228,10 +228,7 @@ public class Player : MonoBehaviour
     void UpdateLastFloorHeight()
     {
         if (grounded)
-        {
             lastGroundedHeight = (int)(rb.position.y+.05f);
-            Debug.Log($"Player {playerIndex} last height: {lastGroundedHeight}");
-        }
     }
 
     void Update()

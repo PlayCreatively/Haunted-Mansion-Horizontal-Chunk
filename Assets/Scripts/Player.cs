@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(Rigidbody)), SelectionBase]
 public class Player : MonoBehaviour
@@ -14,6 +12,7 @@ public class Player : MonoBehaviour
     PlayerInput playerInput;
     Rigidbody rb;
     Collider col;
+    Renderer rend;
     InteractiveHand hand;
     Transform visuals;
     Animator animator;
@@ -37,6 +36,7 @@ public class Player : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponentInChildren<Animator>();
         visuals = transform.Find("Visuals");
+        rend = visuals.Find("Body").GetComponentInChildren<Renderer>();
         col = GetComponent<Collider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         }
 
         playerInput.actions["Move"].performed += MoveInput;
-        playerInput.actions["Move"].canceled += _ => moveInput = Vector2.zero;
+        playerInput.actions["Move"].canceled += MoveInput;
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
@@ -202,7 +202,7 @@ public class Player : MonoBehaviour
 
     void SetStunned(bool value)
     {
-        visuals.Find("Body").GetComponent<MeshRenderer>().material.SetColor("_Color", value ? Color.red : Color.cyan);
+        rend.material.SetColor("_Color", value ? Color.red : Color.cyan);
         stunned = value;
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
     }
@@ -218,6 +218,19 @@ public class Player : MonoBehaviour
         grounded = false;
 
         jumpSquash = .5f;
+
+        animator.SetTrigger("JumpInput");
+    }
+
+    public float LastGroundedHeight => lastGroundedHeight;
+    float lastGroundedHeight;
+    void UpdateLastFloorHeight()
+    {
+        if (grounded)
+        {
+            lastGroundedHeight = (int)transform.position.y;
+            Debug.Log($"Player {playerIndex} last height: {lastGroundedHeight}");
+        }
     }
 
     void Update()
@@ -225,12 +238,17 @@ public class Player : MonoBehaviour
         if (jumpSquash > 0)
         {
             jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
-            //visuals.Squash(1f + jumpSquash);
+            visuals.Squash(1f + jumpSquash);
         }
+        UpdateLastFloorHeight();
+
     }
 
     void FixedUpdate()
     {
+
+
+
         if (stunned)
             return;
 
@@ -286,6 +304,8 @@ public class Player : MonoBehaviour
             {
                 particle.Stop();
             }
+
+        animator.SetBool("Grounded", grounded);
 
         grounded = false;
 

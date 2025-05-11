@@ -19,6 +19,47 @@ public static class ExtensionMethods
         return new(v.x, y, v.y);
     }
 
+    public static Rect CropToBounds(this Rect rect, Rect bounds)
+    {
+        // Compute the overlap on each axis.
+        float xMin = Mathf.Max(rect.xMin, bounds.xMin);
+        float xMax = Mathf.Min(rect.xMax, bounds.xMax);
+        float yMin = Mathf.Max(rect.yMin, bounds.yMin);
+        float yMax = Mathf.Min(rect.yMax, bounds.yMax);
+
+        // If there’s no overlap, return an “empty” rect.
+        if (xMax <= xMin || yMax <= yMin)
+            return Rect.zero;   // or use new Rect() if you prefer (same thing).
+
+        // Otherwise return the intersection.
+        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+    }
+
+    public static Rect Restrict(this Rect rect, Rect bounds)
+    {
+        // 1. Normalise so width & height are guaranteed positive
+        if (rect.width < 0) { rect.x += rect.width; rect.width = -rect.width; }
+        if (rect.height < 0) { rect.y += rect.height; rect.height = -rect.height; }
+
+        // 2. If the rect is larger than the bounds, trim it first
+        rect.width = Mathf.Min(rect.width, bounds.width);
+        rect.height = Mathf.Min(rect.height, bounds.height);
+
+        // 3. Slide it so it fits
+        float minX = Mathf.Clamp(rect.xMin, bounds.xMin, bounds.xMax - rect.width);
+        float minY = Mathf.Clamp(rect.yMin, bounds.yMin, bounds.yMax - rect.height);
+
+        return new Rect(minX, minY, rect.width, rect.height);
+    }
+
+    public static Rect ExpandToRatio(this Rect rect, float aspectRatio)
+    {
+        Vector2 size = rect.width / rect.height < aspectRatio ?
+            new Vector2(rect.height * aspectRatio, rect.height) :
+            new Vector2(rect.width, rect.width / aspectRatio);
+            return new Rect(rect.center - size * .5f, size);
+    }
+
     public static void Squash(this Transform trans, float yNormal)
     {
         float xNormal = 2f - yNormal;

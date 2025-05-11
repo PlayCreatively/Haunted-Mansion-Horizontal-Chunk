@@ -5,8 +5,6 @@ using UnityEngine;
 public class DynamicCamera : MonoBehaviour
 {
     [SerializeField]
-    float minSize = 3f; // Minimum camera size
-    [SerializeField]
     float BorderSize = 3f;
     [SerializeField, Range(0f,1f)]
     float smoothing = 0.1f; // Smoothing factor for camera movement
@@ -18,6 +16,8 @@ public class DynamicCamera : MonoBehaviour
         players = FindObjectsByType<Player>(FindObjectsInactive.Include, FindObjectsSortMode.None);
     }
 
+    public float zoom = 5f;
+    public Vector2 position = Vector2.zero;
     void Update()
     {
         float _smoothing = smoothing;
@@ -36,92 +36,31 @@ public class DynamicCamera : MonoBehaviour
             return;
         }
 #endif
-        Vector3 cameraPosition = Vector3.zero;
 
-        // Set the camera position to be halfway between the two players
-        foreach (var player in players)
-            cameraPosition += player.transform.position;
-
-        float maxDistance = 0f;
-
-        for (int i = 0; i < players.Length; i++)
         {
-            for (int j = i + 1; j < players.Length; j++)
-            {
-                float distance = Vector3.Distance(players[i].transform.position, players[j].transform.position);
-                if (distance > maxDistance)
-                    maxDistance = distance;
-            }
+            //// worldBounds
+            Vector2 worldSize = new Vector2(2f * zoom * Camera.main.aspect, 2f * zoom);
+            Rect worldBounds = new (position - worldSize * .5f, worldSize);
+            //// playersRect
+            Vector2 p1 = AlignWithCamera(players[0].transform.position + players[0].transform.up * .5f);
+            Vector2 p2 = AlignWithCamera(players[1].transform.position + players[1].transform.up * .5f);
+            Vector2 playersCenter = (p1 + p2) * .5f;
+            Vector2 playersSize = new (MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
+            Rect playerRect = new (playersCenter - playersSize * .5f, playersSize);
+
+            playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(Camera.main.aspect).Restrict(worldBounds);
+
+            transform.position = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
+
+            Camera.main.orthographicSize = playerRect.height * .5f;
+            return;
         }
-
-        cameraPosition /= players.Length;
-
-        // Align with camera angle
-        Vector3[] playersPos = new Vector3[players.Length];
-
-        for (int i = 0; i < players.Length; i++)
-            playersPos[i] = Vector3.ProjectOnPlane(playersPos[i], transform.forward);
-
-        Rect playersRect = Encompass(playersPos);
-        //cameraPosition = playersRect.center;
-
-        Vector3 targetPosDelta = -transform.position + cameraPosition + (transform.forward * -30);
-        transform.position = cameraPosition + (transform.forward * -30); // Keep the camera at the same distance
-
-        // Set the camera size based on the distance between the two players
-        float distanceBetweenPlayers = maxDistance + BorderSize * 2;
-        float targetSizeDelta = -Camera.main.orthographicSize + Mathf.Max(distanceBetweenPlayers * .5f, minSize);
-        Camera.main.orthographicSize += targetSizeDelta * _smoothing;
-
     }
-
-    void OnDrawGizmos()
-    {
-        // draw player rect
-
-        Gizmos.color = Color.red;
-        Vector3[] playersPos = new Vector3[players.Length];
-        for (int i = 0; i < players.Length; i++)
-            playersPos[i] = Vector3.ProjectOnPlane(players[i].transform.position, transform.forward);
-        Rect playersRect = Encompass(playersPos);
-        Gizmos.DrawLineStrip(playersPos, true);
-        // draw player rect
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(new Vector3(playersRect.xMin, playersRect.yMax), new Vector3(playersRect.xMax, playersRect.yMin));
-        Gizmos.DrawLine(new Vector3(playersRect.xMin, playersRect.yMin), new Vector3(playersRect.xMax, playersRect.yMax));
-        Gizmos.DrawLine(new Vector3(playersRect.xMin, playersRect.yMin), new Vector3(playersRect.xMax, playersRect.yMin));
-        Gizmos.DrawLine(new Vector3(playersRect.xMin, playersRect.yMax), new Vector3(playersRect.xMax, playersRect.yMax));
-        
-    }
-
-    public static Rect Encompass(Vector3[] points)
-    {
-        if (points == null || points.Length == 0)
-            throw new ArgumentException("points array cannot be null or empty", nameof(points));
-
-        // Initialise with first point to avoid sentinel ±∞ values.
-        float minX = points[0].x;
-        float minY = points[0].y;
-        float maxX = minX;
-        float maxY = minY;
-
-        for (int i = 1; i < points.Length; ++i)
-        {
-            Vector3 p = points[i];
-            if (p.x < minX) minX = p.x;
-            if (p.y < minY) minY = p.y;
-            if (p.x > maxX) maxX = p.x;
-            if (p.y > maxY) maxY = p.y;
-        }
-
-        return Rect.MinMaxRect(minX, minY, maxX, maxY);
-    }
-
+    Vector3 AlignWithCamera(Vector3 pos) => Quaternion.Inverse(Camera.main.transform.rotation) * pos;
+    Vector3 InverseAlignWithCamera(Vector3 pos) => Camera.main.transform.rotation * pos;
 
 #if UNITY_EDITOR
     public bool editMode = false;
-    public float zoom = 5f;
-    public Vector2 position = Vector2.zero;
 
     void UpdateEditModeView()
     {

@@ -6,7 +6,7 @@ public class DynamicCamera : MonoBehaviour
 {
     [SerializeField]
     float BorderSize = 3f;
-    [SerializeField, Range(0f,1f)]
+    [SerializeField, Range(0f, 1f)]
     float smoothing = 0.1f; // Smoothing factor for camera movement
 
     Player[] players;
@@ -23,8 +23,8 @@ public class DynamicCamera : MonoBehaviour
         float _smoothing = smoothing;
 
 #if UNITY_EDITOR
-        if(players.Length == 0)
-         Start();
+        if (players.Length == 0)
+            Start();
 
         if (Application.isEditor && !Application.isPlaying)
         {
@@ -39,14 +39,14 @@ public class DynamicCamera : MonoBehaviour
 
         {
             //// worldBounds
-            Vector2 worldSize = new Vector2(2f * zoom * Camera.main.aspect, 2f * zoom);
-            Rect worldBounds = new (position - worldSize * .5f, worldSize);
+            Vector2 worldSize = new(2f * zoom * Camera.main.aspect, 2f * zoom);
+            Rect worldBounds = new(position - worldSize * .5f, worldSize);
             //// playersRect
-            Vector2 p1 = AlignWithCamera(players[0].transform.position + players[0].transform.up * .5f);
-            Vector2 p2 = AlignWithCamera(players[1].transform.position + players[1].transform.up * .5f);
+            Vector2 p1 = AlignWithCamera(GetPlayerPos(0));
+            Vector2 p2 = AlignWithCamera(GetPlayerPos(1));
             Vector2 playersCenter = (p1 + p2) * .5f;
-            Vector2 playersSize = new (MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
-            Rect playerRect = new (playersCenter - playersSize * .5f, playersSize);
+            Vector2 playersSize = new(MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
+            Rect playerRect = new(playersCenter - playersSize * .5f, playersSize);
 
             playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(Camera.main.aspect).Restrict(worldBounds);
 
@@ -58,6 +58,14 @@ public class DynamicCamera : MonoBehaviour
     }
     Vector3 AlignWithCamera(Vector3 pos) => Quaternion.Inverse(Camera.main.transform.rotation) * pos;
     Vector3 InverseAlignWithCamera(Vector3 pos) => Camera.main.transform.rotation * pos;
+
+    Vector3 GetPlayerPos(int i)
+    {
+        var player = players[i];
+        var pos = player.transform.position;
+        pos.y = player.LastGroundedHeight + .5f;
+        return pos;
+    }
 
 #if UNITY_EDITOR
     public bool editMode = false;

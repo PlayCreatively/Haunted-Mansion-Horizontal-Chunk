@@ -228,7 +228,7 @@ public class Player : MonoBehaviour
     {
         if (grounded)
         {
-            lastGroundedHeight = (int)transform.position.y;
+            lastGroundedHeight = (int)(rb.position.y+.05f);
             Debug.Log($"Player {playerIndex} last height: {lastGroundedHeight}");
         }
     }

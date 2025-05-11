@@ -204,6 +204,7 @@ public class Player : MonoBehaviour
     {
         rend.material.SetColor("_Color", value ? Color.red : Color.cyan);
         stunned = value;
+        animator.SetBool("IsStunned", value);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
     }
 
@@ -305,7 +306,7 @@ public class Player : MonoBehaviour
                 particle.Stop();
             }
 
-        animator.SetBool("Grounded", grounded);
+        animator.SetBool("IsGrounded", grounded);
 
         grounded = false;
 

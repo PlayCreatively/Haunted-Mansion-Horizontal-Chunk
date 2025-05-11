@@ -206,7 +206,6 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Collider playerCol = collision.collider;
-            Debug.Log(playerCol.bounds.extents);
             Vector3 playerFeetPos = playerCol.bounds.center - Vector3.up * playerCol.bounds.extents.y;
             Debug.DrawRay(playerFeetPos, collision.transform.forward * 2, Color.red, 1f);
             Vector3 enemyCenterPos = col.bounds.center;

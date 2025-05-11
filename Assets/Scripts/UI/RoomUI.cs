@@ -83,8 +83,6 @@ public class RoomUI : MonoBehaviour
 
     public void UpdateStateUI(RoomState state)
     {
-        Debug.Log($"Updating state UI to {state}.");
-
         if (state == RoomState.Occupied)
         {
             transform.parent.gameObject.SetActive(false);

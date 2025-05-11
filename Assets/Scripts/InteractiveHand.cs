@@ -16,7 +16,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         set
         {
             __backpack = value;
-            Debug.Log($"Backpack set to {__backpack}");
+            //Debug.Log($"Backpack set to {__backpack}");
         }
     }
 
@@ -175,8 +175,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
     {
         if(backpack != null)
             backpack.Inventory.OnInventoryUpdate = null;
-
-        Debug.Log("creating new backpack");
 
         backpack = Instantiate(backpackPrefab, transform);
         

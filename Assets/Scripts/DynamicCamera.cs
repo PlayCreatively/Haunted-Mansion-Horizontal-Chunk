@@ -39,6 +39,10 @@ public class DynamicCamera : MonoBehaviour
         }
 #endif
 
+        bool zoomOut = true;
+        for (int i = 0; i < players.Length; i++)
+            zoomOut &= players[i].ZoomInput;
+
         {
             //// worldBounds
             Vector2 worldSize = new(2f * zoom * mainCamera.aspect, 2f * zoom);
@@ -52,10 +56,21 @@ public class DynamicCamera : MonoBehaviour
 
             playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(mainCamera.aspect).Restrict(worldBounds);
 
-            Vector3 targetPos = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
-            transform.position = Vector3.Lerp(transform.position, targetPos, _smoothing);
+            Vector3 targetPos;
+            float targetZoom;
 
-            float targetZoom = playerRect.height * .5f;
+            if (zoomOut)
+            {
+                targetZoom = zoom;
+                targetPos = InverseAlignWithCamera(new(position.x, position.y, -30f));
+            }
+            else
+            {
+                targetPos = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
+                targetZoom = playerRect.height * .5f;
+            }
+
+            transform.position = Vector3.Lerp(transform.position, targetPos, _smoothing);
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetZoom, _smoothing * .5f);
             return;
         }

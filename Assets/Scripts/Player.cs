@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     ParticleSystem[] dashParticles;
     ParticleSystem[] walkParticles;
 
-
     Vector3 moveInput;
     bool grounded;
     float dashValue = 0.5f;
@@ -28,6 +27,8 @@ public class Player : MonoBehaviour
     const float boostRunDuration = 1f;
     float boostRunEnergy = 0;
     Gamepad gamepad;
+    bool zoomInput = false;
+    public bool ZoomInput => zoomInput;
 
     void Awake()
     {
@@ -76,6 +77,8 @@ public class Player : MonoBehaviour
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
+        playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
+        playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
     }
 
 

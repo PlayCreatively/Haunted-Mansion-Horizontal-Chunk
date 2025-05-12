@@ -98,6 +98,12 @@ public class Carriable : MonoBehaviour, IInteractable
         meshRend = GetComponentInChildren<Renderer>();
     }
 
+    void FixedUpdate()
+    {
+        bool isMoving = rb.linearVelocity.sqrMagnitude > 20f;
+        col.material.bounciness = isMoving ? 0.7f : 0f;
+    }
+
     public Vector3 GetSize()
     {
         return col switch

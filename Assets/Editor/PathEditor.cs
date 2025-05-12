@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System;
-using log4net.Util;
 
 [CustomEditor(typeof(Path))]
 public class PathEditor : Editor

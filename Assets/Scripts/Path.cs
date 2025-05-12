@@ -73,7 +73,6 @@ public class Path : MonoBehaviour
 #if UNITY_EDITOR
     public bool isPath = false; // Flag to indicate if this is a path or a floor editor
     public bool dirty = false;
-#endif
 
     [UnityEditor.MenuItem("Game/ReSnapAllNodesToGrid")]
     static void ReSnapAllNodes()
@@ -100,6 +99,7 @@ public class Path : MonoBehaviour
 
         UnityEditor.Undo.CollapseUndoOperations(UnityEditor.Undo.GetCurrentGroup());
     }
+#endif
 
     // Helper: Convert stored Vector2 to world space Vector3 (using transform.position.y as the height)
     public Vector3 GetPos(int i)

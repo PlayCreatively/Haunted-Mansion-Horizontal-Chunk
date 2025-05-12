@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 622b2083bb218224684fdf8e9ffa72b7
+guid: 8d1d7b0f665e0e543875e8e436ccfca8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,9 +31,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: animation
-      takeName: animation
-      internalID: -7292391843476892669
+      name: "goo|\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F.001Action"
+      takeName: "goo|\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F.001Action"
+      internalID: 5358634052503548564
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0

@@ -15,6 +15,7 @@ public class RoomUI : MonoBehaviour
     [SerializeField]
     Image[] ResourceUI;
     public GameObject requirementsParent;
+    public GameObject bookedIconUI;
     int urgency = 0;
 
     void Awake()
@@ -86,6 +87,7 @@ public class RoomUI : MonoBehaviour
         if (state == RoomState.Occupied)
         {
             transform.parent.gameObject.SetActive(false);
+            bookedIconUI.SetActive(false);
         }
 
         else if (state == RoomState.PreBooked)
@@ -99,6 +101,7 @@ public class RoomUI : MonoBehaviour
         else if (state == RoomState.Booked)
         {
             bookingTimeUI.transform.parent.gameObject.SetActive(true);
+            StartCoroutine(bookedIconUI.transform.ScaleUpObject(.2f, true));
         }
     }
 

@@ -61,11 +61,13 @@ public class DynamicCamera : MonoBehaviour
 
             if (zoomOut)
             {
+                Time.timeScale = 0f;
                 targetZoom = zoom;
                 targetPos = InverseAlignWithCamera(new(position.x, position.y, -30f));
             }
             else
             {
+                Time.timeScale = 1f;
                 targetPos = InverseAlignWithCamera((Vector3)playerRect.center - Vector3.forward * 30);
                 targetZoom = playerRect.height * .5f;
             }

@@ -284,6 +284,15 @@ public class Player : MonoBehaviour
         bool isRunBoosting = grounded && boostRunEnergy > 0;
         if (isRunBoosting)
         {
+            if(boostRunEnergy == boostRunDuration)
+            {
+                FMODAudioManager.Instance.TriggerJumpingOffTheBalconySfx();
+                foreach (var particle in dashParticles)
+                {
+                    particle.Play();
+                }
+            }
+
             const float time = .8f;
             if(boostRunEnergy > time)
             {

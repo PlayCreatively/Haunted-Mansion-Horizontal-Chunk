@@ -72,7 +72,7 @@ Material:
     - _TileY: 1
     - _Tiling: 0
     m_Colors:
-    - _Center: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Center: {r: 0.521, g: 0.488, b: 0, a: 0}
     - _Offset: {r: 0.59, g: -0.13, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

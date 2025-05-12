@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     float boostRunEnergy = 0;
     Gamepad gamepad;
     bool zoomInput = false;
+    float airTime = 0;
     public bool ZoomInput => zoomInput;
 
     void Awake()
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Move"].performed += MoveInput;
         playerInput.actions["Move"].canceled += MoveInput;
+        playerInput.actions["Move"].canceled += _ => boostRunEnergy = 0; ;
 
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
@@ -129,8 +131,8 @@ public class Player : MonoBehaviour
         if (dashValue <= 0)
             return;
 
-        const float squashAmount = 0.3f;
-        visuals.Squash(1f - squashAmount * dashValue);
+        //const float squashAmount = 0.3f;
+        //visuals.Squash(1f - squashAmount * dashValue);
 
         float dashDelta = Mathf.Min(Time.deltaTime, dashValue);
         dashValue -= dashDelta;
@@ -247,14 +249,27 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-
-
-
         if (stunned)
+        {
+            boostRunEnergy = 0;
             return;
+        }
 
         visuals.Squash(rb.linearVelocity.y / 15f + 1);
 
+        if (!grounded)
+        {
+            airTime += Time.fixedDeltaTime;
+        }
+
+        if (grounded)
+        {
+            if (airTime > .7f)
+            {
+                boostRunEnergy = boostRunDuration;
+            }
+            airTime = 0;
+        }
 
         var jumpAction = playerInput.actions.FindAction("Jump");
         if (jumpAction.IsPressed())
@@ -268,7 +283,18 @@ public class Player : MonoBehaviour
 
         bool isRunBoosting = grounded && boostRunEnergy > 0;
         if (isRunBoosting)
+        {
+            const float time = .8f;
+            if(boostRunEnergy > time)
+            {
+                float squash = boostRunEnergy - time;
+                squash /= (1f - time);
+                squash *= squash;
+                visuals.Squash(1f - squash);
+            }
+
             boostRunEnergy -= Time.deltaTime;
+        }
 
         float runBoost = isRunBoosting ? 2f : 1f;
 
@@ -300,11 +326,10 @@ public class Player : MonoBehaviour
                 }
             visuals.LookAt(transform.position + moveInput, Vector3.up);
         }
+
         if (walkParticles[0].isPlaying && (!isMoving || !grounded))
             foreach (var particle in walkParticles)
-            {
                 particle.Stop();
-            }
 
         animator.SetBool("IsGrounded", grounded);
 
@@ -320,8 +345,22 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if(stunned)
-        //    controller
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Collider playerCol = collision.collider;
+            Vector3 playerFeetPos = playerCol.bounds.center - Vector3.up * playerCol.bounds.extents.y;
+            Vector3 enemyCenterPos = col.bounds.center;
+
+            // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
+            float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
+
+            var player = collision.gameObject.GetComponent<Player>();
+            if (touchHeightPercent > 0f)
+            {
+                player.Jump(1.25f);
+                player.Vibrate(1f, .25f, false, true);
+            }
+        }
     }
 
     void OnCollisionStay(Collision collision)

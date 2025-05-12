@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System.Collections;
 using UnityEngine;
 
@@ -207,9 +206,7 @@ public class Enemy : MonoBehaviour
         {
             Collider playerCol = collision.collider;
             Vector3 playerFeetPos = playerCol.bounds.center - Vector3.up * playerCol.bounds.extents.y;
-            Debug.DrawRay(playerFeetPos, collision.transform.forward * 2, Color.red, 1f);
             Vector3 enemyCenterPos = col.bounds.center;
-            Debug.DrawRay(enemyCenterPos, transform.forward * 2, Color.red, 1f);
 
             // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
             float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;

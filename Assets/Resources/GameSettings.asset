@@ -60,7 +60,7 @@ MonoBehaviour:
   - {fileID: 8803960671301444383, guid: 6a0b6ca064e29674ab4b57be84af4528, type: 3}
   PostBookedTime: 120
   minStayTime: 20
-  maxStayTime: 360
+  maxStayTime: 180
   minPreBookedTime: 0
   maxPreBookedTime: 0
   requirementSettings:
@@ -69,8 +69,8 @@ MonoBehaviour:
     minTypes: 1
     maxTypes: 3
   smartElevator: 1
-  laundryMachineTime: 15
-  soapMachineTime: 15
+  laundryMachineTime: 20
+  soapMachineTime: 20
   toiletPaper:
     prefab: {fileID: -7235903851819569586, guid: badca6beb724cdc4592a4064a30817e8, type: 3}
     visualPrefab: {fileID: 3870387949449623212, guid: a739a2dcaf14465498ddade6fd2ae828, type: 3}

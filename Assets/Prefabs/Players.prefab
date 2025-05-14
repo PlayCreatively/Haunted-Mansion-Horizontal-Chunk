@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BorderSize: 7
-  smoothing: 0.15
+  smoothing: 0.03
   zoom: 7.455
   position: {x: 0, y: 0.2075}
   editMode: 0

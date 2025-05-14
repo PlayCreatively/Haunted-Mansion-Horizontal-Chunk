@@ -31,11 +31,12 @@ public class DynamicCamera : MonoBehaviour
         if (Application.isEditor && !Application.isPlaying)
         {
             _smoothing = 1;
-        }
-        if (editMode)
-        {
-            UpdateEditModeView();
-            return;
+
+            if (editMode)
+            {
+                UpdateEditModeView();
+                return;
+            }
         }
 #endif
 

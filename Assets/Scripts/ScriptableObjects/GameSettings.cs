@@ -148,10 +148,7 @@ public class GameSettings : ScriptableObject
     [Header("Room Settings")]
     [Tooltip("Takes into consideration how many rooms are already booked")]
     public int PostBookedTime = 45;
-    public float GetPostBookedTime()
-    {
-        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * PostBookedTime;
-    }
+    
     //public float minPostBookedTime = 60;
     //public float maxPostBookedTime = 60 * 4;
     public float minStayTime = 20;

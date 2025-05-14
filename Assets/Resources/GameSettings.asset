@@ -58,14 +58,14 @@ MonoBehaviour:
   - {fileID: 8803960671301444383, guid: 7a478e3d898cf6d4186c16fd3ac4e702, type: 3}
   - {fileID: 8803960671301444383, guid: a599cdcd912ad3e4eb08811058333e47, type: 3}
   - {fileID: 8803960671301444383, guid: 6a0b6ca064e29674ab4b57be84af4528, type: 3}
-  PostBookedTime: 45
-  minStayTime: 30
-  maxStayTime: 180
-  minPreBookedTime: 5
-  maxPreBookedTime: 120
+  PostBookedTime: 120
+  minStayTime: 20
+  maxStayTime: 360
+  minPreBookedTime: 0
+  maxPreBookedTime: 0
   requirementSettings:
     minAmount: 1
-    maxAmount: 3
+    maxAmount: 2
     minTypes: 1
     maxTypes: 3
   smartElevator: 1

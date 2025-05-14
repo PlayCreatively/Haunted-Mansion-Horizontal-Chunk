@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -83,10 +84,20 @@ public class Room : MonoBehaviour
     void Start()
     {
         CheckIn();
-        if (Random.value < (2f / rooms.Count)) // likely that the game will start with 2 rooms checked out
-            Invoke(nameof(CheckOut), 1);
 
+        if (GetRoomCountForState(RoomState.PreBooked) == 0) // rough balancing
+        {
+            GetClosestToPlayers().CheckOut();
+        }
 
+    }
+
+    void BookRoomIfNone()
+    {
+        if (GetRoomCountForState(RoomState.PreBooked) == 0) // rough balancing
+        {
+            rooms[Random.Range(0, rooms.Count)].CheckOut();
+        }
     }
 
     void Update()
@@ -125,13 +136,14 @@ public class Room : MonoBehaviour
 
         isDirty = false;
         CheckIn();
+        //BookRoomIfNone();
     }
 
     public void Book()
     {
         Debug.Log($"{gameObject.name} booked", gameObject);
         state = RoomState.Booked;
-        BookedTime = GameSettings.Instance.GetPostBookedTime();
+        BookedTime = GetPostBookedTime();
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
@@ -146,7 +158,7 @@ public class Room : MonoBehaviour
 
         if(isDirty)
         {
-            Clean();
+            Clean(); // REMOVE FOR PLAYTEST
             return;
             roomUI.UpdateBookingTimeUI(0);
             Game.GameOver(this);
@@ -212,6 +224,37 @@ public class Room : MonoBehaviour
 
         availableRoom = null;
         return false;
+    }
+
+    public float GetPostBookedTime()
+    {
+        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * GameSettings.Instance.PostBookedTime;
+    }
+    public float GetRoomCountForState(RoomState state)
+    {
+        return Room.Rooms.Where(r => r.state == state).Count();
+    }
+    public Room GetClosestToPlayers()
+    {
+        var players = GameObject.FindGameObjectsWithTag("Player");
+        Vector3 center = Vector3.zero;
+        foreach (var player in players)
+            center += player.transform.position;
+        center /= players.Length;
+
+        float closestDistance = Mathf.Infinity;
+        Room closestRoom = null;
+        foreach (var room in rooms)
+        {
+            float distance = Vector3.Distance(room.transform.position, center);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestRoom = room;
+            }
+        }
+
+        return closestRoom;
     }
 
     public struct Requirements

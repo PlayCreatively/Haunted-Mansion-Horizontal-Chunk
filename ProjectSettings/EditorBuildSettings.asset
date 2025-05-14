@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainScene.unity
-    guid: a37b14d3f2c348b44ad6b15514fdf05d
+    path: Assets/Scenes/Sasha's Scene.unity
+    guid: c0807387a413c40b4a13adf2abd9602b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

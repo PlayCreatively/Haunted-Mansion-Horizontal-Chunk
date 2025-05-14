@@ -24,10 +24,10 @@ public class Room : MonoBehaviour
         set
         {
             _bookedTime = value;
-            if(UrgencyState < 2 && _bookedTime < 15f)
-                UrgencyState = 2;
-            else if(UrgencyState < 1 && _bookedTime < 30f)
-                UrgencyState = 1;
+            //if(UrgencyState < 2 && _bookedTime < 15f)
+            //    UrgencyState = 2;
+            //else if(UrgencyState < 1 && _bookedTime < 30f)
+            //    UrgencyState = 1;
             
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
@@ -54,6 +54,8 @@ public class Room : MonoBehaviour
     public Vector2 UIOffset;
 
     protected readonly static List<Room> rooms = new(8);
+    public readonly static Queue<Room> bookedRooms = new(4);
+    public static int CleanedRoomsCount = 0;
     public Action<RoomState> OnStateChange;
     public Action<Requirements> OnRequirementsChange;
     public static Action<Room> OnRoomStateChange;
@@ -129,6 +131,7 @@ public class Room : MonoBehaviour
     [ContextMenu("Clean")]
     public void Clean()
     {
+        CleanedRoomsCount++;
         UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
@@ -141,9 +144,15 @@ public class Room : MonoBehaviour
 
     public void Book()
     {
+        bookedRooms.Enqueue(this);
+        UpdateArrowColors();
         Debug.Log($"{gameObject.name} booked", gameObject);
         state = RoomState.Booked;
         BookedTime = GetPostBookedTime();
+        if (GetRoomCountForState(RoomState.PreBooked) == 0) // THIS NEEDS TO BE REPLACED BEFORE PLAYTEST
+        {
+            BookedTime += 40f;
+        }
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
@@ -152,14 +161,18 @@ public class Room : MonoBehaviour
 
     public void CheckIn()
     {
+        if (bookedRooms.Contains(this))
+            bookedRooms.Dequeue();
+
+        UpdateArrowColors();
         UrgencyState = 0;
 
         Debug.Log($"{gameObject.name} checked in", gameObject);
 
         if(isDirty)
         {
-            Clean(); // REMOVE FOR PLAYTEST
-            return;
+            //Clean(); // REMOVE FOR PLAYTEST
+            //return;
             roomUI.UpdateBookingTimeUI(0);
             Game.GameOver(this);
             enabled = false;
@@ -176,6 +189,11 @@ public class Room : MonoBehaviour
     [ContextMenu("Check Out")]
     public void CheckOut()
     {
+        if(GetRoomCountForState(RoomState.Booked) >= 4)
+        {
+            CheckIn(); return;
+        }
+
         Debug.Log($"{gameObject.name} checked out", gameObject);
         state = RoomState.PreBooked;
         isDirty = true;
@@ -228,13 +246,36 @@ public class Room : MonoBehaviour
 
     public float GetPostBookedTime()
     {
-        return Room.Rooms.Where(r => r.state == RoomState.Booked).Count() * GameSettings.Instance.PostBookedTime;
+        int count = GetRoomCountForState(RoomState.Booked);
+        const int maxFinishedRooms = 20;
+
+        float alpha = (float)CleanedRoomsCount / maxFinishedRooms;
+        float roomTimeBuffer = Lerp(GameSettings.Instance.PostBookedTime, GameSettings.Instance.PostBookedTime * .75f, alpha);
+        return (MathF.Log(count, 3) + 1) * roomTimeBuffer;
     }
-    public float GetRoomCountForState(RoomState state)
+
+    float Lerp(float a, float b, float t)
+    {
+        return a + (b - a) * t;
+    }
+
+    void UpdateArrowColors()
+    {
+        Color[] colors = { new Color(214f/255, 105f/255, 107f/255), new Color(214f/255, 153f / 255, 105f/255), new Color(218f/255, 213f/255, 202f/255) };
+
+        int i = 0;
+        foreach (var room in bookedRooms)
+        {
+            room.roomUI.UpdateRoomOrderColors(colors[i]);
+            i = Mathf.Min(i + 1, 2);
+        }
+    }
+
+    public static int GetRoomCountForState(RoomState state)
     {
         return Room.Rooms.Where(r => r.state == state).Count();
     }
-    public Room GetClosestToPlayers()
+    public static Room GetClosestToPlayers()
     {
         var players = GameObject.FindGameObjectsWithTag("Player");
         Vector3 center = Vector3.zero;

@@ -69,7 +69,8 @@ public class EnemySpawner : MonoBehaviour
         if(sharedMesh == null)
             sharedMesh = enemyPrefab.GetComponentInChildren<SkinnedMeshRenderer>()?.sharedMesh;
 
-        //Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, Vector3.one);
+        if(enemyPrefab.enemyType != EnemyType.Mummy)
+            Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, Vector3.one);
     }
 #endif
 }

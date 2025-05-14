@@ -13,7 +13,7 @@ public class RoomUI : MonoBehaviour
     [SerializeField]
     Image[] ResourceUI;
     public GameObject requirementsParent;
-    public GameObject bookedIconUI;
+    //public GameObject bookedIconUI;
     int urgency = 0;
 
     void Awake()
@@ -35,6 +35,15 @@ public class RoomUI : MonoBehaviour
         (transform as RectTransform).position = GetRoomPosInScreenSpace();
 
         UpdateArrow();
+    }
+
+    public void UpdateRoomOrderColors(Color color)
+    {
+        roomArrowUI.color = color;
+        bookingTimeUI.faceColor = color;
+        Color darkerShade = color * .3f;
+        darkerShade.a = 1f;
+        bookingTimeUI.outlineColor = darkerShade;
     }
 
     public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.transform.position + room.UIOffset.XZ());
@@ -85,7 +94,7 @@ public class RoomUI : MonoBehaviour
         if (state == RoomState.Occupied)
         {
             transform.parent.gameObject.SetActive(false);
-            bookedIconUI.SetActive(false);
+            //bookedIconUI.SetActive(false);
         }
 
         else if (state == RoomState.PreBooked)
@@ -99,7 +108,7 @@ public class RoomUI : MonoBehaviour
         else if (state == RoomState.Booked)
         {
             bookingTimeUI.transform.parent.gameObject.SetActive(true);
-            StartCoroutine(bookedIconUI.transform.ScaleUpObject(.2f, true));
+            //StartCoroutine(bookedIconUI.transform.ScaleUpObject(.2f, true));
         }
     }
 

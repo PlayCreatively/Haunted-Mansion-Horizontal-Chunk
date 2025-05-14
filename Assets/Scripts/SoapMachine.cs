@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 #nullable enable
-public class GooMachine : MonoBehaviour, IInteractable
+public class SoapMachine : MonoBehaviour, IInteractable
 {
     [SerializeField] Carriable soapPrefab;
 
@@ -39,6 +39,8 @@ public class GooMachine : MonoBehaviour, IInteractable
 
     IEnumerator MixRoutine()
     {
+        float duration = GameSettings.Instance.soapMachineTime;
+
         foreach (var anim in animators)
         {
             anim.enabled = true;
@@ -46,7 +48,7 @@ public class GooMachine : MonoBehaviour, IInteractable
 
         }
 
-        yield return new WaitForSeconds(2.3f);
+        yield return new WaitForSeconds(duration);
 
         SpawnSoap();
 

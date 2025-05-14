@@ -167,6 +167,10 @@ public class GameSettings : ScriptableObject
     };
     [Header("Elevator Settings")]
     public bool smartElevator = true;
+    [Header("Machine Settings")]
+    public float laundryMachineTime = 10f;
+    public float soapMachineTime = 10f;
+
 
     [Serializable]
     public struct RoomRequirementSettings

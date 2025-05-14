@@ -37,8 +37,9 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
     IEnumerator LaunderingRoutine()
     {
+        float duration = GameSettings.Instance.laundryMachineTime;
         const float offset = Mathf.PI / 4f;
-        yield return new Timer(6f).GetRoutinePro((a, t) =>
+        yield return new Timer(duration * .6f).GetRoutinePro((a, t) =>
         {
             const float speed = 2f * Mathf.PI;
             t *= speed;
@@ -47,7 +48,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
         StartCoroutine(gooVisual.transform.ScaleDownObject(.2f, true));
 
-        yield return new Timer(2f).GetRoutinePro((a, t) =>
+        yield return new Timer(duration * .2f).GetRoutinePro((a, t) =>
         {
             const float speed = 6f * Mathf.PI;
             t *= speed;

@@ -5,8 +5,11 @@ public class Bed : MonoBehaviour, IInteractable
     [SerializeField]
     Transform[] bedsheets;
 
+    public GameObject Visual { get; private set; }
+
     void Start()
     {
+        Visual = transform.Find("Visual").gameObject;
         //MakeDirty(true);
     }
 
@@ -44,7 +47,7 @@ public class Bed : MonoBehaviour, IInteractable
         return correct;
     }
 
-    public bool Highlight(bool value, InteractiveHand interactiveHand)
+    public bool CanHighlight(bool value, InteractiveHand interactiveHand)
     {
         if (!IsDirty()) return false;
 

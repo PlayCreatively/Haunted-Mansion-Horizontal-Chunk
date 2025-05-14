@@ -156,7 +156,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         float rayCastDistance = rayBackDistance + itemSize.z;
         Vector3 rayBackOffset = Vector3.forward * rayBackDistance;
         Debug.DrawRay(transform.parent.position + transform.TransformVector(defaultLocalPosition - rayBackOffset), transform.forward * rayCastDistance);
-        if(Physics.Raycast(transform.parent.position + transform.TransformVector(defaultLocalPosition - rayBackOffset), transform.forward, out RaycastHit hit, rayCastDistance, ~LayerMask.GetMask("Player", "Enemy"), QueryTriggerInteraction.Ignore))
+        if(Physics.Raycast(transform.parent.position + transform.TransformVector(defaultLocalPosition - rayBackOffset), transform.forward, out RaycastHit hit, rayCastDistance, ~LayerMask.GetMask("Player", "Enemy", "EnemyBlocker"), QueryTriggerInteraction.Ignore))
         {
             float zScale = (hit.distance - rayBackDistance) / itemSize.z;
             float zOffset = ((1f - zScale) * .5f * itemSize.z);
@@ -341,7 +341,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
                 if(canHighlight)
                 {
-                    focusedInteractable?.Highlight(false, this);
+                    if (focusedInteractable is MonoBehaviour mb && mb != null)
+                        focusedInteractable.Highlight(false, this);
                     focusedInteractable = interactable;
                 }
             }

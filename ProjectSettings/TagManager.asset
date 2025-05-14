@@ -16,8 +16,8 @@ TagManager:
   - Enemy
   - Item
   - Wall
-  - 
-  - 
+  - Highlight
+  - EnemyBlocker
   - 
   - 
   - 

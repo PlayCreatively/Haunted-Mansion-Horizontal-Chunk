@@ -50,6 +50,7 @@ public class Room : MonoBehaviour
     public Requirements requirements;
 
     RoomUI roomUI;
+    public Vector2 UIOffset;
 
     protected readonly static List<Room> rooms = new(8);
     public Action<RoomState> OnStateChange;

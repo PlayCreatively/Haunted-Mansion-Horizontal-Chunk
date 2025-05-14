@@ -21,7 +21,15 @@ public interface IInteractableObject : IInteractable
 
 public interface IHighlightable
 {
-    bool Highlight(bool value, InteractiveHand interactiveHand);
+    public GameObject Visual { get; }
+    public bool Highlight(bool value, InteractiveHand interactiveHand)
+    {
+        bool successful = value && CanHighlight(value, interactiveHand);
+        Visual.SetLayerRecursively(value && successful ? LayerMask.NameToLayer("Highlight") : LayerMask.NameToLayer("Default"));
+        return successful;
+    }
+
+    bool CanHighlight(bool value, InteractiveHand interactiveHand);
 }
 
 public interface ICarriable : IInteractable
@@ -86,6 +94,7 @@ public class Carriable : MonoBehaviour, IInteractable
     Collider col;
     Rigidbody rb;
     Renderer meshRend;
+    public GameObject Visual { get; private set; }
 
     public bool pickedUp = false;
     public bool highlighted = false;
@@ -96,6 +105,11 @@ public class Carriable : MonoBehaviour, IInteractable
         col = GetComponentInChildren<Collider>();
         rb = GetComponent<Rigidbody>();
         meshRend = GetComponentInChildren<Renderer>();
+        var visualFound = transform.Find("Visual");
+        if(visualFound != null)
+            Visual = visualFound.gameObject;
+        else
+            Visual = gameObject;
     }
 
     void FixedUpdate()
@@ -115,13 +129,9 @@ public class Carriable : MonoBehaviour, IInteractable
         };
     }
 
-    public bool Highlight(bool value, InteractiveHand interactiveHand)
+    public bool CanHighlight(bool value, InteractiveHand interactiveHand)
     {
-        highlighted = value;
-        if(meshRend != null) // TODO: find out why this is needed, ugly fix
-            meshRend.material.color = value ? Color.yellow : Color.white;
-
-        return true;
+        return value;
     }
 
     public void Destroy()

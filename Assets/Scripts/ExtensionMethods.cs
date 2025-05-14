@@ -201,6 +201,14 @@ public static class ExtensionMethods
             trans.gameObject.SetActive(false);
     }
 
+    public static void SetLayerRecursively(this GameObject root, int layer)
+    {
+        root.layer = layer;
+
+        foreach (Transform child in root.transform)
+            child.gameObject.SetLayerRecursively(layer);
+    }
+
     public static Vector3 Divide(this Vector3 a, Vector3 b)
     {
         return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);

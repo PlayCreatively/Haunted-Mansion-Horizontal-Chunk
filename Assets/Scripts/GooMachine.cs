@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 #nullable enable
@@ -9,61 +11,67 @@ public class GooMachine : MonoBehaviour, IInteractable
     Renderer rend;
     Transform visual, spawnPoint;
     bool hasGoo = false;
+    Animator[] animators;
+
+    public GameObject Visual => visual.gameObject;
 
     void Awake()
     {
         visual = transform.Find("Visual");
-        spawnPoint = visual.Find("SpawnPoint");
+        spawnPoint = transform.Find("SpawnPoint");
         rend = visual.GetComponent<Renderer>();
+        animators = GetAllAnimators(visual).ToArray();
+        foreach (var anim in animators)
+        {
+            anim.enabled = false;
+        }
+    }
+
+    IEnumerable<Animator> GetAllAnimators(Transform trans)
+    {
+        foreach (Transform child in trans)
+            if (child.TryGetComponent(out Animator anim))
+                yield return anim;
+            else
+                foreach (var nestedAnim in GetAllAnimators(child))
+                    yield return nestedAnim;
     }
 
     IEnumerator MixRoutine()
     {
-        const float offset = Mathf.PI / 4f;
-        yield return new Timer(6f).GetRoutinePro((a, t) =>
+        foreach (var anim in animators)
         {
-            const float speed = 2f * Mathf.PI;
-            t *= speed;
-            visual.Squash(1f + Mathf.Sin(t - offset) * .2f);
-        });
+            anim.enabled = true;
+            // start from beginning
 
-        yield return new Timer(2f).GetRoutinePro((a, t) =>
-        {
-            const float speed = 6f * Mathf.PI;
-            t *= speed;
-            visual.Squash(1f + Mathf.Sin(t - offset) * .35f);
-            float y = 1f - Mathf.Cos(t);
-            visual.localPosition = new Vector3(0f, y * .1f, 0f);
-        });
+        }
 
-        const float jumpHeight = .6f;
-
-        yield return new Timer(.2f).GetRoutinePro((a, t) =>
-        {
-            a = -2f * a * a * a + 3f * a * a;
-
-            visual.SetLocalPositionAndRotation(new Vector3(0f, a * jumpHeight, 0f), Quaternion.Euler(a * -45f, 0f, 0f));
-            visual.Squash(1f + (a * .35f));
-        });
+        yield return new WaitForSeconds(2.3f);
 
         SpawnSoap();
 
-        yield return new Timer(.2f).GetRoutinePro((a, t) =>
+        //yield return new Timer(.2f).GetRoutinePro((a, t) =>
+        //{
+        //    a = (2f * a * a * a) - (3f * a * a) + 1f;
+
+        //    visual.SetLocalPositionAndRotation(new Vector3(0f, a * jumpHeight, 0f), Quaternion.Euler(a * -45f, 0f, 0f));
+        //    visual.Squash(1f + (a * .35f));
+
+        //});
+
+        foreach (var anim in animators)
         {
-            a = (2f * a * a * a) - (3f * a * a) + 1f;
-
-            visual.SetLocalPositionAndRotation(new Vector3(0f, a * jumpHeight, 0f), Quaternion.Euler(a * -45f, 0f, 0f));
-            visual.Squash(1f + (a * .35f));
-
-        });
+            anim.enabled = false;
+        }
 
         hasGoo = false;
+
+        yield break;
     }
 
-    public bool Highlight(bool value, InteractiveHand interactiveHand)
+    public bool CanHighlight(bool value, InteractiveHand interactiveHand)
     {
         value &= !hasGoo && IsGoo(interactiveHand.ItemInHand);
-        rend.material.color = value ? Color.yellow : Color.white;
 
         return value;
     }
@@ -86,8 +94,8 @@ public class GooMachine : MonoBehaviour, IInteractable
 
     void SpawnSoap()
     {
-        soapPrefab = soapPrefab.Spawn(spawnPoint.position, Quaternion.identity, .1f);
-        soapPrefab.SetVelocity(visual.forward * 5f);
+        var spawnedSoap = soapPrefab.Spawn(spawnPoint.position, spawnPoint.rotation, .1f);
+        spawnedSoap.SetVelocity((spawnPoint.right + Vector3.up) * 3f);
     }
 }
 #nullable disable

@@ -12,11 +12,14 @@ public class StackingInventory : Inventory, IInteractable
     MeshRenderer[] itemMeshRends;
     Material defaultMaterial; // Default material for items
     int count = 0;
+    public GameObject Visual { get; private set; }
 
     protected override void Awake()
     {
         Assert.IsTrue(itemGrid.x > 0 && itemGrid.y > 0 && itemGrid.z > 0, "Item grid size must be greater than zero");
         Assert.IsTrue(maxSize <= itemGrid.x * itemGrid.y * itemGrid.z, "Max size must be less than or equal to item grid size");
+
+        Visual = transform.Find("Visual").gameObject;
 
         base.Awake();
 
@@ -120,7 +123,7 @@ public class StackingInventory : Inventory, IInteractable
         return successful;
     }
 
-    public bool Highlight(bool value, InteractiveHand hand)
+    public bool CanHighlight(bool value, InteractiveHand hand)
     {
         if (count >= maxSize || hand.ItemInHand == null || !allowedTypes.IsInMask(hand.ItemInHand.type))
         {

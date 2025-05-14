@@ -143,7 +143,11 @@ public class Path : MonoBehaviour
 
         string roomName = __roomRef != null ? "<color=yellow>Guest Room\nFloor {0:F0}</color>" : "Floor {0:F0}";
 
-        UnityEditor.Handles.Label(transform.position, string.Format(roomName, transform.position.y), style: new GUIStyle
+        Vector3 labelPos = transform.position;
+        if(__roomRef != null)
+            labelPos += __roomRef.UIOffset.XZ();
+
+        UnityEditor.Handles.Label(labelPos, string.Format(roomName, transform.position.y), style: new GUIStyle
         {
             fontSize = 10,
             normal = new GUIStyleState { textColor = Color.white },

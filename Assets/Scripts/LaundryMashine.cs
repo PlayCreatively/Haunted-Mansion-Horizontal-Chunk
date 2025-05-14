@@ -8,6 +8,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
     Renderer rend;
     Transform visual, spawnPoint;
+    public GameObject Visual => visual.gameObject;
     Renderer dirtyLaundryVisual;
     GameObject gooVisual;
     const CarriableTypeMask allowedCarriables = allowedLaundry | CarriableTypeMask.Goo;
@@ -82,11 +83,10 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         dirtyLaundryVisual.enabled = false;
     }
 
-    public bool Highlight(bool value, InteractiveHand interactiveHand)
+    public bool CanHighlight(bool value, InteractiveHand interactiveHand)
     {
         var item = interactiveHand.ItemInHand;
         value &= IsAllowed(item) && (currentItem == none && allowedLaundry.IsInMask(item!.type) || (!hasGoo && item!.type == CarriableType.Goo));
-        rend.material.color = value ? Color.yellow : Color.white;
         return value;
     }
 
@@ -136,8 +136,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     void SpawnLaundry(CarriableType type)
     {
         var laundry = ResourceInfo.Instance.Get(type).prefab;
-        laundry = laundry.Spawn(spawnPoint.position, Quaternion.identity, .1f);
-        laundry.SetVelocity(visual.forward * 5f);
+        var spawnedLaundry = laundry.Spawn(spawnPoint.position, Quaternion.identity, .1f);
+        spawnedLaundry.SetVelocity(visual.forward * 5f);
     }
 }
 #nullable disable

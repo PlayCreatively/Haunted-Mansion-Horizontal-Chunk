@@ -287,6 +287,7 @@ public class Player : MonoBehaviour
             if(boostRunEnergy == boostRunDuration)
             {
                 FMODAudioManager.Instance.TriggerJumpingOffTheBalconySfx();
+                Vibrate(.3f, .1f, true, true);
                 foreach (var particle in dashParticles)
                 {
                     particle.Play();

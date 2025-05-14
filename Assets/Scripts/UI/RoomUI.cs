@@ -37,7 +37,7 @@ public class RoomUI : MonoBehaviour
         UpdateArrow();
     }
 
-    public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.transform.position);
+    public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.transform.position + room.UIOffset.XZ());
 
     public void UpdateArrow()
     {

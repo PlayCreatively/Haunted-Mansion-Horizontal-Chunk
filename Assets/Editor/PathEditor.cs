@@ -36,7 +36,7 @@ public class PathEditor : Editor
         //foreach (var path in FindObjectsByType<Path>(0))
         //{
         //    path.RecenterRoom();
-        //}f
+        //}
 
         // rebuild all paths
         foreach (var path in FindObjectsByType<PathPolygonMeshGenerator>(0))

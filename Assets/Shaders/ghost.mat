@@ -69,6 +69,7 @@ Material:
     - _QueueOffset: 0
     - _Rotation: 0
     - _Smoothness: 0.5
+    - _StartRotation: -91.6
     - _TileY: 1
     - _Tiling: 0
     m_Colors:

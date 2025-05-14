@@ -136,6 +136,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
     void SpawnLaundry(CarriableType type)
     {
+        FMODAudioManager.Instance.TriggerLaundryDoneSfx();
         var laundry = ResourceInfo.Instance.Get(type).prefab;
         var spawnedLaundry = laundry.Spawn(spawnPoint.position, Quaternion.identity, .1f);
         spawnedLaundry.SetVelocity(visual.forward * 5f);

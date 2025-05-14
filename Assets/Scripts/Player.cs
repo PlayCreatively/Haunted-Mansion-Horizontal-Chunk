@@ -164,6 +164,8 @@ public class Player : MonoBehaviour
         StartCoroutine(new Timer(duration).GetRoutine(a => gamepad.SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
     }
 
+    public void LandingVibrate() => Vibrate(.3f, .1f, true, true);
+
     public void Stun(Vector3 origin)
     {
         if (stunned) return;
@@ -287,7 +289,7 @@ public class Player : MonoBehaviour
             if(boostRunEnergy == boostRunDuration)
             {
                 FMODAudioManager.Instance.TriggerJumpingOffTheBalconySfx();
-                Vibrate(.3f, .1f, true, true);
+                LandingVibrate();
                 foreach (var particle in dashParticles)
                 {
                     particle.Play();
@@ -368,7 +370,7 @@ public class Player : MonoBehaviour
             if (touchHeightPercent > 0f)
             {
                 player.Jump(1.25f);
-                player.Vibrate(1f, .25f, false, true);
+                player.LandingVibrate();
             }
         }
     }

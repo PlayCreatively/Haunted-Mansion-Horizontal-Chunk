@@ -215,7 +215,7 @@ public class Enemy : MonoBehaviour
             if (touchHeightPercent > 0f)
             {
                 player.Jump(1.25f);
-                player.Vibrate(1f, .25f, false, true);
+                player.LandingVibrate();
                 Hit();
             }
             else // player stunned

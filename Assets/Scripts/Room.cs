@@ -41,7 +41,7 @@ public class Room : MonoBehaviour
         {
             if (_urgencyState == value) return;
             _urgencyState = value;
-            roomUI.OnUrgencyUpdated(value);
+            //roomUI.OnUrgencyUpdated(value);
             FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(value);
         }
     }
@@ -261,7 +261,7 @@ public class Room : MonoBehaviour
 
     void UpdateArrowColors()
     {
-        Color[] colors = { new Color(214f/255, 105f/255, 107f/255), new Color(214f/255, 153f / 255, 105f/255), new Color(218f/255, 213f/255, 202f/255) };
+        Color[] colors = { new (214f/255, 105f/255, 107f/255), new (214f/255, 153f / 255, 105f/255), new (218f/255, 213f/255, 202f/255) };
 
         int i = 0;
         foreach (var room in bookedRooms)

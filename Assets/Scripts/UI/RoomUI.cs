@@ -101,8 +101,8 @@ public class RoomUI : MonoBehaviour
         {
             transform.parent.gameObject.SetActive(true);
             bookingTimeUI.transform.parent.gameObject.SetActive(false);
-            bookingTimeUI.color = Color.white;
-            roomArrowUI.color = Color.white;
+            //bookingTimeUI.color = Color.white;
+            //roomArrowUI.color = Color.white;
         }
 
         else if (state == RoomState.Booked)

@@ -204,8 +204,6 @@ public class FMODAudioManager : MonoBehaviour
     #region ROOMSFX
         //Plays room cleaned SFX. No parameter
         public void TriggerRoomCleanedSfx() => roomCleanedInstance.start();
-        //Plays room check out SFX. No parameter
-        public void TriggerRoomCheckOutSfx() => roomCheckOutInstance.start();
         //Plays room booked SFX. No parameter
         public void TriggerRoomBookedSfx() => roomBookedInstance.start();
         public void TriggerResourcePlacedInRoom() => resourcePlacedInRoomInstance.start();

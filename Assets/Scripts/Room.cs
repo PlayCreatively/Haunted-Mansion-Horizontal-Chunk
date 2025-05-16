@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public enum RoomState
 {
-    PreBooked,
     Booked,
     Occupied,
     //Locked
@@ -32,7 +31,6 @@ public class Room : MonoBehaviour
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
     }
-    float preBookedTime = 0f;
     int _urgencyState = 0;
     int UrgencyState
     {
@@ -87,18 +85,18 @@ public class Room : MonoBehaviour
     {
         CheckIn();
 
-        if (GetRoomCountForState(RoomState.PreBooked) == 0) // rough balancing
+        if (GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
         {
-            GetClosestToPlayers().CheckOut();
+            GetClosestToPlayers().Book(80);
         }
 
     }
 
     void BookRoomIfNone()
     {
-        if (GetRoomCountForState(RoomState.PreBooked) == 0) // rough balancing
+        if (GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
         {
-            rooms[Random.Range(0, rooms.Count)].CheckOut();
+            rooms[Random.Range(0, rooms.Count)].Book();
         }
     }
 
@@ -106,21 +104,16 @@ public class Room : MonoBehaviour
     {
         switch (state)
         {
-            case RoomState.PreBooked:
-                preBookedTime -= Time.deltaTime;
-                if(preBookedTime <= 0) Book(); break;
             case RoomState.Booked:
                 BookedTime -= Time.deltaTime;
                 if (BookedTime <= 0) CheckIn(); break;
             case RoomState.Occupied:
                 stayTime -= Time.deltaTime;
-                if (stayTime <= 0) CheckOut(); break;
+                if (stayTime <= 0) Book(); break;
         }
     }
 
     public float StayTime => stayTime;
-    public float NonBookedTime => preBookedTime;
-    public float Bookedtime => _bookedTime;
     public static List<Room> Rooms => rooms;
 
     public bool IsClean => !isDirty;
@@ -139,20 +132,27 @@ public class Room : MonoBehaviour
 
         isDirty = false;
         CheckIn();
-        //BookRoomIfNone();
     }
 
-    public void Book()
+    public void Book() => Book(GetBookingTime());
+    public void Book(float time)
     {
+        BookedTime = time;
+
+        if (GetRoomCountForState(RoomState.Booked) >= 4)
+        {
+            CheckIn(); return;
+        }
+
         bookedRooms.Enqueue(this);
         UpdateArrowColors();
-        Debug.Log($"{gameObject.name} booked", gameObject);
+
         state = RoomState.Booked;
-        BookedTime = GetPostBookedTime();
-        if (GetRoomCountForState(RoomState.PreBooked) == 0) // THIS NEEDS TO BE REPLACED BEFORE PLAYTEST
-        {
-            BookedTime += 40f;
-        }
+        isDirty = true;
+        requirements = Requirements.CreateRandom();
+        OnRequirementsChange?.Invoke(requirements);
+
+        Debug.Log($"{gameObject.name} booked", gameObject);
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
@@ -184,26 +184,6 @@ public class Room : MonoBehaviour
 
         OnStateChange?.Invoke(state);
         OnRoomStateChange?.Invoke(this);
-    }
-
-    [ContextMenu("Check Out")]
-    public void CheckOut()
-    {
-        if(GetRoomCountForState(RoomState.Booked) >= 4)
-        {
-            CheckIn(); return;
-        }
-
-        Debug.Log($"{gameObject.name} checked out", gameObject);
-        state = RoomState.PreBooked;
-        isDirty = true;
-        preBookedTime = GameSettings.Instance.GetRandomPreBookedTime;
-        requirements = Requirements.CreateRandom();
-        OnRequirementsChange?.Invoke(requirements);
-
-        OnStateChange?.Invoke(state);
-        OnRoomStateChange?.Invoke(this);
-        FMODAudioManager.Instance.TriggerRoomCheckOutSfx();
     }
 
     public void ResourceEnter(CarriableType type, bool enter)
@@ -244,7 +224,7 @@ public class Room : MonoBehaviour
         return false;
     }
 
-    public float GetPostBookedTime()
+    public float GetBookingTime()
     {
         int count = GetRoomCountForState(RoomState.Booked);
         const int maxFinishedRooms = 20;
@@ -261,12 +241,11 @@ public class Room : MonoBehaviour
 
     void UpdateArrowColors()
     {
-        Color[] colors = { new (214f/255, 105f/255, 107f/255), new (214f/255, 153f / 255, 105f/255), new (218f/255, 213f/255, 202f/255) };
 
         int i = 0;
         foreach (var room in bookedRooms)
         {
-            room.roomUI.UpdateRoomOrderColors(colors[i]);
+            room.roomUI.UpdateRoomOrderColors(i);
             i = Mathf.Min(i + 1, 2);
         }
     }

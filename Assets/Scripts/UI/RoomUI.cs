@@ -37,8 +37,13 @@ public class RoomUI : MonoBehaviour
         UpdateArrow();
     }
 
-    public void UpdateRoomOrderColors(Color color)
+    public void UpdateRoomOrderColors(int urgency)
     {
+        Color[] colors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255) };
+
+        this.urgency = urgency;
+
+        var color = colors[urgency];
         roomArrowUI.color = color;
         bookingTimeUI.faceColor = color;
         Color darkerShade = color * .3f;
@@ -71,7 +76,9 @@ public class RoomUI : MonoBehaviour
             Mathf.Clamp(rectTrans.anchoredPosition.y, -extents.y, extents.y)
         );
 
-        float sinOffset = (Mathf.Sin(Time.time * urgency * 4f) * .5f - .5f) * 2 * 35;
+        int arrowUrgency = 2 - urgency;
+
+        float sinOffset = (Mathf.Sin(Time.time * arrowUrgency * 4f) * .5f - .5f) * 2 * 35;
 
         roomArrowUI.rectTransform.anchoredPosition += roomArrowUI.rectTransform.anchoredPosition.normalized * sinOffset;
 
@@ -97,31 +104,12 @@ public class RoomUI : MonoBehaviour
             //bookedIconUI.SetActive(false);
         }
 
-        else if (state == RoomState.PreBooked)
-        {
-            transform.parent.gameObject.SetActive(true);
-            bookingTimeUI.transform.parent.gameObject.SetActive(false);
-            //bookingTimeUI.color = Color.white;
-            //roomArrowUI.color = Color.white;
-        }
-
         else if (state == RoomState.Booked)
         {
+            transform.parent.gameObject.SetActive(true);
             bookingTimeUI.transform.parent.gameObject.SetActive(true);
             //StartCoroutine(bookedIconUI.transform.ScaleUpObject(.2f, true));
         }
-    }
-
-    public void OnUrgencyUpdated(int urgency)
-    {
-        this.urgency = urgency;
-        bookingTimeUI.color = roomArrowUI.color = urgency switch
-        {
-            0 => Color.white,
-            1 => new Color(1, .8f, .2f, 1),
-            2 => new Color(1, .2f, .2f, 1),
-            _ => throw new System.ArgumentOutOfRangeException(nameof(urgency), urgency, null)
-        };
     }
 
     public void UpdateBookingTimeUI(float time)

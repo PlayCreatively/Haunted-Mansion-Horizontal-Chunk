@@ -2,23 +2,21 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public async void StartGame()
     {
-    }
-
-    public void StartGame()
-    {
-        // Load the game scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-
         var playersObj = GameObject.Find("Players");
+
+        DontDestroyOnLoad(playersObj);
+
+        await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
 
         foreach (var player in playersObj.GetComponentsInChildren<Player>())
         {
             player.enabled = true;
+            Destroy(player.GetComponent<SkinSelector>());
         }
 
         playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
+
     }
 }

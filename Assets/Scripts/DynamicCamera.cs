@@ -23,8 +23,8 @@ public class DynamicCamera : MonoBehaviour
     public bool followPlayers = false;
     void Update()
     {
-        if(followPlayers)
-        UpdateFollowPlayers();
+        if (followPlayers)
+            UpdateFollowPlayers();
     }
 
     void UpdateFollowPlayers()
@@ -80,8 +80,11 @@ public class DynamicCamera : MonoBehaviour
                 targetZoom = playerRect.height * .5f;
             }
 
-            transform.position = Vector3.Lerp(transform.position, targetPos, _smoothing);
+            Quaternion targetRotation = Quaternion.Euler(45, 45, 0);
+            
+            transform.SetPositionAndRotation(Vector3.Lerp(transform.position, targetPos, _smoothing), Quaternion.Lerp(transform.rotation, targetRotation, _smoothing * .5f));
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetZoom, _smoothing * .5f);
+
             return;
         }
     }

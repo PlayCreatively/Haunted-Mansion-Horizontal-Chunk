@@ -36,7 +36,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
     IInteractable? focusedInteractable;
 
     /// TODO: validate
-    void Awake()
+    void Start()
     {
         defaultLocalPosition = transform.localPosition;
         backpackUI = InventoryUI.CreateUI(5, transform.parent);

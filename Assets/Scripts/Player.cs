@@ -43,21 +43,13 @@ public class Player : MonoBehaviour
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
+
+        SetUpController();
     }
 
-    void OnEnable()
+    void SetUpController()
     {
-        playerInput.enabled = true;
-        enabled = true;
-    }
-    void OnDisable()
-    {
-        playerInput.enabled = false;
-        enabled = false;
-    }
 
-    void Start()
-    {
         if (GameSettings.Instance.UsingControllers)
         {
             Debug.Log($"{Gamepad.all.Count} controllers found");
@@ -77,7 +69,10 @@ public class Player : MonoBehaviour
             playerInput.currentActionMap = new InputActionMap("Player");
             playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "Keyboard&Mouse" : "P2Keyboard", Keyboard.current);
         }
+    }
 
+    void Start()
+    {
         playerInput.actions["Move"].performed += MoveInput;
         playerInput.actions["Move"].canceled += MoveInput;
         playerInput.actions["Interact"].performed += _ => hand.Interact();
@@ -88,6 +83,12 @@ public class Player : MonoBehaviour
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
         playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
+
+        playerInput.enabled = true;
+        hand.enabled = true;
+
+
+        
     }
 
     void OnDestroy()

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[DefaultExecutionOrder(+500)]
+[DefaultExecutionOrder(-500)]
 public class RoomUI : MonoBehaviour
 {
     public Room room;

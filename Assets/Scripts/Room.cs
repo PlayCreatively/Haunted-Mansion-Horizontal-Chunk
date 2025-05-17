@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -11,7 +9,6 @@ public enum RoomState
     Occupied,
     //Locked
 }
-
 
 public class Room : MonoBehaviour
 {
@@ -51,19 +48,20 @@ public class Room : MonoBehaviour
     RoomUI roomUI;
     public Vector2 UIOffset;
 
-    protected readonly static List<Room> rooms = new(8);
-    public readonly static Queue<Room> bookedRooms = new(4);
-    public static int CleanedRoomsCount = 0;
+    
     public Action<RoomState> OnStateChange;
     public Action<Requirements> OnRequirementsChange;
-    public static Action<Room> OnRoomStateChange;
     Animator shineAnimator;
 
-    void OnEnable() => rooms.Add(this);
-    void OnDisable() => rooms.Remove(this);
+    RoomManager RoomManager;
+
+    void OnEnable() => RoomManager.rooms.Add(this);
+    void OnDisable() => RoomManager.rooms.Remove(this);
 
     void Awake()
     {
+        RoomManager = RoomManager.Instance;
+
         var roomUIObj = Resources.Load<GameObject>("RoomUI");
         shineAnimator = GetComponent<Animator>();
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
@@ -75,6 +73,7 @@ public class Room : MonoBehaviour
         roomUI.transform.parent.localPosition = Vector3.zero;
 
         roomUI.AssignRoom(this);
+
         roomUI.transform.parent.gameObject.SetActive(false);
 
         if (GameSettings.Instance.RoomCleaning == false)
@@ -83,20 +82,20 @@ public class Room : MonoBehaviour
 
     void Start()
     {
+
         CheckIn();
 
-        if (GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
+        if (RoomManager.GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
         {
-            GetClosestToPlayers().Book(80);
+            RoomManager.GetClosestToPlayers().Book(80);
         }
-
     }
 
     void BookRoomIfNone()
     {
-        if (GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
+        if (RoomManager.GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
         {
-            rooms[Random.Range(0, rooms.Count)].Book();
+            RoomManager.rooms[Random.Range(0, RoomManager.rooms.Count)].Book();
         }
     }
 
@@ -114,7 +113,6 @@ public class Room : MonoBehaviour
     }
 
     public float StayTime => stayTime;
-    public static List<Room> Rooms => rooms;
 
     public bool IsClean => !isDirty;
     public bool IsDirty => isDirty;
@@ -124,7 +122,7 @@ public class Room : MonoBehaviour
     [ContextMenu("Clean")]
     public void Clean()
     {
-        CleanedRoomsCount++;
+        RoomManager.CleanedRoomsCount++;
         UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
@@ -139,12 +137,12 @@ public class Room : MonoBehaviour
     {
         BookedTime = time;
 
-        if (GetRoomCountForState(RoomState.Booked) >= 4)
+        if (RoomManager.GetRoomCountForState(RoomState.Booked) >= 4)
         {
             CheckIn(); return;
         }
 
-        bookedRooms.Enqueue(this);
+        RoomManager.bookedRooms.Enqueue(this);
         UpdateArrowColors();
 
         state = RoomState.Booked;
@@ -156,13 +154,13 @@ public class Room : MonoBehaviour
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
-        OnRoomStateChange?.Invoke(this);
+        RoomManager.OnRoomStateChange?.Invoke(this);
     }
 
     public void CheckIn()
     {
-        if (bookedRooms.Contains(this))
-            bookedRooms.Dequeue();
+        if (RoomManager.bookedRooms.Contains(this))
+            RoomManager.bookedRooms.Dequeue();
 
         UpdateArrowColors();
         UrgencyState = 0;
@@ -183,7 +181,7 @@ public class Room : MonoBehaviour
         stayTime = GameSettings.Instance.GetRandomStayTime;
 
         OnStateChange?.Invoke(state);
-        OnRoomStateChange?.Invoke(this);
+        RoomManager.OnRoomStateChange?.Invoke(this);
     }
 
     public void ResourceEnter(CarriableType type, bool enter)
@@ -212,7 +210,7 @@ public class Room : MonoBehaviour
 
     bool TryGetAvailableRoom(out Room availableRoom)
     {
-        foreach (var room in rooms)
+        foreach (var room in RoomManager.rooms)
             if (room.IsClean)
             {
                 room.Book();
@@ -226,10 +224,10 @@ public class Room : MonoBehaviour
 
     public float GetBookingTime()
     {
-        int count = GetRoomCountForState(RoomState.Booked);
+        int count = RoomManager.GetRoomCountForState(RoomState.Booked);
         const int maxFinishedRooms = 20;
 
-        float alpha = (float)CleanedRoomsCount / maxFinishedRooms;
+        float alpha = (float)RoomManager.CleanedRoomsCount / maxFinishedRooms;
         float roomTimeBuffer = Lerp(GameSettings.Instance.PostBookedTime, GameSettings.Instance.PostBookedTime * .75f, alpha);
         return (MathF.Log(count, 3) + 1) * roomTimeBuffer;
     }
@@ -243,38 +241,11 @@ public class Room : MonoBehaviour
     {
 
         int i = 0;
-        foreach (var room in bookedRooms)
+        foreach (var room in RoomManager.bookedRooms)
         {
             room.roomUI.UpdateRoomOrderColors(i);
             i = Mathf.Min(i + 1, 2);
         }
-    }
-
-    public static int GetRoomCountForState(RoomState state)
-    {
-        return Room.Rooms.Where(r => r.state == state).Count();
-    }
-    public static Room GetClosestToPlayers()
-    {
-        var players = GameObject.FindGameObjectsWithTag("Player");
-        Vector3 center = Vector3.zero;
-        foreach (var player in players)
-            center += player.transform.position;
-        center /= players.Length;
-
-        float closestDistance = Mathf.Infinity;
-        Room closestRoom = null;
-        foreach (var room in rooms)
-        {
-            float distance = Vector3.Distance(room.transform.position, center);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestRoom = room;
-            }
-        }
-
-        return closestRoom;
     }
 
     public struct Requirements
@@ -344,17 +315,5 @@ public class Room : MonoBehaviour
             get => resourceRequirement[i];
             set => resourceRequirement[i] = value;
         }
-    }
-}
-
-public class RoomManager : MonoBehaviour
-{
-    public static RoomManager Instance { get; private set; }
-    void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
     }
 }

@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
+
     }
 
     void Start()
@@ -63,29 +64,46 @@ public class Player : MonoBehaviour
         }
         else
         {
+            playerInput.currentActionMap = new InputActionMap("Player");
             playerInput.SwitchCurrentControlScheme(playerIndex == 0 ? "Keyboard&Mouse" : "P2Keyboard", Keyboard.current);
         }
 
         playerInput.actions["Move"].performed += MoveInput;
         playerInput.actions["Move"].canceled += MoveInput;
-        playerInput.actions["Move"].canceled += _ => boostRunEnergy = 0; ;
-
         playerInput.actions["Interact"].performed += _ => hand.Interact();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
         playerInput.actions["Throw"].performed += _ => Throw();
-        //playerInput.actions["Next"].performed += _ => hand.IncrementSelection(1);
-        //playerInput.actions["Previous"].performed += _ => hand.IncrementSelection(-1);
         playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
         playerInput.actions["Pause"].performed += _ => Game.RestartGame();
-        playerInput.actions["Settings"].performed += _ => GameSettings.Instance.RoomCleaning = !GameSettings.Instance.RoomCleaning;
         playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
+    }
+
+    void OnDestroy()
+    {
+        playerInput.actions["Move"].performed -= MoveInput;
+        playerInput.actions["Move"].canceled -= MoveInput;
+        playerInput.actions["Interact"].performed -= _ => hand.Interact();
+        playerInput.actions["Drop"].performed -= _ => hand.DropFromHand();
+        playerInput.actions["Throw"].performed -= _ => Throw();
+        playerInput.actions["ArcSelect"].canceled -= _ => hand.DisplayInventoryUI(0);
+        playerInput.actions["ArcSelect"].performed -= ctx => UpdateSelected(ctx.ReadValue<Vector2>());
+        playerInput.actions["Pause"].performed -= _ => Game.RestartGame();
+        playerInput.actions["ZoomOut"].started -= _ => zoomInput = true;
+        playerInput.actions["ZoomOut"].canceled -= _ => zoomInput = false;
     }
 
 
     void MoveInput(InputAction.CallbackContext ctx)
     {
+        if(ctx.canceled)
+        {
+            moveInput = Vector3.zero;
+            animator.SetFloat("Speed", 0);
+            return;
+        }
+
         moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
         animator.SetFloat("Speed", moveInput.magnitude);
     }

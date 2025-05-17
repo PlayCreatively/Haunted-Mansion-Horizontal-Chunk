@@ -7,18 +7,10 @@ using UnityEngine.UI;
 
 public static class Game
 {
-    static GameManager _gameManager;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    public static void Init()
-    {
-        _gameManager = GameObject.Find("GameManager").AddComponent<GameManager>();
-    }
-
     public static void GameOver(Room failedRoom)
     {
         FMODAudioManager.Instance.TriggerGameOver();
-        _gameManager.StartCoroutine(GameOverRoutine(failedRoom));
+        GameManager.Instance.StartCoroutine(GameOverRoutine(failedRoom));
     }
 
     public static void RestartGame()
@@ -40,7 +32,7 @@ public static class Game
 
         yield return PanCamera(failedRoom.transform.position, 5f);
         yield return new WaitForSecondsRealtime(5f);
-        var gameOverScreen = _gameManager.canvas.transform.Find("GameOverOverlay").GetComponent<Image>();
+        var gameOverScreen = GameManager.Instance.canvas.transform.Find("GameOverOverlay").GetComponent<Image>();
         gameOverScreen.gameObject.SetActive(true);
         gameOverScreen.color = new Color(1, 1, 1, 0);
         float t = 0f;
@@ -78,34 +70,25 @@ public static class Game
 
 class GameManager: MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    static GameManager _instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject obj = new("GameManager");
+                _instance = obj.AddComponent<GameManager>();
+                _instance.Init();
+            }
+            return _instance;
+        }
+    }
     public Canvas canvas;
-    public Player[] players;
-    public Room[] rooms;
-    //public Enemy[] enemies;
-    //public Carriable[] items;
 
-    void GetAllReferences()
+    void Init()
     {
-        players = FindObjectsByType<Player>(0);
-        Debug.Log($"{players.Length} players found");
-
-        rooms = FindObjectsByType<Room>(0);
-        Debug.Log($"{rooms.Length} rooms found");
-
         canvas = FindFirstObjectByType<Canvas>();
-    }
-
-    void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
-    void Start()
-    {
-        GetAllReferences();
     }
 }
 

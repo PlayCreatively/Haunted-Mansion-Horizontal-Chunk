@@ -20,7 +20,14 @@ public class DynamicCamera : MonoBehaviour
 
     public float zoom = 5f;
     public Vector2 position = Vector2.zero;
+    public bool followPlayers = false;
     void Update()
+    {
+        if(followPlayers)
+        UpdateFollowPlayers();
+    }
+
+    void UpdateFollowPlayers()
     {
         float _smoothing = smoothing;
 
@@ -78,6 +85,7 @@ public class DynamicCamera : MonoBehaviour
             return;
         }
     }
+
     Vector3 AlignWithCamera(Vector3 pos) => Quaternion.Inverse(mainCamera.transform.rotation) * pos;
     Vector3 InverseAlignWithCamera(Vector3 pos) => mainCamera.transform.rotation * pos;
 

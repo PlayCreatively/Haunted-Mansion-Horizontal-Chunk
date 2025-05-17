@@ -43,7 +43,17 @@ public class Player : MonoBehaviour
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
+    }
 
+    void OnEnable()
+    {
+        playerInput.enabled = true;
+        enabled = true;
+    }
+    void OnDisable()
+    {
+        playerInput.enabled = false;
+        enabled = false;
     }
 
     void Start()

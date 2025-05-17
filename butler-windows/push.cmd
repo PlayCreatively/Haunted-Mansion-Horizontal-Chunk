@@ -1,3 +1,3 @@
-butler.exe push ../webGL-setup playcreatively/hauntel:HTML5 --if-changed
+butler.exe push ../Builds playcreatively/hauntel-management:windows --if-changed
 
-explorer "https://playcreatively.itch.io/hauntel"
+explorer "https://playcreatively.itch.io/hauntel-management"

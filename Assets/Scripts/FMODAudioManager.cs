@@ -161,6 +161,7 @@ public class FMODAudioManager : MonoBehaviour
     #region WORM
         private void TriggerLandingOnTheWormMonsterSfx(int hp)
         {
+            landingOnTheWormMonsterInstance.setParameterByName("Towel HP", hp);
             landingOnTheWormMonsterInstance.start(); // TODO: Implement in FMOD
         }
         public void TriggerNewWormMonsterSpawnedSfx() //Plays a worm monster spawn SFX. No parameter

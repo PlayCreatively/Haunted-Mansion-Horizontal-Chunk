@@ -69,15 +69,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToBack",
-                    "type": "Button",
-                    "id": "78518fd7-b7d7-4c23-af39-c6dcfdc0571a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
@@ -399,6 +390,28 @@
                 },
                 {
                     "name": "",
+                    "id": "8f6e30b0-63e1-43f0-9cd2-7b607a606174",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ceba2b7e-1638-419f-9c1a-7635dbc396fd",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";P2Keyboard",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f2e9ba44-c423-42a7-ad56-f20975884794",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -531,23 +544,23 @@
                 },
                 {
                     "name": "",
-                    "id": "c566b5b8-f8ce-4450-8f5a-5c9b517ec83b",
-                    "path": "<Gamepad>/dpad/up",
+                    "id": "9fcc3ae4-dfe3-494e-8381-537d692957e3",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ToBack",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Previous",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "49828e24-f5af-4029-b92b-a3e23e402c4d",
-                    "path": "<Keyboard>/t",
+                    "id": "70484bd4-e24b-4dd1-81f6-a5d54ab0cf02",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "ToBack",
+                    "groups": ";P2Keyboard",
+                    "action": "Previous",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

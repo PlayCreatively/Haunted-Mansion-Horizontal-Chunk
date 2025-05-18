@@ -151,7 +151,7 @@ public class Player : MonoBehaviour
         float throwForce = GameSettings.Instance.playerThrowForce;
         const float minThrowForce = .45f;
 
-        float chargeMul = rb.linearVelocity.y > .2f || boostRunEnergy > 0 ? 1f : minThrowForce;
+        float chargeMul = !grounded || boostRunEnergy > 0 ? 1f : minThrowForce;
         hand.Throw(throwForce * chargeMul);
     }
 

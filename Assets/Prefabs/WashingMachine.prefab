@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3237739531324938830}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 64381421257023189}
   - component: {fileID: 8824289243150555790}
   - component: {fileID: 6944515900158985410}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 3241567937216900518}
   - component: {fileID: 920233207534590212}
   - component: {fileID: 5461379665759704540}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DirtyLaundry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 4040203468629397606}
   - component: {fileID: 2765596514935707694}
   - component: {fileID: 9192384939971869943}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WashingMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,8 +255,6 @@ MonoBehaviour:
   dirtyLaundryMat:
   - {fileID: 2100000, guid: 47b829ca3f0d6614fb5581f813537822, type: 2}
   - {fileID: 2100000, guid: 8cb7d9b57fadc1b48ae1ca38582e99c8, type: 2}
-  speed: 0
-  offset: 0
 --- !u!65 &9192384939971869943
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -345,6 +343,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: fa3e0d16d9d54de41ac1f63800fac33e, type: 3}
       propertyPath: m_Name
       value: Goo
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fa3e0d16d9d54de41ac1f63800fac33e, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

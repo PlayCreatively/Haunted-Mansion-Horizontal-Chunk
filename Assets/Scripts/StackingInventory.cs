@@ -13,6 +13,7 @@ public class StackingInventory : Inventory, IInteractable
     Material defaultMaterial; // Default material for items
     int count = 0;
     public GameObject Visual { get; private set; }
+    public int DefaultLayer { get; private set; }
 
     protected override void Awake()
     {
@@ -20,6 +21,7 @@ public class StackingInventory : Inventory, IInteractable
         Assert.IsTrue(maxSize <= itemGrid.x * itemGrid.y * itemGrid.z, "Max size must be less than or equal to item grid size");
 
         Visual = transform.Find("Visual").gameObject;
+        DefaultLayer = Visual.layer;
 
         base.Awake();
 

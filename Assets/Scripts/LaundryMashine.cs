@@ -18,9 +18,12 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     CarriableType currentItem = none;
     bool hasGoo = false;
 
+    public int DefaultLayer { get; private set; }
+
     void Awake()
     {
         visual = transform.Find("Visual");
+        DefaultLayer = Visual.layer;
         dirtyLaundryVisual = visual.Find("DirtyLaundry").GetComponent<Renderer>();
         gooVisual = visual.Find("Goo").gameObject;
         gooVisual.SetActive(false);

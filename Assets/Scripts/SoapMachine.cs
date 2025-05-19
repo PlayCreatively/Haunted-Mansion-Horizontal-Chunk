@@ -15,9 +15,12 @@ public class SoapMachine : MonoBehaviour, IInteractable
 
     public GameObject Visual => visual.gameObject;
 
+    public int DefaultLayer { get; private set; }
+
     void Awake()
     {
         visual = transform.Find("Visual");
+        DefaultLayer = Visual.layer;
         spawnPoint = transform.Find("SpawnPoint");
         rend = visual.GetComponent<Renderer>();
         animators = GetAllAnimators(visual).ToArray();

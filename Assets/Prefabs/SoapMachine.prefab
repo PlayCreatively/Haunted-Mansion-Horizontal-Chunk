@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5469232536041880485}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7318590534472348953}
   - component: {fileID: 1780185591471219460}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: "\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8357909058815006637}
   - component: {fileID: 8410859156561910369}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: "\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F.001"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 5279534093029714329}
   - component: {fileID: 3913010650945190778}
   - component: {fileID: 6425123791441012226}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: soap_machine_goo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 5024755081491326792}
   - component: {fileID: 4569097438316925734}
   - component: {fileID: 7099356527051672410}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SoapMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -409,7 +409,7 @@ GameObject:
   - component: {fileID: 4343159935796524143}
   - component: {fileID: 3350358402392520112}
   - component: {fileID: 1052773455779702981}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: "\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F.002"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7857807624454981435}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: soap_machine_bowl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +547,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5482350633905517785}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,7 +582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 901226974707123753}
   - component: {fileID: 537197481604478744}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: soap_machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,7 +639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1338994880272931978}
   - component: {fileID: 154982903430129897}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: "\u0448\u0435\u0441\u0442\u0435\u0440\u0435\u043D\u043A\u0430_\u0442\u0443\u043F\u0430\u044F.009"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -727,7 +727,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8892112198247024607}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: goo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -759,7 +759,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7126899964997681850}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

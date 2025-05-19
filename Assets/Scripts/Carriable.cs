@@ -22,10 +22,11 @@ public interface IInteractableObject : IInteractable
 public interface IHighlightable
 {
     public GameObject Visual { get; }
+    public int DefaultLayer { get; }
     public bool Highlight(bool value, InteractiveHand interactiveHand)
     {
         bool successful = value && CanHighlight(value, interactiveHand);
-        Visual.SetLayerRecursively(value && successful ? LayerMask.NameToLayer("Highlight") : LayerMask.NameToLayer("Default"));
+        Visual.SetLayerRecursively(value && successful ? LayerMask.NameToLayer("Highlight") : DefaultLayer);
         return successful;
     }
 
@@ -96,6 +97,7 @@ public class Carriable : MonoBehaviour, IInteractable
     Renderer meshRend;
     public GameObject Visual { get; private set; }
 
+    public int DefaultLayer { get; private set; }
     public bool pickedUp = false;
     public bool highlighted = false;
     bool destroyed = false;
@@ -110,6 +112,7 @@ public class Carriable : MonoBehaviour, IInteractable
             Visual = visualFound.gameObject;
         else
             Visual = gameObject;
+        DefaultLayer = Visual.layer;
     }
 
     void FixedUpdate()

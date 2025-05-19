@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3203204006362004412}
   - component: {fileID: 7963215028240742348}
   - component: {fileID: 4586083377051080045}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DirtyTowel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

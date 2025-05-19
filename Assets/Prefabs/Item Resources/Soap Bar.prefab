@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 150039959299038874}
   - component: {fileID: 6009088074254661487}
   - component: {fileID: 3685960659938125696}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Soap Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-800)]
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField]
@@ -17,9 +18,9 @@ public class InventoryUI : MonoBehaviour
 
     public static InventoryUI CreateUI(int count, Transform target)
     {
-        InventoryUI inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"));
-        inventoryUI.transform.SetParent(GameObject.Find("Canvas").transform);
-
+        var canvas = GameObject.Find("Canvas").transform;
+        Assert.IsNotNull(canvas, "Canvas not found in the scene.");
+        InventoryUI inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"), canvas.transform);
         inventoryUI.icons = new Image[count];
         inventoryUI.target = target;
 

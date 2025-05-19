@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.96
+      value: 10.4773035
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.6620002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.133
+      value: 7.6584263
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 9e9f104aed7c8eb4a81f00d6f56c0b4a, type: 2}
+      objectReference: {fileID: 2100000, guid: 963429e107024e34781c22faa71c4595, type: 2}
     - target: {fileID: 919132149155446097, guid: cbfb8c8ae368f4e41b08b1fb3dfe882c, type: 3}
       propertyPath: m_Name
       value: SM_LAMP_WALL

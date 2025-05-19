@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 3783913502394067695}
   - component: {fileID: 228824712309876042}
   - component: {fileID: 2650374517798424960}
-  - component: {fileID: 3352459057608461313}
+  - component: {fileID: 436881516919060444}
   m_Layer: 0
   m_Name: door_anim
   m_TagString: Untagged
@@ -229,7 +229,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &3352459057608461313
+--- !u!95 &436881516919060444
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0

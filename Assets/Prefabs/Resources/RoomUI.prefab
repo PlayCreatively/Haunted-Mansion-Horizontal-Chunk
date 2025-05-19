@@ -249,7 +249,6 @@ MonoBehaviour:
   - {fileID: 5272620130525866547}
   - {fileID: 3075821197100068462}
   requirementsParent: {fileID: 7356369239613289188}
-  bookedIconUI: {fileID: 4309461728427565697}
 --- !u!1 &2245916065128563800
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -194738014, guid: 25df5ba5b02c18a4185d74714d09891b, type: 3}
+  m_Sprite: {fileID: 935867848, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

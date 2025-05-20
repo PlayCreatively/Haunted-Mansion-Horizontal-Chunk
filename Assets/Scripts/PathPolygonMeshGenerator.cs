@@ -22,15 +22,15 @@ public class PathPolygonMeshGenerator : MonoBehaviour
     List<Vector2> lastGenerated2DVertices = null;  // Store 2D vertices
     List<int> lastGeneratedTriangles = null;
 
-    // regenerate the path on engine start
-    [UnityEditor.InitializeOnLoadMethod]
     [UnityEditor.MenuItem("Game/Regenerate Paths")]
     static void OnProjectLoadedInEditor()
     {
+        Debug.Log("REGENERATED ALL PATHS");
         // Find all Path components in the scene and regenerate them.
         PathPolygonMeshGenerator[] paths = FindObjectsByType<PathPolygonMeshGenerator>(FindObjectsSortMode.None);
         foreach (var path in paths)
         {
+            Debug.Log($"Regenerating path: {path.name}");
             path.Generate2DPolygonMesh();
         }
     }
@@ -55,6 +55,11 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         }
 
         meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
+    }
+
+    void Start()
+    {
+        Generate2DPolygonMesh();
     }
 
     void Update()

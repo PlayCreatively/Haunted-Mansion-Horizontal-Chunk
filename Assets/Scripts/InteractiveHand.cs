@@ -37,8 +37,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     void Awake()
     {
-        backpackUI = InventoryUI.CreateUI(5, transform.parent);
-        backpackUI.gameObject.SetActive(false);
     }
 
     void Start()
@@ -46,6 +44,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
         defaultLocalPosition = transform.localPosition;
         
 
+        backpackUI = InventoryUI.CreateUI(5, transform.parent);
+        backpackUI.gameObject.SetActive(false);
         CreateNewBackpack();
     }
 

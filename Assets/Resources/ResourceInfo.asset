@@ -39,5 +39,9 @@ MonoBehaviour:
     prefab: {fileID: 8891036835039849118, guid: bfef77635e4992a4eb0809ead47588af, type: 3}
   - type: 3
     icons:
-    - {fileID: -194738014, guid: 25df5ba5b02c18a4185d74714d09891b, type: 3}
+    - {fileID: 935867848, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: 1993792987, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: 963155664, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: -77863420, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: -1259471450, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
     prefab: {fileID: 1742999710040291878, guid: 768cf953414eac645b9166ba93f0dda6, type: 3}

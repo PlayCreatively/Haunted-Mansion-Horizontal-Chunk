@@ -122,6 +122,7 @@ public class Player : MonoBehaviour
     public int UpdateSelected(Vector2 dir)
     {
         if (dir.sqrMagnitude < .1f)
+        if (dir.sqrMagnitude < .3f)
         {
             hand.DisplayInventoryUI(0);
             return -1;

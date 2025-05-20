@@ -537,7 +537,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                     instance.transform.localScale = new Vector3(length, originalScale.y, originalScale.z);
                 }
 
-                instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
+                instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable | HideFlags.DontSaveInEditor;
 
             }
         }

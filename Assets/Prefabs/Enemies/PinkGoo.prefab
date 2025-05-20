@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab26b34ab3d054e4ba48f9a7f27c74f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plaster: {fileID: 7967223576613897600}
   enemyType: 3
   resourceDrop: {fileID: 2513014634330291281, guid: 36f4e134b5e14c541b8c6befdb47b715, type: 3}
 --- !u!54 &3923314876375813597
@@ -262,5 +263,10 @@ PrefabInstance:
 --- !u!4 &7339340230563995450 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b6419fd062a06ab4485c8af40446229d, type: 3}
+  m_PrefabInstance: {fileID: 7084208877033322705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7967223576613897600 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b6419fd062a06ab4485c8af40446229d, type: 3}
   m_PrefabInstance: {fileID: 7084208877033322705}
   m_PrefabAsset: {fileID: 0}

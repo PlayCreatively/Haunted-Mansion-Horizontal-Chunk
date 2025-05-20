@@ -74,6 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8998525a7c641d45b92fe584dd8e18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plaster: {fileID: 6736956853095617141}
   enemyType: 0
   resourceDrop: {fileID: 1776415883596520742, guid: ca880a380f7461241aa52e3c03375c34, type: 3}
 --- !u!136 &7907561961344033214
@@ -221,15 +222,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.12572193
+      value: -0.132
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.348
+      value: 0.324
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.14883137
+      value: -0.158
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -275,6 +276,11 @@ PrefabInstance:
 --- !u!4 &6212058439012944079 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
+  m_PrefabInstance: {fileID: 5890448010670305060}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6736956853095617141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
   m_PrefabInstance: {fileID: 5890448010670305060}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6458970336155536467

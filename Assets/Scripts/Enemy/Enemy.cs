@@ -29,6 +29,8 @@ public class GooSettings : EnemySettings
 public class Enemy : MonoBehaviour
 {
     protected int hp = 1;
+    [SerializeField]
+    GameObject plaster;
     public int HP => hp;
     public EnemyType enemyType;
     public Carriable resourceDrop;
@@ -66,6 +68,7 @@ public class Enemy : MonoBehaviour
         settings = GameSettings.Instance.GetEnemySettings(enemyType);
         speed = settings.speed;
         hp = settings.hp;
+        plaster.SetActive(false);
     }
 
     protected virtual void OnEnable()
@@ -84,6 +87,7 @@ public class Enemy : MonoBehaviour
     IEnumerator HitRoutine()
     {
         hp--;
+        plaster.SetActive(true);
         visuals.GetComponentInChildren<Renderer>().material.SetFloat("_Angry", 1f);
         FMODAudioManager.Instance.TriggerLandingOnEnemySfx(enemyType, hp);
         yield return HitSquashRoutine();
@@ -167,7 +171,7 @@ public class Enemy : MonoBehaviour
         }
 
         // check for wall
-        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .3f, ~LayerMask.GetMask("Player", "Enemy", "Item"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .35f, ~LayerMask.GetMask("Player", "Enemy", "Item"), QueryTriggerInteraction.Ignore))
         {
             ReflectOffWall(hit.normal);
         }

@@ -100,7 +100,7 @@ public class Carriable : MonoBehaviour, IInteractable
     public int DefaultLayer { get; private set; }
     public bool pickedUp = false;
     public bool highlighted = false;
-    bool destroyed = false;
+    public bool destroyed = false;
 
     protected virtual void Awake()
     {
@@ -213,7 +213,7 @@ public class Carriable : MonoBehaviour, IInteractable
     {
         const float minInteractionSpeed = 100f;
 
-        if (!pickedUp && (rb.angularVelocity.sqrMagnitude > minInteractionSpeed) || rb.angularVelocity.y < float.Epsilon)
+        if (!destroyed && !pickedUp && (rb.angularVelocity.sqrMagnitude > minInteractionSpeed) || rb.angularVelocity.y < float.Epsilon)
         {
 
             if (collision.rigidbody != null && collision.rigidbody.TryGetComponent(out IInteractable interactable))

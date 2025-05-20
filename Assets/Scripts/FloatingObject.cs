@@ -9,7 +9,7 @@ public class FloatingObject : MonoBehaviour
 
     void Start()
     {
-        startPosition = transform.position;
+        startPosition = transform.localPosition;
         
         // Apply random offset if none provided
         if (Mathf.Approximately(offset, 0f))
@@ -21,6 +21,6 @@ public class FloatingObject : MonoBehaviour
     void Update()
     {
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed + offset) * floatHeight;
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        transform.localPosition = new Vector3(startPosition.x, newY, startPosition.z);
     }
 }

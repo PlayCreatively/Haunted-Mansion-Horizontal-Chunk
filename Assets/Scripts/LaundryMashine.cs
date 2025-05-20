@@ -16,7 +16,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
     const CarriableType none = (CarriableType)(-1);
 
     CarriableType currentItem = none;
-    bool hasGoo = false;
+    int gooCount = 0;
+    bool isLaundering = false;
 
     public int DefaultLayer { get; private set; }
 
@@ -32,13 +33,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         rend = visual.GetComponent<Renderer>();
     }
 
-    [ContextMenu("Spawn")]
-    public void Spawn()
-    {
-        SpawnLaundry(CarriableType.DirtyTowel);
-    }
-
-    IEnumerator LaunderingRoutine()
+    IEnumerator LaunderingRoutine(CarriableType toSpawn)
     {
         float duration = GameSettings.Instance.laundryMachineTime;
         const float offset = Mathf.PI / 4f;
@@ -70,8 +65,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             visual.Squash(1f + (a * .35f));
         });
 
-        SpawnLaundry(currentItem - 4);
-        currentItem = none;
+        SpawnLaundry(toSpawn);
 
         yield return new Timer(.2f).GetRoutinePro((a, t) =>
         {
@@ -83,37 +77,53 @@ public class LaundryMashine : MonoBehaviour, IInteractable
         });
 
         currentItem = none;
-        hasGoo = false;
+        gooCount = 0;
         dirtyLaundryVisual.enabled = false;
+        isLaundering = false;
     }
 
     public bool CanHighlight(bool value, InteractiveHand interactiveHand)
     {
         var item = interactiveHand.ItemInHand;
-        value &= IsAllowed(item) && (currentItem == none && allowedLaundry.IsInMask(item!.type) || (!hasGoo && item!.type == CarriableType.Goo));
+        value &= !isLaundering && IsAllowed(item) && (currentItem == none && allowedLaundry.IsInMask(item!.type) || (gooCount < 2 && item!.type == CarriableType.Goo));
         return value;
     }
 
     public bool Interact(Carriable carriable)
     {
+        if(isLaundering) return false;
+
         bool successful = false;
 
         if (currentItem == none && IsDirtyLaundry(carriable))
         {
+            successful = true;
             InsertLaundry(carriable.type);
+            Debug.Log($"LaundryMashine: Inserted {carriable.type}");
             carriable.Destroy(transform.position, .1f);
-            successful = true;
         }
-        else if (!hasGoo && carriable.type == CarriableType.Goo)
+        else if (gooCount < 2 && carriable.type == CarriableType.Goo)
         {
-            carriable.Destroy(transform.position, .1f);
-            StartCoroutine(gooVisual.transform.ScaleUpObject(.1f, true));
-            hasGoo = true;
             successful = true;
+            carriable.Destroy(transform.position, .1f);
+            if(gooCount == 0)
+                StartCoroutine(gooVisual.transform.ScaleUpObject(.1f, true));
+            gooCount++;
+            Debug.Log($"LaundryMashine: Inserted Goo {gooCount}");
+            if (gooCount == 2)
+            {
+                isLaundering = true;
+                StartCoroutine(LaunderingRoutine(CarriableType.Soap));
+                return true;
+            }
+
         }
 
-        if(successful && hasGoo && currentItem != none)
-            StartCoroutine(LaunderingRoutine());
+        if(successful && gooCount == 1 && currentItem != none)
+        {
+            isLaundering = true;
+            StartCoroutine(LaunderingRoutine(currentItem - 4));
+        }
 
         return successful;
     }

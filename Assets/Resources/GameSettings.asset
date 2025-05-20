@@ -58,7 +58,7 @@ MonoBehaviour:
   - {fileID: 8803960671301444383, guid: 7a478e3d898cf6d4186c16fd3ac4e702, type: 3}
   - {fileID: 8803960671301444383, guid: a599cdcd912ad3e4eb08811058333e47, type: 3}
   - {fileID: 8803960671301444383, guid: 6a0b6ca064e29674ab4b57be84af4528, type: 3}
-  PostBookedTime: 120
+  PostBookedTime: 100
   minStayTime: 20
   maxStayTime: 180
   minPreBookedTime: 0
@@ -85,13 +85,17 @@ MonoBehaviour:
     mesh: {fileID: -1558037838122711689, guid: adce8986e54ddaf49a7c6fb11ad1765a, type: 3}
   soap:
     prefab: {fileID: 1742999710040291878, guid: 768cf953414eac645b9166ba93f0dda6, type: 3}
-    visualPrefab: {fileID: 0}
-    mesh: {fileID: 0}
+    visualPrefab: {fileID: 1723108791092883970, guid: 768cf953414eac645b9166ba93f0dda6, type: 3}
+    mesh: {fileID: 5366677859941942551, guid: 829f961b46a9e7947bcb59a3900451aa, type: 3}
   dirtyTowel:
     prefab: {fileID: 1776415883596520742, guid: 0e6a4ae11c396ee46a74c56a7ac2eedb, type: 3}
-    visualPrefab: {fileID: 0}
-    mesh: {fileID: 0}
+    visualPrefab: {fileID: 5564300449383712698, guid: 0e6a4ae11c396ee46a74c56a7ac2eedb, type: 3}
+    mesh: {fileID: 1703718507284371230, guid: 116145fbe64b0eb4a80be5e9904e9f89, type: 3}
   dirtyBedSheet:
     prefab: {fileID: 1776415883596520742, guid: ca880a380f7461241aa52e3c03375c34, type: 3}
-    visualPrefab: {fileID: 0}
-    mesh: {fileID: 0}
+    visualPrefab: {fileID: 5564300449383712698, guid: ca880a380f7461241aa52e3c03375c34, type: 3}
+    mesh: {fileID: 1703718507284371230, guid: 116145fbe64b0eb4a80be5e9904e9f89, type: 3}
+  ghost: {fileID: 8079634157583613218, guid: a0c5c83d7ec42fc4cbac1843070adda9, type: 3}
+  mummy: {fileID: 804567775763324226, guid: 201eb69b12f029a43b791c902b38a95d, type: 3}
+  gooMonster: {fileID: 8731404756076036300, guid: 10bb313edeae27e43b77b149c0f907a7, type: 3}
+  towelMonster: {fileID: 636504347077856553, guid: 3d5c9b83bf6b5d7458a21df8b021fc61, type: 3}

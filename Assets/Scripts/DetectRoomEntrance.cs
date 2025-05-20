@@ -28,6 +28,11 @@ public class DetectRoomEntrance : MonoBehaviour
             room.ResourceEnter(item.type, true);
             item.Destroy();
         }
+        else if(TryGetComponent(out TutorialRoom tutorialRoom) && collision.gameObject.TryGetComponent(out item) && tutorialRoom.IsRequired(item.type))
+        {
+            tutorialRoom.ResourceEnter(item.type, true);
+            item.Destroy();
+        }
     }
     //private void OnCollisionExit(Collision collision)
     //{

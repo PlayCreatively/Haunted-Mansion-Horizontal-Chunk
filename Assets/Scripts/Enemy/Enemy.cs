@@ -29,6 +29,7 @@ public class GooSettings : EnemySettings
 public class Enemy : MonoBehaviour
 {
     protected int hp = 1;
+    public int HP => hp;
     public EnemyType enemyType;
     public Carriable resourceDrop;
     protected float speed;
@@ -225,4 +226,7 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
+    public static T Spawn<T>(Vector3 position) where T : Enemy 
+        => GameSettings.Instance.GetEnemyPrefab<T>().Spawn(position, Quaternion.identity);
 }

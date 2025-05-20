@@ -3,23 +3,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
-public enum RoomState
-{
-    Booked,
-    Occupied,
-    //Locked
-}
-
-public interface IRoom
-{
-    event Action<RoomState> OnStateChange;
-    event Action<Room.Requirements> OnRequirementsChange;
-    Transform Transform { get; }
-    Vector2 UIOffset { get; }
-    bool IsDirty { get; }
-}
-
-public class Room : MonoBehaviour, IRoom
+public class TutorialRoom : MonoBehaviour, IRoom
 {
     float stayTime;
     float _bookedTime;
@@ -52,25 +36,17 @@ public class Room : MonoBehaviour, IRoom
 
     bool isDirty = false;
     public RoomState state;
-    public Requirements requirements;
+    public Room.Requirements requirements;
 
     RoomUI roomUI;
     public Vector2 UIOffset;
 
-
     public event Action<RoomState> OnStateChange;
-    public event Action<Requirements> OnRequirementsChange;
+    public event Action<Room.Requirements> OnRequirementsChange;
     Animator shineAnimator;
-
-    RoomManager RoomManager;
-
-    void OnEnable() => RoomManager.rooms.Add(this);
-    void OnDisable() => RoomManager.rooms.Remove(this);
 
     void Awake()
     {
-        RoomManager = RoomManager.Instance;
-
         var roomUIObj = Resources.Load<GameObject>("RoomUI");
         shineAnimator = GetComponent<Animator>();
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
@@ -83,42 +59,25 @@ public class Room : MonoBehaviour, IRoom
 
         roomUI.AssignRoom(this);
 
+        roomUI.bookingTimeUI.gameObject.SetActive(false);
+
         roomUI.transform.parent.gameObject.SetActive(false);
 
         if (GameSettings.Instance.RoomCleaning == false)
             enabled = false;
     }
 
-    void Start()
-    {
-
-        CheckIn();
-
-        if (RoomManager.GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
-        {
-            RoomManager.GetClosestToPlayers().Book(80);
-        }
-    }
-
-    void BookRoomIfNone()
-    {
-        if (RoomManager.GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
-        {
-            RoomManager.rooms[Random.Range(0, RoomManager.rooms.Count)].Book();
-        }
-    }
-
     void Update()
     {
-        switch (state)
-        {
-            case RoomState.Booked:
-                BookedTime -= Time.deltaTime;
-                if (BookedTime <= 0) CheckIn(); break;
-            case RoomState.Occupied:
-                stayTime -= Time.deltaTime;
-                if (stayTime <= 0) Book(); break;
-        }
+        //switch (state)
+        //{
+        //    case RoomState.Booked:
+        //        BookedTime -= Time.deltaTime;
+        //        if (BookedTime <= 0) CheckIn(); break;
+        //    case RoomState.Occupied:
+        //        stayTime -= Time.deltaTime;
+        //        if (stayTime <= 0) Book(); break;
+        //}
     }
 
     public float StayTime => stayTime;
@@ -129,13 +88,11 @@ public class Room : MonoBehaviour, IRoom
     public bool IsOccupied => state == RoomState.Occupied;
 
     public Transform Transform => transform;
-
     Vector2 IRoom.UIOffset => UIOffset;
 
     [ContextMenu("Clean")]
     public void Clean()
     {
-        RoomManager.CleanedRoomsCount++;
         UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
@@ -145,37 +102,23 @@ public class Room : MonoBehaviour, IRoom
         CheckIn();
     }
 
-    public void Book() => Book(GetBookingTime());
-    public void Book(float time)
+    public void Book(float time, Room.Requirements requirements)
     {
         BookedTime = time;
 
-        if (RoomManager.GetRoomCountForState(RoomState.Booked) >= 4)
-        {
-            CheckIn(); return;
-        }
-
-        RoomManager.bookedRooms.Enqueue(this);
-        UpdateArrowColors();
-
         state = RoomState.Booked;
         isDirty = true;
-        requirements = Requirements.CreateRandom();
+        this.requirements = requirements;
         OnRequirementsChange?.Invoke(requirements);
 
         Debug.Log($"{gameObject.name} booked", gameObject);
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         OnStateChange?.Invoke(state);
-        RoomManager.OnRoomStateChange?.Invoke(this);
     }
 
     public void CheckIn()
     {
-        if (RoomManager.bookedRooms.Contains(this))
-            RoomManager.bookedRooms.Dequeue();
-
-        UpdateArrowColors();
         UrgencyState = 0;
 
         Debug.Log($"{gameObject.name} checked in", gameObject);
@@ -185,7 +128,6 @@ public class Room : MonoBehaviour, IRoom
             //Clean(); // REMOVE FOR PLAYTEST
             //return;
             roomUI.UpdateBookingTimeUI(0);
-            Game.GameOver(this);
             enabled = false;
             return;
         }
@@ -194,7 +136,6 @@ public class Room : MonoBehaviour, IRoom
         stayTime = GameSettings.Instance.GetRandomStayTime;
 
         OnStateChange?.Invoke(state);
-        RoomManager.OnRoomStateChange?.Invoke(this);
     }
 
     public void ResourceEnter(CarriableType type, bool enter)
@@ -221,53 +162,9 @@ public class Room : MonoBehaviour, IRoom
         return isDirty && requirements.IsRequired(type);
     }
 
-    bool TryGetAvailableRoom(out Room availableRoom)
+    public void ForceRequire(Room.Requirements requirements)
     {
-        foreach (var room in RoomManager.rooms)
-            if (room.IsClean)
-            {
-                room.Book();
-                availableRoom = room;
-                return true;
-            }
-
-        availableRoom = null;
-        return false;
-    }
-
-    public float GetBookingTime()
-    {
-        int count = RoomManager.GetRoomCountForState(RoomState.Booked);
-        const int maxFinishedRooms = 20;
-
-        float alpha = (float)RoomManager.CleanedRoomsCount / maxFinishedRooms;
-        float roomTimeBuffer = Lerp(GameSettings.Instance.PostBookedTime, GameSettings.Instance.PostBookedTime * .75f, alpha);
-        return (MathF.Log(count, 3) + 1) * roomTimeBuffer;
-    }
-
-    float Lerp(float a, float b, float t)
-    {
-        return a + (b - a) * t;
-    }
-
-    void UpdateArrowColors()
-    {
-
-        int i = 0;
-        foreach (var room in RoomManager.bookedRooms)
-        {
-            room.roomUI.UpdateRoomOrderColors(i);
-            i = Mathf.Min(i + 1, 2);
-        }
-    }
-
-    public void ForceRequire(Requirements requirements)
-    {
-        this.requirements = requirements;
-        OnRequirementsChange?.Invoke(requirements);
-        Debug.Log($"{gameObject.name} requirements forced: {requirements}", gameObject);
-        if(state != RoomState.Occupied)
-            Book();
+        Book(0, requirements);
     }
 
     public struct Requirements

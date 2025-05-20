@@ -187,6 +187,12 @@ public class GameSettings : ScriptableObject
     public ResourceInfo soap;
     public ResourceInfo dirtyTowel;
     public ResourceInfo dirtyBedSheet;
+    [Space(20), Header("Enemies")]
+    public Ghost ghost;
+    public Mummy mummy;
+    public GooMonster gooMonster;
+    public TowelMonster towelMonster;
+
 
     public ResourceInfo GetResourceInfo(CarriableType type)
     {
@@ -225,6 +231,15 @@ public class GameSettings : ScriptableObject
         };
     }
 
+    public T GetEnemyPrefab<T>() where T : Enemy
+    {
+        return typeof(T) == typeof(Ghost) ? ghost as T :
+               typeof(T) == typeof(Mummy) ? mummy as T :
+               typeof(T) == typeof(GooMonster) ? gooMonster as T :
+               typeof(T) == typeof(TowelMonster) ? towelMonster as T :
+               throw new ArgumentOutOfRangeException(nameof(T), typeof(T), null);
+    }
+
 #if UNITY_EDITOR
     [UnityEditor.MenuItem("Game/" + nameof(GameSettings))]
     public static void CreateAndShow()
@@ -239,6 +254,7 @@ public class GameSettings : ScriptableObject
         // open properties window
         UnityEditor.EditorUtility.OpenPropertyEditor(Instance);
     }
+
 #endif
 
 }

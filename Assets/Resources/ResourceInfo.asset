@@ -45,3 +45,11 @@ MonoBehaviour:
     - {fileID: -77863420, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
     - {fileID: -1259471450, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
     prefab: {fileID: 1742999710040291878, guid: 768cf953414eac645b9166ba93f0dda6, type: 3}
+  - type: 7
+    icons:
+    - {fileID: 935867848, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: 1993792987, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: 963155664, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: -77863420, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    - {fileID: -1259471450, guid: 42cb43ab531e1fd45bfff40e937a7516, type: 3}
+    prefab: {fileID: 2513014634330291281, guid: 36f4e134b5e14c541b8c6befdb47b715, type: 3}

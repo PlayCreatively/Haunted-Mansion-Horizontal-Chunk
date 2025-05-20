@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,11 +6,11 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(-500)]
 public class RoomUI : MonoBehaviour
 {
-    public Room room;
+    public IRoom room;
     public Image roomArrowUI;
     public GameObject bookingUI;
     public ResourceRequirementsUI[] resourceRequirementsUI;
-    TextMeshProUGUI bookingTimeUI;
+    public TextMeshProUGUI bookingTimeUI;
     [SerializeField]
     Image[] ResourceUI;
     public GameObject requirementsParent;
@@ -21,7 +22,7 @@ public class RoomUI : MonoBehaviour
         bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>(true);
     }
 
-    public void AssignRoom(Room room)
+    public void AssignRoom(IRoom room)
     {
         Awake();
 
@@ -51,7 +52,7 @@ public class RoomUI : MonoBehaviour
         bookingTimeUI.outlineColor = darkerShade;
     }
 
-    public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.transform.position + room.UIOffset.XZ());
+    public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.Transform.position + room.UIOffset.XZ());
 
     public void UpdateArrow()
     {

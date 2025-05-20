@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[ExecuteAlways, DefaultExecutionOrder(-200)]
+[ExecuteAlways, DefaultExecutionOrder(+500)]
 public class DynamicCamera : MonoBehaviour
 {
     [SerializeField]
@@ -49,18 +49,32 @@ public class DynamicCamera : MonoBehaviour
 
         bool zoomOut = true;
         for (int i = 0; i < players.Length; i++)
-            zoomOut &= players[i].ZoomInput;
+            if (players[i] != null)
+                zoomOut &= players[i].ZoomInput;
 
         {
             //// worldBounds
             Vector2 worldSize = new(2f * zoom * mainCamera.aspect, 2f * zoom);
             Rect worldBounds = new(position - worldSize * .5f, worldSize);
             //// playersRect
-            Vector2 p1 = AlignWithCamera(GetPlayerPos(0));
-            Vector2 p2 = AlignWithCamera(GetPlayerPos(1));
-            Vector2 playersCenter = (p1 + p2) * .5f;
-            Vector2 playersSize = new(MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
-            Rect playerRect = new(playersCenter - playersSize * .5f, playersSize);
+            Rect playerRect;
+            if (players[0] != null && players[1] != null)
+            {
+                Vector2 p1 = AlignWithCamera(GetPlayerPos(0));
+                Vector2 p2 = AlignWithCamera(GetPlayerPos(1));
+                Vector2 playersCenter = (p1 + p2) * .5f;
+                Vector2 playersSize = new(MathF.Abs(p1.x - p2.x) + BorderSize, MathF.Abs(p1.y - p2.y) + BorderSize);
+                playerRect = new(playersCenter - playersSize * .5f, playersSize);
+            }
+            else
+            {
+                Vector2 size = Vector2.one * BorderSize;
+                if (players[0] != null)
+                    playerRect = new((Vector2)AlignWithCamera(GetPlayerPos(0)) - size * .5f, size);
+                else
+                    playerRect = new((Vector2)AlignWithCamera(GetPlayerPos(1)) - size * .5f, size);
+
+            }
 
             playerRect = playerRect.CropToBounds(worldBounds).ExpandToRatio(mainCamera.aspect).Restrict(worldBounds);
 

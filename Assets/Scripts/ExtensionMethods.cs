@@ -84,6 +84,7 @@ public static class ExtensionMethods
     public static void Destroy<T>(this T carriable, Vector3 destination, float time = .2f) where T : Carriable
     {
         carriable.EnablePhysics(false);
+        carriable.destroyed = true;
 
         Vector3 startPos = carriable.transform.position;
 

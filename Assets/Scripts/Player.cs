@@ -10,9 +10,9 @@ public class Player : MonoBehaviour
     public int playerIndex = 0;
 
     PlayerInput playerInput;
-    Rigidbody rb;
-    Collider col;
-    Renderer rend;
+    public Rigidbody rb;
+    public Collider col;
+    public Renderer rend;
     InteractiveHand hand;
     Transform visuals;
     Animator animator;
@@ -33,6 +33,9 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        transform.parent = GameObject.Find("Players").transform;
+        transform.localPosition = Vector3.up;
+
         rb = GetComponent<Rigidbody>();
         hand = GetComponentInChildren<InteractiveHand>();
         playerInput = GetComponent<PlayerInput>();
@@ -44,7 +47,9 @@ public class Player : MonoBehaviour
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
 
-        SetUpController();
+        //SetUpController();
+        if(playerInput.GetDevice<Gamepad>() == null)
+            Destroy(gameObject);
     }
 
     void SetUpController()
@@ -61,8 +66,10 @@ public class Player : MonoBehaviour
                     // vibrate controller
                     gamepad = Gamepad.all[playerIndex];
                     playerInput.SwitchCurrentControlScheme("Gamepad", gamepad);
-                    break;
+                    return;
                 }
+
+            Destroy(gameObject);
         }
         else
         {
@@ -122,12 +129,15 @@ public class Player : MonoBehaviour
     public int UpdateSelected(Vector2 dir)
     {
         if (dir.sqrMagnitude < .1f)
-        if (dir.sqrMagnitude < .3f)
         {
             hand.DisplayInventoryUI(0);
             return -1;
         }
+
         hand.DisplayInventoryUI(dir.magnitude);
+
+        if (dir.sqrMagnitude < .3f)
+            return -1;
 
         const float selectionEndDegree = -90f;
         const float selectionStartDegree = 90;

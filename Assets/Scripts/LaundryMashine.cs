@@ -44,7 +44,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             visual.Squash(1f + Mathf.Sin(t - offset) * .2f);
         });
 
-        StartCoroutine(gooVisual.transform.ScaleDownObject(.2f, true));
+        if(gooCount != 2)
+            StartCoroutine(gooVisual.transform.ScaleDownObject(.4f, true));
 
         yield return new Timer(duration * .2f).GetRoutinePro((a, t) =>
         {
@@ -64,6 +65,9 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             visual.SetLocalPositionAndRotation(new Vector3(0f, a * jumpHeight, 0f), Quaternion.Euler(a * -45f, 0f, 0f));
             visual.Squash(1f + (a * .35f));
         });
+
+        if (gooCount == 2)
+            StartCoroutine(gooVisual.transform.ScaleDownObject(.4f, true));
 
         SpawnLaundry(toSpawn);
 

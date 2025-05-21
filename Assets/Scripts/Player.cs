@@ -50,11 +50,6 @@ public class Player : MonoBehaviour
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
 
-        
-
-        //SetUpController();
-        if (playerInput.GetDevice<Gamepad>() == null)
-            Destroy(gameObject);
     }
 
     void SetUpController()

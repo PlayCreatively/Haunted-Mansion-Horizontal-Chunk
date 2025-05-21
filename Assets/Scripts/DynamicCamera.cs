@@ -23,7 +23,7 @@ public class DynamicCamera : MonoBehaviour
     public bool followPlayers = false;
     void Update()
     {
-        if (followPlayers)
+        if (followPlayers && players.Length > 0)
             UpdateFollowPlayers();
     }
 

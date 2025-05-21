@@ -8,7 +8,7 @@ public class BootstrapPlayers : MonoBehaviour
 
     void Awake()
     {
-        var mgr = PlayerInputManager.instance;
+        var mgr = GetComponent<PlayerInputManager>();
 
         for (int i = 0; i < Gamepad.all.Count; i++)
         {
@@ -26,7 +26,21 @@ public class BootstrapPlayers : MonoBehaviour
             player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();
         }
 
-        if(Gamepad.all.Count < 2)
+        if(Gamepad.all.Count == 0)
+        {
+            var player = PlayerInput.Instantiate(
+                         playerPrefab,
+                         playerIndex: 0,
+                         controlScheme: "Keyboard&Mouse",
+                         pairWithDevice: Keyboard.current);
+            Vector3 offset = new(0, 0, 0); // offset the player position
+            player.transform.localPosition = offset;
+            player.transform.SetParent(transform, false);
+            player.gameObject.name = "Player 1"; // rename the player object
+            player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();
+        }
+
+        if (Gamepad.all.Count < 2)
             mgr.EnableJoining();
     }
 }

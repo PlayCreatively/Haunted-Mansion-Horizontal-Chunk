@@ -1,6 +1,4 @@
-﻿using Mono.Cecil;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;

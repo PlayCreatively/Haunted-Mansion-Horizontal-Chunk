@@ -8,7 +8,6 @@ using System.Linq;
 [RequireComponent(typeof(MeshRenderer))]
 public class PathPolygonMeshGenerator : MonoBehaviour
 {
-#if UNITY_EDITOR
     Path pathComponent;
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
@@ -22,6 +21,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
     List<Vector2> lastGenerated2DVertices = null;  // Store 2D vertices
     List<int> lastGeneratedTriangles = null;
 
+#if UNITY_EDITOR
     [UnityEditor.MenuItem("Game/Regenerate Paths")]
     static void OnProjectLoadedInEditor()
     {
@@ -34,6 +34,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             path.Generate2DPolygonMesh();
         }
     }
+#endif
 
     void Awake()
     {
@@ -45,7 +46,9 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         if(!TryGetComponent(out meshCollider))
         {
             meshCollider = gameObject.AddComponent<MeshCollider>();
+#if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(meshCollider);
+#endif
         }
         else // check if more than one collider component
         {
@@ -54,12 +57,12 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 DestroyImmediate(colliders[1]);
         }
 
-        meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
     }
 
     void Start()
     {
         Generate2DPolygonMesh();
+        meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
     }
 
     void Update()
@@ -71,6 +74,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         if (pathComponent == null) pathComponent = GetComponent<Path>();
@@ -92,6 +96,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
         }
         Generate2DPolygonMesh();
     }
+#endif
 
     [ContextMenu("Generate Polygon Mesh from Path (2D, then convert)")]
     public void GenerateMeshFromEditor()
@@ -213,7 +218,9 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
         if (enableDebugLogging)
             Debug.Log($"Successfully generated mesh with {finalVertices3D.Count} vertices and {triangles.Count / 3} triangles.", this);
+#if UNITY_EDITOR
         pathComponent.dirty = false;
+#endif
 
         bool isRoom = TryGetComponent<Room>(out var _);
         gameObject.name = string.Format(isRoom ? "Floor {0:F0} (Guest Room)" : "Floor {0:F0}", transform.position.y);
@@ -517,7 +524,7 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 }
                 GameObject instance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(connectionPrefabs[wallIndex], transform);
 #else
-                GameObject instance = Instantiate(connectionPrefab, transform);
+                GameObject instance = Instantiate(connectionPrefabs[wallIndex], transform);
 #endif
                 instance.name = $"ConnectionInstance {con.nodeA}-{con.nodeB}";
                 instance.transform.SetPositionAndRotation(connectionPrefabs[wallIndex].transform.position + midpoint + Vector3.up * .5f, finalRotation);
@@ -547,9 +554,10 @@ public class PathPolygonMeshGenerator : MonoBehaviour
             }
         }
 
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.RepaintHierarchyWindow();
-    }
 #endif
+    }
         public static void CleanOrphanWalls()
         {
             // Destroy all walls without parent

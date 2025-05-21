@@ -93,9 +93,6 @@ public class Player : MonoBehaviour
 
         playerInput.enabled = true;
         hand.enabled = true;
-
-
-        
     }
 
     void OnDestroy()

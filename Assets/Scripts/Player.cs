@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     public int playerIndex = 0;
 
     PlayerInput playerInput;
+    [HideInInspector]
     public Rigidbody rb;
+    [HideInInspector]
     public Collider col;
+    [HideInInspector]
     public Renderer rend;
     InteractiveHand hand;
     Transform visuals;
@@ -47,8 +50,10 @@ public class Player : MonoBehaviour
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
 
+        
+
         //SetUpController();
-        if(playerInput.GetDevice<Gamepad>() == null)
+        if (playerInput.GetDevice<Gamepad>() == null)
             Destroy(gameObject);
     }
 
@@ -122,7 +127,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        moveInput = Quaternion.AngleAxis(45, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
+        moveInput = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
         animator.SetFloat("Speed", moveInput.magnitude);
     }
 

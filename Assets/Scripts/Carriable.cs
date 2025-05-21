@@ -213,7 +213,7 @@ public class Carriable : MonoBehaviour, IInteractable
     {
         const float minInteractionSpeed = 100f;
 
-        if (!destroyed && !pickedUp && (rb.angularVelocity.sqrMagnitude > minInteractionSpeed) || rb.angularVelocity.y < float.Epsilon)
+        if (!destroyed && !pickedUp && ((rb.angularVelocity.sqrMagnitude > minInteractionSpeed) || rb.angularVelocity.y < float.Epsilon))
         {
 
             if (collision.rigidbody != null && collision.rigidbody.TryGetComponent(out IInteractable interactable))

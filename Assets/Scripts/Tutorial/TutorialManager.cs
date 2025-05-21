@@ -109,10 +109,10 @@ public class TutorialManager : MonoBehaviour
     public TextMeshPro oneMoreTime;
     IEnumerator JumpOnMummy()
     {
-        oneMoreTime.transform.localScale = Vector3.zero;
+        oneMoreTime.transform.gameObject.SetActive(false);
         var mummy = Enemy.Spawn<Mummy>(mummySpawnPlacement.position);
 
-        while(mummy.HP < 1)
+        while(mummy.HP > 1)
             yield return null;
 
         yield return oneMoreTime.transform.ScaleUpObject(.2f, true);

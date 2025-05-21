@@ -189,10 +189,6 @@ PrefabInstance:
       propertyPath: maxCount
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2323194614721286599, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
-      propertyPath: enemyPrefab
-      value: 
-      objectReference: {fileID: 804567775763324226, guid: 201eb69b12f029a43b791c902b38a95d, type: 3}
     - target: {fileID: 3995987442079346954, guid: 696fa4871e1ad7f43bad241539f168ab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 50.763382

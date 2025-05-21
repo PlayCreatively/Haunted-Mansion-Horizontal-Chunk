@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3995987442079346954}
   - component: {fileID: 2323194614721286599}
   m_Layer: 0
-  m_Name: Ghost Spawner
+  m_Name: Mummy Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca4c812a8f7f7f41bb7f41deb69de18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 8079634157583613218, guid: a0c5c83d7ec42fc4cbac1843070adda9, type: 3}
+  enemyPrefab: {fileID: 421803389883430102, guid: 201eb69b12f029a43b791c902b38a95d, type: 3}
   spawnInterval: 20
   maxCount: 2

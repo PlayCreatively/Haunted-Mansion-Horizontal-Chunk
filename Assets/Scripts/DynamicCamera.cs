@@ -58,7 +58,7 @@ public class DynamicCamera : MonoBehaviour
             Rect worldBounds = new(position - worldSize * .5f, worldSize);
             //// playersRect
             Rect playerRect;
-            if (players[0] != null && players[1] != null)
+            if (players.Length == 2 && players[0] != null && players[1] != null)
             {
                 Vector2 p1 = AlignWithCamera(GetPlayerPos(0));
                 Vector2 p2 = AlignWithCamera(GetPlayerPos(1));

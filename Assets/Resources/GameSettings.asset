@@ -96,6 +96,6 @@ MonoBehaviour:
     visualPrefab: {fileID: 5564300449383712698, guid: ca880a380f7461241aa52e3c03375c34, type: 3}
     mesh: {fileID: 1703718507284371230, guid: 116145fbe64b0eb4a80be5e9904e9f89, type: 3}
   ghost: {fileID: 8079634157583613218, guid: a0c5c83d7ec42fc4cbac1843070adda9, type: 3}
-  mummy: {fileID: 804567775763324226, guid: 201eb69b12f029a43b791c902b38a95d, type: 3}
+  mummy: {fileID: 421803389883430102, guid: 201eb69b12f029a43b791c902b38a95d, type: 3}
   gooMonster: {fileID: 8731404756076036300, guid: 10bb313edeae27e43b77b149c0f907a7, type: 3}
   towelMonster: {fileID: 636504347077856553, guid: 3d5c9b83bf6b5d7458a21df8b021fc61, type: 3}

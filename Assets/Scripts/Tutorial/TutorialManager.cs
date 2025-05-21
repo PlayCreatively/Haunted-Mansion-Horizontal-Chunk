@@ -109,8 +109,8 @@ public class TutorialManager : MonoBehaviour
     public TextMeshPro oneMoreTime;
     IEnumerator JumpOnMummy()
     {
-        oneMoreTime.transform.gameObject.SetActive(false);
         var mummy = Enemy.Spawn<Mummy>(mummySpawnPlacement.position);
+        oneMoreTime.gameObject.SetActive(false);
 
         while(mummy.HP > 1)
             yield return null;

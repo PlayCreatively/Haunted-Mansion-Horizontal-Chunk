@@ -83,6 +83,7 @@ public class DynamicCamera : MonoBehaviour
 
             if (zoomOut)
             {
+                _smoothing = .1f;
                 Time.timeScale = 0f;
                 targetZoom = zoom;
                 targetPos = InverseAlignWithCamera(new(position.x, position.y, -30f));

@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public Rigidbody rb;
     [HideInInspector]
-    public Collider col;
+    public CapsuleCollider col;
+    SphereCollider ballCollider;
     [HideInInspector]
     public Renderer rend;
     InteractiveHand hand;
@@ -45,7 +46,8 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         visuals = transform.Find("Visuals");
         rend = visuals.Find("Body").GetComponentInChildren<Renderer>();
-        col = GetComponent<Collider>();
+        col = GetComponent<CapsuleCollider>();
+        ballCollider = GetComponent<SphereCollider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
@@ -241,14 +243,17 @@ public class Player : MonoBehaviour
     {
         enabled = false;
         SetStunned(true);
-        var physicsMat = col.material;
-        physicsMat.bounciness = 1f;
-        physicsMat.dynamicFriction = physicsMat.staticFriction = 0f;
-        physicsMat.bounceCombine = PhysicsMaterialCombine.Maximum;
-        physicsMat.frictionCombine = PhysicsMaterialCombine.Minimum;
+        visuals.Squash(1f);
+        rb.freezeRotation = false;
+        col.enabled = false;
+        ballCollider.enabled = true;
         float stunDuration = GameSettings.Instance.playerStunDuration;
         yield return new WaitForSeconds(stunDuration);
-        col.material.bounciness = 0f;
+        col.enabled = true;
+        ballCollider.enabled = false;
+        rb.rotation = Quaternion.identity;
+        rb.freezeRotation = true;
+
         SetStunned(false);
         enabled = true;
     }

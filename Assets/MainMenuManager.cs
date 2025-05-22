@@ -38,30 +38,20 @@ public class MainMenuManager : MonoBehaviour
         input.transform.parent.GetComponentInChildren<DynamicCamera>().followPlayers = false;
     }
 
-    public async void StartGame()
+    public void StartGame() => LoadScene(1);
+
+    public void StartTutorial() => LoadScene(2);
+
+    void LoadScene(int i)
     {
         var playersObj = GameObject.Find("Players");
-
-        await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
-
-        foreach (var player in playersObj.GetComponentsInChildren<Player>())
-        {
-            player.enabled = true;
-            Destroy(player.GetComponent<SkinSelector>());
-        }
-
-        playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
-    }
-
-    public void StartTutorial()
-    {
-        var playersObj = GameObject.Find("Players");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(i);
         foreach (var player in playersObj.GetComponentsInChildren<Player>())
         {
             player.enabled = true;
             Destroy(player.GetComponent<SkinSelector>());
         }
         playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
+
     }
 }

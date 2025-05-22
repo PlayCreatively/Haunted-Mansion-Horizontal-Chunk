@@ -46,8 +46,5 @@ public class BootstrapPlayers : MonoBehaviour
             player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();
         }
         //player.GetComponent<Player>().enabled = false;
-
-        if (Gamepad.all.Count < 2)
-            mgr.EnableJoining();
     }
 }

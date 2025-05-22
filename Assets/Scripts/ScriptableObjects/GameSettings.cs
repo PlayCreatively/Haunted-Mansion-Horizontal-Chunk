@@ -13,9 +13,11 @@ public static class Game
         GameManager.Instance.StartCoroutine(GameOverRoutine(failedRoom));
     }
 
-    public static void RestartGame()
+    public static void ToMainMenu()
     {
         Time.timeScale = 1f;
+        // destroy all not destroy on load
+        GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
         SceneManager.LoadScene(0);
     }
 

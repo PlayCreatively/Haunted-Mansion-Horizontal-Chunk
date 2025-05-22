@@ -9,6 +9,9 @@ public class MainMenuManager : MonoBehaviour
     {
         playerInputManager = FindAnyObjectByType<PlayerInputManager>();
 
+        if (Gamepad.all.Count < 2)
+            playerInputManager.EnableJoining();
+
         playerInputManager.onPlayerJoined += OnPlayerJoined;
 
         foreach (var player in FindObjectsByType<PlayerInput>(0))
@@ -21,6 +24,8 @@ public class MainMenuManager : MonoBehaviour
 
     void OnDestroy()
     {
+        playerInputManager.DisableJoining();
+        playerInputManager.joinBehavior = PlayerJoinBehavior.JoinPlayersManually;
         playerInputManager.onPlayerJoined -= OnPlayerJoined;
     }
 

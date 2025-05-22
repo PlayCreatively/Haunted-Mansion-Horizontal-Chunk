@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Throw"].performed += _ => Throw();
         playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
-        playerInput.actions["Pause"].performed += _ => Game.RestartGame();
+        playerInput.actions["Pause"].performed += _ => Game.ToMainMenu();
         playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
 
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Throw"].performed -= _ => Throw();
         playerInput.actions["ArcSelect"].canceled -= _ => hand.DisplayInventoryUI(0);
         playerInput.actions["ArcSelect"].performed -= ctx => UpdateSelected(ctx.ReadValue<Vector2>());
-        playerInput.actions["Pause"].performed -= _ => Game.RestartGame();
+        playerInput.actions["Pause"].performed -= _ => Game.ToMainMenu();
         playerInput.actions["ZoomOut"].started -= _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled -= _ => zoomInput = false;
     }

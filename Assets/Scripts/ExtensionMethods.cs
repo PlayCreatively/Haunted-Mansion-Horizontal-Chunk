@@ -1,6 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
+public static class ExecutionOrder
+{
+    public const int Singleton = -10000;
+    public const int Camera = 500;
+    public const int UI = 600;
+}
+
 public static class ExtensionMethods
 {
     public static Vector2 XZ(this Vector3 v)

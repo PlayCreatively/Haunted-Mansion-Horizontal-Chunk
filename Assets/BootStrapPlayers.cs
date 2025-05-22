@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
+[DefaultExecutionOrder(-11)]
 public class BootstrapPlayers : MonoBehaviour
 {
     [SerializeField] GameObject playerPrefab;

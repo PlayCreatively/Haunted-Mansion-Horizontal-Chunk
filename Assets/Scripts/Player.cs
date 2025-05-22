@@ -91,8 +91,17 @@ public class Player : MonoBehaviour
         playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
 
-        playerInput.enabled = true;
+    }
+
+    void OnEnable()
+    {
         hand.enabled = true;
+        
+    }
+
+    void OnDisable()
+    {
+        hand.enabled = false;
     }
 
     void OnDestroy()

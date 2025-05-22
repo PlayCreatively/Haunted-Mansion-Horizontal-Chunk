@@ -47,11 +47,10 @@ public class Player : MonoBehaviour
         visuals = transform.Find("Visuals");
         rend = visuals.Find("Body").GetComponentInChildren<Renderer>();
         col = GetComponent<CapsuleCollider>();
-        ballCollider = GetComponent<SphereCollider>();
+        ballCollider = visuals.GetComponent<SphereCollider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
-
     }
 
     void SetUpController()
@@ -153,14 +152,16 @@ public class Player : MonoBehaviour
         const float arcWidth = 180f;
         const float selectionWidth = arcWidth / slotCount;
 
+        
         Vector2 selectionStartAngle = new(Mathf.Cos(selectionStartDegree), Mathf.Sin(selectionStartDegree));
-        float angle = -Vector2.SignedAngle(selectionStartAngle, dir) - selectionWidth * .5f;
-        angle = Mathf.Clamp(angle, 0, arcWidth);
+        float angle = MathF.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        angle = Math.Clamp(angle, -90f, 90f);
+        angle = (90f - angle);
+        Debug.Log($"angle: {angle} i: {(int)((angle) / selectionWidth)}");
         int index = (int)((angle) / selectionWidth);
-
-        if (index != slotCount - 1)
-            hand.UpdateSelection(index);
-        else return index; // TODO: drop bag
+        index = Mathf.Clamp(index, 0, slotCount - 1);
+        hand.UpdateSelection(index);
+        //else return index; // TODO: drop bag
 
         return index;
     }

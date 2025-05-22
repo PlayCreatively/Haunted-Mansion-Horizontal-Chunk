@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-[DefaultExecutionOrder(-800)]
+[DefaultExecutionOrder(ExecutionOrder.UI)]
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField]
@@ -75,7 +75,7 @@ public class InventoryUI : MonoBehaviour
     public void Setup(Inventory newInventory, int selected)
     {
         Assert.IsNotNull(newInventory, "Inventory cannot be null");
-        Assert.IsTrue(newInventory.MaxSize == icons.Length - 1, "Inventory size does not match UI slots");
+        Assert.IsTrue(newInventory.MaxSize == icons.Length, "Inventory size does not match UI slots");
 
         for (int i = 0; i < newInventory.MaxSize; i++)
         {
@@ -89,9 +89,9 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        //TODO: set last slot as bag
-        int bagSlot = icons.Length - 1;
-        UpdateSlot(bagSlot, CarriableType.Backpack);
+        ////TODO: set last slot as bag
+        //int bagSlot = icons.Length - 1;
+        //UpdateSlot(bagSlot, CarriableType.Backpack);
 
         UpdateSelected(selected);
     }

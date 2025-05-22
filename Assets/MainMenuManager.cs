@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 [DefaultExecutionOrder(-10)]
 public class MainMenuManager : MonoBehaviour
@@ -13,11 +14,6 @@ public class MainMenuManager : MonoBehaviour
             playerInputManager.EnableJoining();
 
         playerInputManager.onPlayerJoined += OnPlayerJoined;
-
-        foreach (var player in FindObjectsByType<PlayerInput>(0))
-        {
-            OnPlayerJoined(player);
-        }
 
         playerInputManager.GetComponentInChildren<DynamicCamera>().followPlayers = false;
     }
@@ -33,22 +29,24 @@ public class MainMenuManager : MonoBehaviour
     {
         input.gameObject.AddComponent<SkinSelector>();
 
+        input.currentActionMap = new InputActionMap("UI");
+
         var player = input.GetComponent<Player>();
         player.enabled = false;
-        input.transform.parent.GetComponentInChildren<DynamicCamera>().followPlayers = false;
     }
 
     public void StartGame() => LoadScene(1);
 
     public void StartTutorial() => LoadScene(2);
 
-    void LoadScene(int i)
+    async void LoadScene(int i)
     {
         var playersObj = GameObject.Find("Players");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(i);
+        await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
         foreach (var player in playersObj.GetComponentsInChildren<Player>())
         {
             player.enabled = true;
+            player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
             Destroy(player.GetComponent<SkinSelector>());
         }
         playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;

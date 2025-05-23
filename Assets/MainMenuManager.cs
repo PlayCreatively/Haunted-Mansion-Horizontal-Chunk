@@ -35,9 +35,13 @@ public class MainMenuManager : MonoBehaviour
         player.enabled = false;
     }
 
+    public void MainMenu() => LoadScene(0);
+
     public void StartGame() => LoadScene(1);
 
     public void StartTutorial() => LoadScene(2);
+
+    public void Leaderboard() => LoadScene(3);
 
     async void LoadScene(int i)
     {

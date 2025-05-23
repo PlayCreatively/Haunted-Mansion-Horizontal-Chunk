@@ -12,7 +12,10 @@ public class HubCornerSingleton : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else 
+        else
+        {
+            instance.transform.SetPositionAndRotation(transform.position, transform.rotation);
             Destroy(gameObject);
+        }
     }
 }

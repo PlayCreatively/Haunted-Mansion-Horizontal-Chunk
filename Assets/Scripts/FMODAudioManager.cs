@@ -8,13 +8,8 @@ public class FMODAudioManager : MonoBehaviour
     
     #region LandingOnEnemiesInstances
         EventInstance landingOnTheGhostInstance;
-        EventInstance landingOnTheSpiderInstance;
         EventInstance landingOnTheGreenGooInstance;
-        EventInstance landingOnTheLTrashMonsterInstance;
-        EventInstance landingOnTheMTrashMonsterInstance;
-        EventInstance landingOnTheSTrashMonsterInstance;
         EventInstance landingOnTheMummyInstance;
-        EventInstance landingOnTheCarpetMonsterInstance;
         EventInstance landingOnTheWormMonsterInstance;
     #endregion
     #region CharacterSFXInstances
@@ -30,8 +25,6 @@ public class FMODAudioManager : MonoBehaviour
         EventInstance newGhostSpawnedInstance;
         EventInstance newMummySpawnedInstance;
         EventInstance newGreenGooSpawnedInstance;
-        EventInstance newSpiderSpawnedInstance;
-        EventInstance newTrashMonsterSpawnedInstance;
         EventInstance newWormMonsterSpawnedInstance;
     #endregion
     #region EnvironmentSFXInstances
@@ -62,21 +55,14 @@ public class FMODAudioManager : MonoBehaviour
         
         #region LandingOnMonstersPaths
                 landingOnTheGhostInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GHOST/land on ghost");
-                landingOnTheSpiderInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/SPIDER/land on spider");
                 landingOnTheGreenGooInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GOO/land on green goo");
-                landingOnTheLTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/TRASH MONSTER/land on l trash monster");
-                landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/TRASH MONSTER/land on m trash monster");
-                landingOnTheMTrashMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/TRASH MONSTER/land on s trash monster");
                 landingOnTheMummyInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/MUMMY/land on mummy");
-                landingOnTheCarpetMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/CARPET/land on carpet monster");
                 landingOnTheWormMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/WORM/land on worm");
         #endregion
         #region NewMonsterSpawnsPaths
                 newGhostSpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GHOST/new ghost spawned");
                 newMummySpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/MUMMY/new mummy spawned");
                 newGreenGooSpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GOO/new green goo spawned");
-                newSpiderSpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/SPIDER/new spider spawned");
-                newTrashMonsterSpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/TRASH MONSTER/new trash monster spawned");
                 newWormMonsterSpawnedInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/WORM/new worm spawned");
         #endregion
         #region CharacterPaths
@@ -117,16 +103,6 @@ public class FMODAudioManager : MonoBehaviour
             newGhostSpawnedInstance.start();
         }
     #endregion
-    #region SPIDER
-        public void TriggerLandingOnTheSpiderSfx() //Plays a spider SFX. No parameter
-        {
-            landingOnTheSpiderInstance.start();
-        }
-        public void TriggerNewSpiderSpawnedSfx() //Plays a spider spawn SFX. No parameter
-        {
-            newSpiderSpawnedInstance.start();
-        }
-    #endregion
     #region GREENGOO
         public void TriggerLandingOnTheGreenGooSfx(int greenGooHp) //Plays a SFX based on green goo's HP. Green Goo HP [0;2]
         {
@@ -136,26 +112,6 @@ public class FMODAudioManager : MonoBehaviour
         public void TriggerNewGreenGooSpawnedSfx() //Plays a green goo spawn SFX. No parameter
         {
             newGreenGooSpawnedInstance.start();
-        }
-    #endregion
-    #region TRASHMONSTER
-        public void TriggerLandingOnTheLTrashMonsterSfx(int lTrashMonsterHp) //Plays a SFX based on L trash monster's HP. L Trash Monster HP [0;2]
-        {
-            landingOnTheLTrashMonsterInstance.setParameterByName("L Trash Monster HP", lTrashMonsterHp);
-            landingOnTheLTrashMonsterInstance.start();
-        }
-        public void TriggerLandingOnTheMTrashMonsterSfx(int mTrashMonsterHp) //Plays a SFX based on M trash monster's HP. M Trash Monster HP [0;1]
-        {
-            landingOnTheMTrashMonsterInstance.setParameterByName("M Trash Monster HP", mTrashMonsterHp);
-            landingOnTheMTrashMonsterInstance.start();
-        }
-        public void TriggerLandingOnTheSTrashMonsterSfx() //Plays a S trash monster SFX. No parameter
-        {
-            landingOnTheSTrashMonsterInstance.start();
-        }
-        public void TriggerNewTrashMonsterSpawnedSfx() //Plays a trash monster spawn SFX. No parameter
-        {
-            newTrashMonsterSpawnedInstance.start();
         }
     #endregion
     #region WORM
@@ -178,12 +134,6 @@ public class FMODAudioManager : MonoBehaviour
         public void TriggerNewMummySpawnedSfx() //Plays a mummy spawn SFX. No parameter
         {
             newMummySpawnedInstance.start();
-        }
-    #endregion
-    #region CARPET
-        public void TriggerLandingOnTheCarpetMonster() //Plays a landing on the carpet monster SFX. No parameter
-        {
-            landingOnTheCarpetMonsterInstance.start();
         }
     #endregion
     #region CHARACTERSFX
@@ -247,9 +197,6 @@ public class FMODAudioManager : MonoBehaviour
             case EnemyType.Goo:
                 TriggerLandingOnTheGreenGooSfx(hp);
                 break;
-            case EnemyType.Trash:
-                TriggerLandingOnTheLTrashMonsterSfx(hp);
-                break;
             case EnemyType.TowelMonster:
                 TriggerLandingOnTheWormMonsterSfx(hp);
                 break;
@@ -285,18 +232,8 @@ public class FMODAudioManager : MonoBehaviour
                 landingOnTheGhostInstance.release();
                 landingOnTheMummyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 landingOnTheMummyInstance.release();
-                landingOnTheSpiderInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                landingOnTheSpiderInstance.release();
                 landingOnTheGreenGooInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 landingOnTheGreenGooInstance.release();
-                landingOnTheLTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                landingOnTheLTrashMonsterInstance.release();
-                landingOnTheMTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                landingOnTheMTrashMonsterInstance.release();
-                landingOnTheSTrashMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                landingOnTheSTrashMonsterInstance.release();
-                landingOnTheCarpetMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                landingOnTheCarpetMonsterInstance.release();
                 landingOnTheWormMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 landingOnTheWormMonsterInstance.release();
         #endregion
@@ -317,14 +254,10 @@ public class FMODAudioManager : MonoBehaviour
                 itemSelectionInTheBagInstance.release();
         #endregion
         #region NewMonsterSpawnsDestroy
-                newTrashMonsterSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                newTrashMonsterSpawnedInstance.release();
                 newMummySpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 newMummySpawnedInstance.release();
                 newGhostSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 newGhostSpawnedInstance.release();
-                newSpiderSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                newSpiderSpawnedInstance.release();
                 newGreenGooSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 newGreenGooSpawnedInstance.release();
                 newWormMonsterSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

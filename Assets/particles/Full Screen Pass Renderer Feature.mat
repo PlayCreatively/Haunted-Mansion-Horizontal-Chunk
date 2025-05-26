@@ -44,9 +44,9 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Range: 6.45
+    - _Range: 6.6
     - _opacity: 1.6
-    - _wave_falloff: 16.44
+    - _wave_falloff: 42.26
     m_Colors:
     - _Color: {r: 0.28229153, g: 7.8833866, b: 21.373585, a: 1}
     - _Position: {r: 0, g: 0, b: 0, a: 0}

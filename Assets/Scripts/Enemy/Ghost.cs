@@ -1,4 +1,5 @@
 using UnityEngine;
+using GameManagers;
 
 
 public class Ghost : Enemy

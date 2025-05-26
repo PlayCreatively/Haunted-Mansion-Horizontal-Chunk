@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 [DefaultExecutionOrder(-10)]
 public class MainMenuManager : MonoBehaviour

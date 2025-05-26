@@ -1,3 +1,4 @@
+using GameManagers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,13 @@ public class RoomManager : MonoBehaviour
     public int CleanedRoomsCount = 0;
     public Action<Room> OnRoomStateChange;
 
+
+    public Room[] GetAllUnlockedRooms()
+    {
+        int currentShift = ShiftData.Instance.CurrentShift;
+        return rooms.Where(r => r.unlockShift <= currentShift).ToArray();
+    }
+
     public int GetRoomCountForState(RoomState state)
     {
         return rooms.Where(r => r.state == state).Count();
@@ -52,6 +60,4 @@ public class RoomManager : MonoBehaviour
 
         return closestRoom;
     }
-
-
 }

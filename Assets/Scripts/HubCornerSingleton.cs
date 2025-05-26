@@ -15,6 +15,7 @@ public class HubCornerSingleton : MonoBehaviour
         else
         {
             instance.transform.SetPositionAndRotation(transform.position, transform.rotation);
+            gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }

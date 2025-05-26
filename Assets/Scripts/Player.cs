@@ -1,3 +1,4 @@
+using GameManagers;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -81,17 +82,25 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        playerInput.actions["Move"].Enable();
         playerInput.actions["Move"].performed += MoveInput;
         playerInput.actions["Move"].canceled += MoveInput;
+        playerInput.actions["Interact"].Enable();
         playerInput.actions["Interact"].performed += _ => hand.Interact();
+        playerInput.actions["Drop"].Enable();
         playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
+        playerInput.actions["Throw"].Enable();
         playerInput.actions["Throw"].performed += _ => Throw();
+        playerInput.actions["ArcSelect"].Enable();
         playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
         playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
+        playerInput.actions["Pause"].Enable();
         playerInput.actions["Pause"].performed += _ => Game.ToMainMenu();
+        playerInput.actions["ZoomOut"].Enable();
         playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
         playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
-
+        playerInput.actions["Dash"].Enable();
+        playerInput.actions["Jump"].Enable();
     }
 
     void OnEnable()

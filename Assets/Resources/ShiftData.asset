@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5cf974fcf55e574092461f4a63dc114, type: 3}
-  m_Name: Skeleton
+  m_Script: {fileID: 11500000, guid: 4bf9ae36b10311b42860e2d301d41359, type: 3}
+  m_Name: ShiftData
   m_EditorClassIdentifier: 
-  mesh: {fileID: -6748422895735917630, guid: 6937d42102a98db45aca1f751fc80335, type: 3}
-  material: {fileID: 2100000, guid: b7706e25897e5034abab8175dc3e27f4, type: 2}
+  shiftDuration: 180
+  minBookings: 1
+  maxBookings: 10
+  maxAlpha: 0.415

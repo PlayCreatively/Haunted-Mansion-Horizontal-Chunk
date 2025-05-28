@@ -1,3 +1,4 @@
+using GameManagers;
 using UnityEngine;
 
 public class TowelMonster : Enemy
@@ -7,8 +8,8 @@ public class TowelMonster : Enemy
 
     protected override void Awake()
     {
-        base.Awake();
         enemyType = EnemyType.TowelMonster;
+        base.Awake();
         anim = GetComponentInChildren<Animator>();
         anim.speed = speed * animSpeedMul;
     }

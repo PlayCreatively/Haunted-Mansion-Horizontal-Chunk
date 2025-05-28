@@ -31,7 +31,7 @@ MonoBehaviour:
   Mummy:
     hp: 2
     speed: 0.7
-    hurtSpeedMultiplier: 8
+    hurtSpeedMultiplier: 2
   Spider:
     hp: 2
     speed: 0.7

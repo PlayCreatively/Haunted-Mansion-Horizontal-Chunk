@@ -5,15 +5,15 @@ public class Mummy : Enemy
 {
     public AnimationCurve moveCurve;
     Animator anim;
-    const float animSpeedMul = 1f;
+    const float animSpeedMul = 2f;
     public float speedMultiplier = 1f;
+    public float visionRadius = 4f;
 
 
     protected override void Awake()
     {
-        base.Awake();
-        speed = GameSettings.Instance.Mummy.speed;
         enemyType = EnemyType.Mummy;
+        base.Awake();
         anim = GetComponentInChildren<Animator>();
         anim.speed = speed * animSpeedMul;
     }
@@ -24,11 +24,31 @@ public class Mummy : Enemy
         float animLength = 3.208f;
         float aTime = animInfo.normalizedTime % 1f;
         float positionInAnimation = aTime * animLength;
-        Debug.Log($"position in animation {positionInAnimation}: {moveCurve.Evaluate(positionInAnimation) > 0}");
-        float deltaMove = moveCurve.Evaluate(positionInAnimation) * Time.fixedDeltaTime;
+        float doMove = moveCurve.Evaluate(positionInAnimation);
+
+        if (doMove > 0f)
+            foreach (var player in FindObjectsByType<Player>(0))
+            {
+                Vector3 dirToPlayer = player.transform.position - transform.position;
+                dirToPlayer.y = 0;
+                if (dirToPlayer.sqrMagnitude < visionRadius * visionRadius)
+                {
+                    MoveDir = dirToPlayer.normalized;
+                    break;
+                }
+            }
+
+        float deltaMove = doMove * Time.fixedDeltaTime;
         Debug.Log(deltaMove);
-        rb.MovePosition(rb.position + speed * speedMultiplier * deltaMove * MoveDir);
+        rb.MovePosition(rb.position + speed * speedMultiplier * animSpeedMul * deltaMove * MoveDir);
 
         anim.speed = speed * animSpeedMul;
+    }
+
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1, 0, 0, .5f);
+        Gizmos.DrawWireSphere(transform.position, visionRadius);
     }
 }

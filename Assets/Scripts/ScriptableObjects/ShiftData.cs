@@ -9,12 +9,12 @@ namespace GameManagers
     [CreateAssetMenu(fileName = nameof(ShiftData), menuName = "ScriptableObjects/" + nameof(ShiftData), order = 1)]
     public class ShiftData : ScriptableObject
     {
-        public const int MaxConsecutiveBookings = 4;
+        public const int MaxConsecutiveBookings = 3;
 
         //// GAME SETTINGS ////
         [Header("Shift Settings")]
         public float shiftDuration = 60 * 3;
-        public int minBookings = 1, maxBookings = 10;
+        public int minBookings = 1, maxBookings = 7;
         //public int minResourcesPerBooking = 1, maxResourcesPerBooking = 3;
         const int addedResourcesPerShift = 2;
         [Range(0, 1)]
@@ -25,8 +25,6 @@ namespace GameManagers
         float currentTimeIntoShift = 0f;
         int[] bookingRequirementCountPerShift = new int[3];
         Room.Requirements[] currentShiftBookingRequirements;
-        int nextBookingIndex = 0;
-        float nextBookingTime = 0f;
         int currentShiftMaxConcurrentBookings = 0;
 
         void OnEnable()
@@ -34,7 +32,18 @@ namespace GameManagers
             ResetData();
         }
 
+        private void Awake()
+        {
+            
+        }
+
+        void OnDisable()
+        {
+            //RoomManager.Instance.OnBookingCompleted -= OnBookingCompleted;
+        }
+
         ////PUBLIC API ////
+        public (Room room, Room.Requirements requirements, bool done)[] BookingShiftSequence => bookingShiftSequence;
         public int CurrentShift => currentShift;
         public float TimeIntoShift => currentTimeIntoShift;
         public float TimeIntoShiftAlpha => currentTimeIntoShift / shiftDuration;
@@ -50,11 +59,10 @@ namespace GameManagers
         /// <summary>
         /// A sequence of rooms and their requirements for the current shift.
         /// </summary>
-        (Room, Room.Requirements)[] bookingShiftSequence;
+        (Room room, Room.Requirements requirements, bool done)[] bookingShiftSequence;
         internal void StartNewShift()
         {
             currentTimeIntoShift = 0f;
-            nextBookingIndex = 0;
 
             AddResourceAndBooking(ref bookingRequirementCountPerShift, CurrentShift);
             currentShiftBookingRequirements = GetRequirementsForShift(bookingRequirementCountPerShift);
@@ -67,24 +75,22 @@ namespace GameManagers
             }
             var roomSequence = GetRandomSequenceOfUnlockedRooms(bookingCount);
 
-            bookingShiftSequence = new (Room, Room.Requirements)[bookingCount];
+            bookingShiftSequence = new (Room room, Room.Requirements requirements, bool done)[bookingCount];
 
             for (int i = 0; i < bookingCount; i++)
-                bookingShiftSequence[i] = (roomSequence[i], currentShiftBookingRequirements[i]);
+                bookingShiftSequence[i] = (roomSequence[i], currentShiftBookingRequirements[i], false);
 
             // book the first rooms
             int initialBookingCount = Math.Min(currentShiftMaxConcurrentBookings, bookingCount);
             for (int i = 0; i < initialBookingCount; i++)
                 ActivateBooking(i);
-            nextBookingIndex = initialBookingCount;
-            if(nextBookingIndex < bookingShiftSequence.Length)
-                nextBookingTime = GetBookingTime(nextBookingIndex);
         }
 
         void ActivateBooking(int i)
         {
             var booking = bookingShiftSequence[i];
-            booking.Item1.Book((float)GetBookingTime(i), booking.Item2);
+            Debug.Assert(booking.room.IsBooked == false, "Room is already booked: " + booking.room.name);
+            booking.room.Book((float)GetBookingTime(i), booking.requirements, i);
         }
 
         /// <summary>
@@ -98,6 +104,8 @@ namespace GameManagers
 
             Room[] rooms = new Room[count];
             Debug.Assert(allUnlockedRooms.Length > 1, "Not enough unlocked rooms to select from.");
+
+            string stringOfRoomIds = "";
 
             Queue<int> lastRooms = new(nBack);
             while (count > 0)
@@ -115,12 +123,16 @@ namespace GameManagers
                 int randomIndex = availableRooms.ElementAt(UnityEngine.Random.Range(0, availableRooms.Count));
 
                 rooms[--count] = allUnlockedRooms[randomIndex];
+                stringOfRoomIds += randomIndex + ", ";
 
                 lastRooms.Enqueue(randomIndex);
                 if (lastRooms.Count > nBack)
                     lastRooms.Dequeue();
             }
 
+            Debug.Log($"Selected rooms for shift {currentShift}: {stringOfRoomIds.TrimEnd(',', ' ')}");
+            Debug.Log($"Selected rooms for shift {currentShift}: {string.Join("\n ", rooms.Select(r => r.name + r.transform.position))}");
+            Debug.Log($"All rooms : {string.Join("\n", allUnlockedRooms.Select(r => r.name + r.transform.position))}");
             return rooms;
         }
 
@@ -134,59 +146,26 @@ namespace GameManagers
                 Game.ToMainMenu();
             }
 
-            if (nextBookingIndex < bookingShiftSequence.Length && currentTimeIntoShift >= nextBookingTime)
+            int nextBookingIndex = bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
+            if (RoomManager.Instance.bookedRooms.Count() < MaxConsecutiveBookings && nextBookingIndex != -1)
             {
                 ActivateBooking(nextBookingIndex);
-                nextBookingIndex++;
-                if (nextBookingIndex < bookingShiftSequence.Length)
-                {
-                    nextBookingTime = GetBookingTime(nextBookingIndex);
-                }
-                else // No more bookings
-                {
-                    nextBookingTime = float.MaxValue;
-                }
             }
         }
 
-        internal bool TryBookNextRoom()
-        {
-            bool canBook = nextBookingIndex < bookingShiftSequence.Length;
-
-            if(canBook)
-            {
-                ActivateBooking(nextBookingIndex);
-                nextBookingIndex++;
-            }
-
-            return canBook;
-        }
-
-        //IEnumerator BookNextRoomCoroutine()
-        //{
-        //    yield return new WaitForSeconds(TimeUntilCheckIn(nextBookingIndex));
-        //    TryBookNextRoom();
-        //}
-
-        internal bool AreAllBookingsCompleted => nextBookingIndex >= bookingShiftSequence.Length && RoomManager.Instance.bookedRooms.Count < 1;
+        internal bool AreAllBookingsCompleted => bookingShiftSequence.All(b => b.done);
+        internal bool AreAnyBookingsNotRunning => bookingShiftSequence.Any(b => !b.done && !b.room.IsBooked);
 
         internal void ResetData() // TODO: Add remaining fields
         {
             currentShift = 0;
             currentTimeIntoShift = 0f;
-            nextBookingIndex = 0;
             bookingShiftSequence = null;
             currentShiftBookingRequirements = null;
             currentShiftMaxConcurrentBookings = 0;
             for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
                 bookingRequirementCountPerShift[i] = 0;
         }
-
-        //// HELPER FUNCTIONS ////
-
-        // 1x 14% 14%
-        // 2x 50% 25%
-        // 3x 36% 12%
 
         Room.Requirements[] GetRequirementsForShift(int[] bookingRequirementCountPerShift)
         {

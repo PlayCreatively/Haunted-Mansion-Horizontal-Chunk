@@ -21,12 +21,17 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        _instance = null;
+    }
+
     public readonly List<Room> rooms = new(8);
     public readonly Queue<Room> bookedRooms = new(4);
     [HideInInspector]
     public int CleanedRoomsCount = 0;
     public Action<Room> OnRoomStateChange;
-
+    public Action<int> OnBookingCompleted;
 
     public Room[] GetAllUnlockedRooms()
     {

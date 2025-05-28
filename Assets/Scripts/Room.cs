@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 
 public enum RoomState
 {
-    Booked,
     Occupied,
+    Booked,
     //Locked
 }
 
@@ -142,15 +142,30 @@ public class Room : MonoBehaviour, IRoom
         shineAnimator.Play("GlassAnimation", 0, 0f);
 
         isDirty = false;
+
         CheckIn();
+
+        ShiftData.Instance.BookingShiftSequence[BookingID].done = true;
+        RoomManager.Instance.OnBookingCompleted?.Invoke(BookingID);
+        _bookingID = -1; // reset booking ID after cleaning
     }
 
-    public void Book() => Book(GetBookingTime(), Requirements.CreateRandom());
-    public void Book(float time, Requirements requirements)
+    int _bookingID = -1;
+    public int BookingID => _bookingID;
+    public void Book() => Book(GetBookingTime(), Requirements.CreateRandom(), -1);
+    public void Book(float time, Requirements requirements, int bookingID)
     {
         BookedTime = time;
+        _bookingID = bookingID;
 
+        Debug.Assert(RoomManager.bookedRooms.Count < ShiftData.MaxConsecutiveBookings, "bookings can not exceed "+ ShiftData.MaxConsecutiveBookings);
         RoomManager.bookedRooms.Enqueue(this);
+        Debug.Log($"{gameObject.name} added to booked rooms queue", gameObject);
+        foreach (var room in RoomManager.bookedRooms)
+        {
+            Debug.Log($"Current booked room: {room.gameObject.name}");
+        }
+
         UpdateArrowColors();
 
         state = RoomState.Booked;
@@ -168,7 +183,15 @@ public class Room : MonoBehaviour, IRoom
     public void CheckIn()
     {
         if (RoomManager.bookedRooms.Contains(this))
+        {
             RoomManager.bookedRooms.Dequeue();
+            // debug
+            Debug.Log($"{gameObject.name} removed from booked rooms queue", gameObject);
+            foreach (var room in RoomManager.bookedRooms)
+            {
+                Debug.Log($"Remaining booked room: {room.gameObject.name}");
+            }
+        }
 
         UpdateArrowColors();
         UrgencyState = 0;

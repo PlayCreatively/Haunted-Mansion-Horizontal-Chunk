@@ -25,6 +25,14 @@ public static class ExtensionMethods
         return new(v.x, y, v.y);
     }
 
+    public static int FirstIndex<T>(this T[] array, System.Func<T, bool> predicate)
+    {
+        for (int i = 0; i < array.Length; i++)
+            if (predicate(array[i]))
+                return i;
+        return -1; // Return -1 if no match is found
+    }
+
     public static Rect CropToBounds(this Rect rect, Rect bounds)
     {
         // Compute the overlap on each axis.

@@ -373,6 +373,7 @@ Transform:
   - {fileID: 8636923487363546787}
   - {fileID: 4133879358028381611}
   - {fileID: 6158165789480405164}
+  - {fileID: 6431401898078671902}
   m_Father: {fileID: 4490225259408865023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &7961044568487443636
@@ -469,6 +470,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1726495569130028972, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
   m_PrefabInstance: {fileID: 28248803391760632}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3108830332611741030
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5036976535808988095}
+    m_Modifications:
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.56533
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.9441086
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.4267356
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143096532008183833, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_Name
+      value: Circular Dust Particle System
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+--- !u!4 &6431401898078671902 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+  m_PrefabInstance: {fileID: 3108830332611741030}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4411991099897746713
 PrefabInstance:

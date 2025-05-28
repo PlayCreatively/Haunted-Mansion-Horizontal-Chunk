@@ -69,14 +69,11 @@ public class Enemy : MonoBehaviour
         speed = settings.speed;
         hp = settings.hp;
         plaster.SetActive(false);
+
+        MoveDir = transform.forward;
     }
 
-    protected virtual void OnEnable()
-    {
-        SetRandomDirection();
-    }
-
-    void SetRandomDirection()
+    public void SetRandomDirection()
     {
         float randAngle = Random.Range(0, Mathf.PI * 2);
         MoveDir = new Vector3(Mathf.Cos(randAngle), 0, Mathf.Sin(randAngle));

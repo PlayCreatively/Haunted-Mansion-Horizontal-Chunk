@@ -28,6 +28,7 @@ public class EnemySpawner : MonoBehaviour
                 if(spawnedEnemies[i] == null)
                 {
                     spawnedEnemies[i] = SpawnEnemy();
+                    spawnedEnemies[i].SetRandomDirection();
                     break;
                 }
         }

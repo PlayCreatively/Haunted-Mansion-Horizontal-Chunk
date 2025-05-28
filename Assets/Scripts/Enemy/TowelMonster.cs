@@ -19,9 +19,4 @@ public class TowelMonster : Enemy
 
         anim.speed = speed * animSpeedMul;
     }
-
-    public override void Hit()
-    {
-        base.Hit();
-    }
 }

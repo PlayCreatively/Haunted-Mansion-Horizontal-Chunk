@@ -79,6 +79,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1902548431543330381, guid: 68d842af9b8d31d41bac1e730931670f, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1902548431543330381, guid: 68d842af9b8d31d41bac1e730931670f, type: 3}
       propertyPath: ShapeModule.randomPositionAmount
       value: 1
       objectReference: {fileID: 0}

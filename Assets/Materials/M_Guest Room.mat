@@ -46,8 +46,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistanceNode1: 0.41
-    - _DistanceNode2: 1.42
+    - _DistanceNode1: -1.31
+    - _DistanceNode2: 3.79
     - _Float: 0
     - _QueueControl: 0
     - _QueueOffset: 0

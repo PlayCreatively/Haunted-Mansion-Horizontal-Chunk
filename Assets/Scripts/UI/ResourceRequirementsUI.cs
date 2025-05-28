@@ -26,13 +26,8 @@ public class ResourceRequirementsUI : MonoBehaviour
             if(isRequired)
             {
                 CarriableType type = (CarriableType)i;
-                if (type == CarriableType.Soap)
-                    resourceUI[i].sprite = ResourceInfo.Instance.Get(type).icons[0];
-                else
-                {
-                    Sprite icon = showNumbers ? ResourceInfo.Instance.Get(type).icons[requirements[i] - 1] : ResourceInfo.Instance.Get(type).icons[0];
-                    resourceUI[i].sprite = icon;
-                }
+                Sprite icon = showNumbers ? ResourceInfo.Instance.Get(type).icons[requirements[i] - 1] : ResourceInfo.Instance.Get(type).icons[0];
+                resourceUI[i].sprite = icon;
             }
         }
 

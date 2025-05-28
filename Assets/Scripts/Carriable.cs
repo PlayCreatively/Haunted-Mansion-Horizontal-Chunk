@@ -139,7 +139,7 @@ public class Carriable : MonoBehaviour, IInteractable
 
     public void Destroy()
     {
-        Debug.Log($"{type} destroyed", gameObject);
+        //Debug.Log($"{type} destroyed", gameObject);
         EnablePhysics(false);
         destroyed = true;
 

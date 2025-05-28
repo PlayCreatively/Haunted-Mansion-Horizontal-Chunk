@@ -1,3 +1,4 @@
+using GameManagers;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -91,7 +92,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     public void Interact()
     {
-        Debug.Log($"Interact with {(focusedInteractable != null ? focusedInteractable : "nothing")} using {(backpack.Inventory[0] != null ? backpack.Inventory[0] : "nothing")}");
+        //Debug.Log($"Interact with {(focusedInteractable != null ? focusedInteractable : "nothing")} using {(backpack.Inventory[0] != null ? backpack.Inventory[0] : "nothing")}");
         focusedInteractable?.Interact(this);
     }
 
@@ -200,7 +201,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     public bool InsertAt(int index, Carriable carriable)
     {
-        Debug.Log($"Picked up {carriable.type}");
+        //Debug.Log($"Picked up {carriable.type}");
 
         if (carriable is Backpack carriableBackpack) 
             return InsertAt(index, carriableBackpack);

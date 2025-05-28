@@ -37,7 +37,7 @@ public class ResourceInfo : ScriptableObject
     }
 
 #if UNITY_EDITOR
-    [UnityEditor.MenuItem("Game/" + nameof(ResourceInfo))]
+    [UnityEditor.MenuItem("Game/Settings/" + nameof(ResourceInfo))]
     public static void CreateAndShow()
     {
         if (!Instance)

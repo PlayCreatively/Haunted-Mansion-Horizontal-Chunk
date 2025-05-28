@@ -1,5 +1,7 @@
+using GameManagers;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -79,50 +81,51 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnActionTriggered(InputAction.CallbackContext ctx)
     {
-        playerInput.actions["Move"].performed += MoveInput;
-        playerInput.actions["Move"].canceled += MoveInput;
-        playerInput.actions["Interact"].performed += _ => hand.Interact();
-        playerInput.actions["Drop"].performed += _ => hand.DropFromHand();
-        playerInput.actions["Throw"].performed += _ => Throw();
-        playerInput.actions["ArcSelect"].canceled += _ => hand.DisplayInventoryUI(0);
-        playerInput.actions["ArcSelect"].performed += ctx => UpdateSelected(ctx.ReadValue<Vector2>());
-        playerInput.actions["Pause"].performed += _ => Game.ToMainMenu();
-        playerInput.actions["ZoomOut"].started += _ => zoomInput = true;
-        playerInput.actions["ZoomOut"].canceled += _ => zoomInput = false;
+        if (ctx.phase == InputActionPhase.Performed)
+            switch (ctx.action.name)
+            {
+                case "Interact": hand.Interact(); break;
+                case "Drop": hand.DropFromHand(); break;
+                case "Dash": DashInput(); break;
+                case "Jump": Jump(); break;
+                case "Throw": Throw(); break;
+                case "Pause": Game.ToMainMenu(); break;
+            }
 
+        switch (ctx.action.name)
+        {
+            case "Move": MoveInput(ctx); break;
+            case "ArcSelect":
+                if (ctx.phase == InputActionPhase.Canceled)
+                    hand.DisplayInventoryUI(0);
+                else if (ctx.phase == InputActionPhase.Performed)
+                    UpdateSelected(ctx.ReadValue<Vector2>());
+                break;
+            case "ZoomOut": zoomInput = ctx.phase != InputActionPhase.Canceled; break;
+        }
     }
 
     void OnEnable()
     {
         hand.enabled = true;
-        
+        playerInput.ActivateInput();
+        playerInput.onActionTriggered += OnActionTriggered;
     }
 
     void OnDisable()
     {
         hand.enabled = false;
+        playerInput.DeactivateInput();
+        playerInput.onActionTriggered -= OnActionTriggered;
     }
 
-    void OnDestroy()
-    {
-        playerInput.actions["Move"].performed -= MoveInput;
-        playerInput.actions["Move"].canceled -= MoveInput;
-        playerInput.actions["Interact"].performed -= _ => hand.Interact();
-        playerInput.actions["Drop"].performed -= _ => hand.DropFromHand();
-        playerInput.actions["Throw"].performed -= _ => Throw();
-        playerInput.actions["ArcSelect"].canceled -= _ => hand.DisplayInventoryUI(0);
-        playerInput.actions["ArcSelect"].performed -= ctx => UpdateSelected(ctx.ReadValue<Vector2>());
-        playerInput.actions["Pause"].performed -= _ => Game.ToMainMenu();
-        playerInput.actions["ZoomOut"].started -= _ => zoomInput = true;
-        playerInput.actions["ZoomOut"].canceled -= _ => zoomInput = false;
-    }
 
 
     void MoveInput(InputAction.CallbackContext ctx)
     {
-        if(ctx.canceled)
+        if (ctx.canceled)
         {
             moveInput = Vector3.zero;
             animator.SetFloat("Speed", 0);
@@ -152,12 +155,12 @@ public class Player : MonoBehaviour
         const float arcWidth = 180f;
         const float selectionWidth = arcWidth / slotCount;
 
-        
+
         Vector2 selectionStartAngle = new(Mathf.Cos(selectionStartDegree), Mathf.Sin(selectionStartDegree));
         float angle = MathF.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         angle = Math.Clamp(angle, -90f, 90f);
         angle = (90f - angle);
-        Debug.Log($"angle: {angle} i: {(int)((angle) / selectionWidth)}");
+        //Debug.Log($"angle: {angle} i: {(int)((angle) / selectionWidth)}");
         int index = (int)((angle) / selectionWidth);
         index = Mathf.Clamp(index, 0, slotCount - 1);
         hand.UpdateSelection(index);
@@ -287,7 +290,7 @@ public class Player : MonoBehaviour
     void UpdateLastFloorHeight()
     {
         if (grounded)
-            lastGroundedHeight = (int)(rb.position.y+.05f);
+            lastGroundedHeight = (int)(rb.position.y + .05f);
     }
 
     void Update()
@@ -297,6 +300,11 @@ public class Player : MonoBehaviour
             jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
             visuals.Squash(1f + jumpSquash);
         }
+        if (!playerInput.actions["Move"].enabled)
+            foreach (var item in playerInput.actions)
+            {
+                item.Enable();
+            }
         UpdateLastFloorHeight();
 
     }
@@ -338,7 +346,7 @@ public class Player : MonoBehaviour
         bool isRunBoosting = grounded && boostRunEnergy > 0;
         if (isRunBoosting)
         {
-            if(boostRunEnergy == boostRunDuration)
+            if (boostRunEnergy == boostRunDuration)
             {
                 FMODAudioManager.Instance.TriggerJumpingOffTheBalconySfx();
                 LandingVibrate();
@@ -349,7 +357,7 @@ public class Player : MonoBehaviour
             }
 
             const float time = .8f;
-            if(boostRunEnergy > time)
+            if (boostRunEnergy > time)
             {
                 float squash = boostRunEnergy - time;
                 squash /= (1f - time);

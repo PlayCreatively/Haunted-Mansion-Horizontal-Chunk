@@ -42,5 +42,6 @@ public class BootstrapPlayers : MonoBehaviour
         rb.rotation = Quaternion.Euler(0, -90f, 0);
         player.gameObject.name = "Player " + (player.playerIndex + 1); // rename the player object
         player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();
+        player.SwitchCurrentActionMap("Player");
     }
 }

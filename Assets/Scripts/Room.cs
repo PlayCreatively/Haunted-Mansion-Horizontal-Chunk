@@ -1,3 +1,4 @@
+using GameManagers;
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -5,8 +6,8 @@ using Random = UnityEngine.Random;
 
 public enum RoomState
 {
-    Booked,
     Occupied,
+    Booked,
     //Locked
 }
 
@@ -51,12 +52,12 @@ public class Room : MonoBehaviour, IRoom
     }
 
     bool isDirty = false;
-    public RoomState state;
+    public RoomState state = RoomState.Occupied;
     public Requirements requirements;
+    public int unlockShift = 0;
 
     RoomUI roomUI;
     public Vector2 UIOffset;
-
 
     public event Action<RoomState> OnStateChange;
     public event Action<Requirements> OnRequirementsChange;
@@ -91,13 +92,17 @@ public class Room : MonoBehaviour, IRoom
 
     void Start()
     {
-
-        CheckIn();
-
-        if (RoomManager.GetRoomCountForState(RoomState.Booked) == 0) // rough balancing
+        if(ShiftData.Instance.CurrentShift < unlockShift)
         {
-            RoomManager.GetClosestToPlayers().Book(80);
+            LockRoom();
+            enabled = false;
+            return;
         }
+    }
+
+    void LockRoom()
+    {
+        //throw new NotImplementedException();
     }
 
     void BookRoomIfNone()
@@ -110,18 +115,13 @@ public class Room : MonoBehaviour, IRoom
 
     void Update()
     {
-        switch (state)
+        if(state == RoomState.Booked)
         {
-            case RoomState.Booked:
-                BookedTime -= Time.deltaTime;
-                if (BookedTime <= 0) CheckIn(); break;
-            case RoomState.Occupied:
-                stayTime -= Time.deltaTime;
-                if (stayTime <= 0) Book(); break;
+            BookedTime -= Time.deltaTime;
+            if (BookedTime <= 0) CheckIn(); 
         }
+        
     }
-
-    public float StayTime => stayTime;
 
     public bool IsClean => !isDirty;
     public bool IsDirty => isDirty;
@@ -142,25 +142,35 @@ public class Room : MonoBehaviour, IRoom
         shineAnimator.Play("GlassAnimation", 0, 0f);
 
         isDirty = false;
+
         CheckIn();
+
+        ShiftData.Instance.BookingShiftSequence[BookingID].done = true;
+        RoomManager.Instance.OnBookingCompleted?.Invoke(BookingID);
+        _bookingID = -1; // reset booking ID after cleaning
     }
 
-    public void Book() => Book(GetBookingTime());
-    public void Book(float time)
+    int _bookingID = -1;
+    public int BookingID => _bookingID;
+    public void Book() => Book(GetBookingTime(), Requirements.CreateRandom(), -1);
+    public void Book(float time, Requirements requirements, int bookingID)
     {
         BookedTime = time;
+        _bookingID = bookingID;
 
-        if (RoomManager.GetRoomCountForState(RoomState.Booked) >= 4)
+        Debug.Assert(RoomManager.bookedRooms.Count < ShiftData.MaxConsecutiveBookings, "bookings can not exceed "+ ShiftData.MaxConsecutiveBookings);
+        RoomManager.bookedRooms.Enqueue(this);
+        Debug.Log($"{gameObject.name} added to booked rooms queue", gameObject);
+        foreach (var room in RoomManager.bookedRooms)
         {
-            CheckIn(); return;
+            Debug.Log($"Current booked room: {room.gameObject.name}");
         }
 
-        RoomManager.bookedRooms.Enqueue(this);
         UpdateArrowColors();
 
         state = RoomState.Booked;
         isDirty = true;
-        requirements = Requirements.CreateRandom();
+        this.requirements = requirements;
         OnRequirementsChange?.Invoke(requirements);
 
         Debug.Log($"{gameObject.name} booked", gameObject);
@@ -173,7 +183,15 @@ public class Room : MonoBehaviour, IRoom
     public void CheckIn()
     {
         if (RoomManager.bookedRooms.Contains(this))
+        {
             RoomManager.bookedRooms.Dequeue();
+            // debug
+            Debug.Log($"{gameObject.name} removed from booked rooms queue", gameObject);
+            foreach (var room in RoomManager.bookedRooms)
+            {
+                Debug.Log($"Remaining booked room: {room.gameObject.name}");
+            }
+        }
 
         UpdateArrowColors();
         UrgencyState = 0;
@@ -191,7 +209,6 @@ public class Room : MonoBehaviour, IRoom
         }
 
         state = RoomState.Occupied;
-        stayTime = GameSettings.Instance.GetRandomStayTime;
 
         OnStateChange?.Invoke(state);
         RoomManager.OnRoomStateChange?.Invoke(this);
@@ -221,20 +238,6 @@ public class Room : MonoBehaviour, IRoom
         return isDirty && requirements.IsRequired(type);
     }
 
-    bool TryGetAvailableRoom(out Room availableRoom)
-    {
-        foreach (var room in RoomManager.rooms)
-            if (room.IsClean)
-            {
-                room.Book();
-                availableRoom = room;
-                return true;
-            }
-
-        availableRoom = null;
-        return false;
-    }
-
     public float GetBookingTime()
     {
         int count = RoomManager.GetRoomCountForState(RoomState.Booked);
@@ -245,10 +248,7 @@ public class Room : MonoBehaviour, IRoom
         return (MathF.Log(count, 3) + 1) * roomTimeBuffer;
     }
 
-    float Lerp(float a, float b, float t)
-    {
-        return a + (b - a) * t;
-    }
+    float Lerp(float a, float b, float t) => a + (b - a) * t;
 
     void UpdateArrowColors()
     {
@@ -259,15 +259,6 @@ public class Room : MonoBehaviour, IRoom
             room.roomUI.UpdateRoomOrderColors(i);
             i = Mathf.Min(i + 1, 2);
         }
-    }
-
-    public void ForceRequire(Requirements requirements)
-    {
-        this.requirements = requirements;
-        OnRequirementsChange?.Invoke(requirements);
-        Debug.Log($"{gameObject.name} requirements forced: {requirements}", gameObject);
-        if(state != RoomState.Occupied)
-            Book();
     }
 
     public struct Requirements
@@ -297,6 +288,18 @@ public class Room : MonoBehaviour, IRoom
             int resourceCount = Random.Range(minAmount, maxAmount + 1);
 
             for (int i = 0; i < resourceCount; i++)
+            {
+                int resourceType = Random.Range(0, resourceTypeCount);
+                requirements[resourceType]++;
+            }
+
+            return requirements;
+        }
+        public static Requirements CreateRandom(int count)
+        {
+            Requirements requirements = new(0,0,0,0);
+
+            for (int i = 0; i < count; i++)
             {
                 int resourceType = Random.Range(0, resourceTypeCount);
                 requirements[resourceType]++;

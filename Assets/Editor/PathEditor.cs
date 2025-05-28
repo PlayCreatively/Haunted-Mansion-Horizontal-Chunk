@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using GameManagers;
 
 [CustomEditor(typeof(Path))]
 public class PathEditor : Editor

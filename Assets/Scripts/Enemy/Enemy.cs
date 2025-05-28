@@ -1,3 +1,4 @@
+using GameManagers;
 using System.Collections;
 using UnityEngine;
 
@@ -52,7 +53,7 @@ public class Enemy : MonoBehaviour
     protected Rigidbody rb;
     protected Collider col;
     protected Transform visuals;
-    Curve deathBounceCurve;
+
     protected EnemySettings settings;
 
     protected virtual void Awake()
@@ -63,7 +64,6 @@ public class Enemy : MonoBehaviour
             col = GetComponentInChildren<Collider>();
 
         rb.isKinematic = false;
-        deathBounceCurve = Resources.Load<Curve>("EnemyDeathBounce");
 
         settings = GameSettings.Instance.GetEnemySettings(enemyType);
         speed = settings.speed;
@@ -104,8 +104,9 @@ public class Enemy : MonoBehaviour
         Timer hitSquashTimer = new(.09f);
         while (!hitSquashTimer.Finished)
         {
-            float t = deathBounceCurve.Evaluate(hitSquashTimer.Normal);
-            visuals.Squash(t);
+            float a = hitSquashTimer.Normal;
+            float t = -1f * a * a + 2f * a;
+            visuals.Squash(.5f + (.5f * t));
             yield return null;
         }
         visuals.Squash(1);

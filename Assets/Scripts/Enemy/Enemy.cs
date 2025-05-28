@@ -98,15 +98,17 @@ public class Enemy : MonoBehaviour
 
     IEnumerator HitSquashRoutine()
     {
+        float defaultY = visuals.localScale.y;
+
         Timer hitSquashTimer = new(.09f);
         while (!hitSquashTimer.Finished)
         {
             float a = hitSquashTimer.Normal;
             float t = -1f * a * a + 2f * a;
-            visuals.Squash(.5f + (.5f * t));
+            visuals.Squash(.5f + (.5f * t), defaultY);
             yield return null;
         }
-        visuals.Squash(1);
+        visuals.Squash(1, defaultY);
     }
 
     public void Die()

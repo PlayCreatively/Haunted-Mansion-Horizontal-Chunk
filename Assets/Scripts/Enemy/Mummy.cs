@@ -30,6 +30,8 @@ public class Mummy : Enemy
             foreach (var player in FindObjectsByType<Player>(0))
             {
                 Vector3 dirToPlayer = player.transform.position - transform.position;
+                if (Mathf.Abs(dirToPlayer.y) > .5f) continue; 
+
                 dirToPlayer.y = 0;
                 if (dirToPlayer.sqrMagnitude < visionRadius * visionRadius)
                 {

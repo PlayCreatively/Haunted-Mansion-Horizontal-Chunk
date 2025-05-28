@@ -81,6 +81,13 @@ public static class ExtensionMethods
         trans.localScale = new(xNormal, yNormal, xNormal);
     }
 
+    public static void Squash(this Transform trans, float yNormal, float yDefault)
+    {
+        float xNormal = 2f - yNormal;
+
+        trans.localScale = new(xNormal, yNormal * yDefault, xNormal);
+    }
+
     public static bool IsInMask(this CarriableTypeMask mask, CarriableType type)
     {
         CarriableTypeMask typeAsMask = (CarriableTypeMask)(1 << (int)type);

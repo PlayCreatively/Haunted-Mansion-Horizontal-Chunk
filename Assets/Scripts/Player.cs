@@ -112,6 +112,7 @@ public class Player : MonoBehaviour
         hand.enabled = true;
         playerInput.ActivateInput();
         playerInput.onActionTriggered += OnActionTriggered;
+        gamepad = playerInput.GetDevice<Gamepad>();
     }
 
     void OnDisable()
@@ -119,6 +120,7 @@ public class Player : MonoBehaviour
         hand.enabled = false;
         playerInput.DeactivateInput();
         playerInput.onActionTriggered -= OnActionTriggered;
+        gamepad = null;
     }
 
 

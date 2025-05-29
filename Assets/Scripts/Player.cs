@@ -215,7 +215,7 @@ public class Player : MonoBehaviour
         float lowValue = low ? value : 0;
         float highValue = high ? value : 0;
 
-        StartCoroutine(new Timer(duration).GetRoutine(a => gamepad.SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
+        StartCoroutine(new Timer(duration).GetRoutine(a => gamepad?.SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
     }
 
     public void LandingVibrate() => Vibrate(.3f, .1f, true, true);

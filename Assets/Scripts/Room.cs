@@ -1,5 +1,6 @@
 using GameManagers;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
@@ -19,7 +20,6 @@ public interface IRoom
     Vector2 UIOffset { get; }
     bool IsDirty { get; }
 }
-
 public class Room : MonoBehaviour, IRoom
 {
     float stayTime;
@@ -65,8 +65,15 @@ public class Room : MonoBehaviour, IRoom
 
     RoomManager RoomManager;
 
-    void OnEnable() => RoomManager.rooms.Add(this);
-    void OnDisable() => RoomManager.rooms.Remove(this);
+    void OnEnable()
+    {
+        RoomManager.rooms.Add(this);
+    }
+
+    void OnDisable()
+    {
+        RoomManager.rooms.Remove(this);
+    }
 
     void Awake()
     {
@@ -146,27 +153,20 @@ public class Room : MonoBehaviour, IRoom
         CheckIn();
 
         ShiftData.Instance.BookingShiftSequence[BookingID].done = true;
+        ShiftData.Instance.RemoveBooking(BookingID);
         RoomManager.Instance.OnBookingCompleted?.Invoke(BookingID);
         _bookingID = -1; // reset booking ID after cleaning
     }
 
     int _bookingID = -1;
     public int BookingID => _bookingID;
+    public void UpdateRoomOrderColors(int order) => roomUI.UpdateRoomOrderColors(order);
+
     public void Book() => Book(GetBookingTime(), Requirements.CreateRandom(), -1);
     public void Book(float time, Requirements requirements, int bookingID)
     {
         BookedTime = time;
         _bookingID = bookingID;
-
-        Debug.Assert(RoomManager.bookedRooms.Count < ShiftData.MaxConsecutiveBookings, "bookings can not exceed "+ ShiftData.MaxConsecutiveBookings);
-        RoomManager.bookedRooms.Enqueue(this);
-        Debug.Log($"{gameObject.name} added to booked rooms queue", gameObject);
-        foreach (var room in RoomManager.bookedRooms)
-        {
-            Debug.Log($"Current booked room: {room.gameObject.name}");
-        }
-
-        UpdateArrowColors();
 
         state = RoomState.Booked;
         isDirty = true;
@@ -182,21 +182,7 @@ public class Room : MonoBehaviour, IRoom
 
     public void CheckIn()
     {
-        if (RoomManager.bookedRooms.Contains(this))
-        {
-            RoomManager.bookedRooms.Dequeue();
-            // debug
-            Debug.Log($"{gameObject.name} removed from booked rooms queue", gameObject);
-            foreach (var room in RoomManager.bookedRooms)
-            {
-                Debug.Log($"Remaining booked room: {room.gameObject.name}");
-            }
-        }
-
-        UpdateArrowColors();
-        UrgencyState = 0;
-
-        Debug.Log($"{gameObject.name} checked in", gameObject);
+        //Debug.Log($"{gameObject.name} checked in", gameObject);
 
         if(isDirty)
         {
@@ -220,11 +206,11 @@ public class Room : MonoBehaviour, IRoom
         {
             requirements[type] += enter ? -1 : 1;
             OnRequirementsChange?.Invoke(requirements);
-            Debug.Log($"{gameObject.name} {type} {(enter ? "added" : "removed")}. Remaining: {requirements[type]}", gameObject);
+            //Debug.Log($"{gameObject.name} {type} {(enter ? "added" : "removed")}. Remaining: {requirements[type]}", gameObject);
 
             if (requirements.IsFulfilled())
             {
-                Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
+                //Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
                 Clean();
             }
             else if(enter)
@@ -249,17 +235,6 @@ public class Room : MonoBehaviour, IRoom
     }
 
     float Lerp(float a, float b, float t) => a + (b - a) * t;
-
-    void UpdateArrowColors()
-    {
-
-        int i = 0;
-        foreach (var room in RoomManager.bookedRooms)
-        {
-            room.roomUI.UpdateRoomOrderColors(i);
-            i = Mathf.Min(i + 1, 2);
-        }
-    }
 
     public struct Requirements
     {

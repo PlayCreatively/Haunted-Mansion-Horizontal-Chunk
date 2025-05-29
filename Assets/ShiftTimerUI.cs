@@ -27,15 +27,15 @@ public class ShiftTimerUI : MonoBehaviour
 
     void OnEnable()
     {
-        RoomManager.Instance.OnBookingCompleted += OnBookingStateChange;
+        RoomManager.Instance.OnBookingCompleted += OnBookingCompleted;
     }
 
     void OnDisable()
     {
-        RoomManager.Instance.OnBookingCompleted -= OnBookingStateChange;
+        RoomManager.Instance.OnBookingCompleted -= OnBookingCompleted;
     }
 
-    void OnBookingStateChange(int bookingID)
+    void OnBookingCompleted(int bookingID)
     {
         bookingBookmarksUI[bookingID].color = Color.gray * .5f;
         UpdateColorByPriority();
@@ -44,17 +44,11 @@ public class ShiftTimerUI : MonoBehaviour
     void UpdateColorByPriority()
     {
         ShiftData shiftData = ShiftData.Instance;
-
-        Color[] priorityColors = new Color[]
-        {
-            Color.red,
-            Color.yellow,
-            Color.white
-        };
+        
         int o = 0;
         for (int i = 0; i < shiftData.BookingShiftSequence.Length && o < 3; i++)
             if (shiftData.BookingShiftSequence[i].done == false)
-                bookingBookmarksUI[i].color = priorityColors[o++];
+                bookingBookmarksUI[i].color = RoomUI.bookingPriorityColors[o++];
     }
 
     public void CreateTimer()

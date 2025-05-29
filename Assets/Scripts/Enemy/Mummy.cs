@@ -34,10 +34,11 @@ public class Mummy : Enemy
 
                 dirToPlayer.y = 0;
                 if (dirToPlayer.sqrMagnitude < visionRadius * visionRadius)
-                {
-                    MoveDir = dirToPlayer.normalized;
-                    break;
-                }
+                    if(Physics.Raycast(transform.position, dirToPlayer, out RaycastHit hit, dirToPlayer.magnitude, LayerMask.GetMask("Wall"), QueryTriggerInteraction.Ignore) == false)
+                    {
+                        MoveDir = dirToPlayer.normalized;
+                        break;
+                    }
             }
 
         float deltaMove = doMove * Time.fixedDeltaTime;

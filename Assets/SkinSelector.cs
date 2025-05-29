@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SkinSelector : MonoBehaviour
 {
@@ -24,6 +26,28 @@ public class SkinSelector : MonoBehaviour
         Debug.Log($"{gameObject.name} Skin index: {skins[currentSkinIndex].name}");
         rend.material = skins[currentSkinIndex].material;
         rend.sharedMesh = skins[currentSkinIndex].mesh;
+    }
+
+    void OnEnable()
+    {
+        GetComponent<PlayerInput>().onActionTriggered += HandleInput;
+    }
+
+    void OnDisable()
+    {
+        GetComponent<PlayerInput>().onActionTriggered -= HandleInput;
+    }
+
+    private void HandleInput(InputAction.CallbackContext context)
+    {
+        if (context.action.name == "Next" && context.performed)
+        {
+            OnNext();
+        }
+        else if (context.action.name == "Previous" && context.performed)
+        {
+            OnPrevious();
+        }
     }
 
     public void OnNext() => SetSkin(currentSkinIndex + 1);

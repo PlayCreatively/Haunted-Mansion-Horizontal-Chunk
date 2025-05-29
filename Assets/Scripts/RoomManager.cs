@@ -27,7 +27,6 @@ public class RoomManager : MonoBehaviour
     }
 
     public readonly List<Room> rooms = new(8);
-    public readonly Queue<Room> bookedRooms = new(4);
     [HideInInspector]
     public int CleanedRoomsCount = 0;
     public Action<Room> OnRoomStateChange;

@@ -15,7 +15,7 @@ public class RoomUI : MonoBehaviour
     Image[] ResourceUI;
     public GameObject requirementsParent;
     //public GameObject bookedIconUI;
-    int urgency = 0;
+    int priority = 0;
 
     void Awake()
     {
@@ -37,14 +37,13 @@ public class RoomUI : MonoBehaviour
 
         UpdateArrow();
     }
+    public static Color[] bookingPriorityColors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255) };
 
-    public void UpdateRoomOrderColors(int urgency)
+    public void UpdateRoomOrderColors(int priority)
     {
-        Color[] colors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255) };
+        this.priority = priority;
 
-        this.urgency = urgency;
-
-        var color = colors[urgency];
+        var color = bookingPriorityColors[priority];
         roomArrowUI.color = color;
         bookingTimeUI.faceColor = color;
         Color darkerShade = color * .3f;
@@ -77,7 +76,7 @@ public class RoomUI : MonoBehaviour
             Mathf.Clamp(rectTrans.anchoredPosition.y, -extents.y, extents.y)
         );
 
-        int arrowUrgency = 2 - urgency;
+        int arrowUrgency = 2 - priority;
 
         float sinOffset = (Mathf.Sin(Time.time * arrowUrgency * 4f) * .5f - .5f) * 2 * 35;
 

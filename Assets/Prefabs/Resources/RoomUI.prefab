@@ -237,12 +237,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8532de03468f8a41931d4d06b4882e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 0}
   roomArrowUI: {fileID: 4308065921687096972}
   bookingUI: {fileID: 8327506756707510095}
   resourceRequirementsUI:
   - {fileID: 2691259871718657766}
   - {fileID: 3974815897814622838}
+  bookingTimeUI: {fileID: 0}
   ResourceUI:
   - {fileID: 2057266891567911789}
   - {fileID: 2763178136107116383}
@@ -1365,4 +1365,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceUI: []
-  showNumbers: 0
+  showNumbers: 1

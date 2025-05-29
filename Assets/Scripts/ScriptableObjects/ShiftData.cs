@@ -76,21 +76,27 @@ namespace GameManagers
             var roomSequence = GetRandomSequenceOfUnlockedRooms(bookingCount);
 
             bookingShiftSequence = new (Room room, Room.Requirements requirements, bool done)[bookingCount];
+            bookingQueue = new List<int>(bookingCount);
 
             for (int i = 0; i < bookingCount; i++)
+            {
                 bookingShiftSequence[i] = (roomSequence[i], currentShiftBookingRequirements[i], false);
+                bookingQueue.Add(i); // Initialize booking queue with indices
+            }
 
             // book the first rooms
             int initialBookingCount = Math.Min(currentShiftMaxConcurrentBookings, bookingCount);
             for (int i = 0; i < initialBookingCount; i++)
                 ActivateBooking(i);
+
+            UpdateRoomOrderColors();
         }
 
         void ActivateBooking(int i)
         {
-            var booking = bookingShiftSequence[i];
-            Debug.Assert(booking.room.IsBooked == false, "Room is already booked: " + booking.room.name);
-            booking.room.Book((float)GetBookingTime(i), booking.requirements, i);
+            var (room, requirements, _) = bookingShiftSequence[i];
+            Debug.Assert(room.IsBooked == false, "Room is already booked: " + room.name);
+            room.Book((float)GetBookingTime(i), requirements, i);
         }
 
         /// <summary>
@@ -146,14 +152,32 @@ namespace GameManagers
                 Game.ToMainMenu();
             }
 
-            int nextBookingIndex = bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
-            if (RoomManager.Instance.bookedRooms.Count() < MaxConsecutiveBookings && nextBookingIndex != -1)
+            int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
+            int bookedRoomsCount () => bookingShiftSequence.Where(b => !b.done && b.room.IsBooked).Count();
+            if (bookedRoomsCount() < MaxConsecutiveBookings)
             {
-                ActivateBooking(nextBookingIndex);
+                int nextBooking = nextBookingIndex();
+                if (nextBooking != -1)
+                    ActivateBooking(nextBooking);
             }
         }
 
-        internal bool AreAllBookingsCompleted => bookingShiftSequence.All(b => b.done);
+        List<int> bookingQueue;
+
+        internal void RemoveBooking(int bookingID)
+        {
+            bookingQueue.Remove(bookingID);
+
+            UpdateRoomOrderColors();
+        }
+
+        void UpdateRoomOrderColors()
+        {
+            for (int i = 0; i < bookingQueue.Count && i < MaxConsecutiveBookings; i++)
+                BookingShiftSequence[bookingQueue[i]].room.UpdateRoomOrderColors(i);
+        }
+
+        internal bool AreAllBookingsCompleted => bookingQueue.Count() == 0;
         internal bool AreAnyBookingsNotRunning => bookingShiftSequence.Any(b => !b.done && !b.room.IsBooked);
 
         internal void ResetData() // TODO: Add remaining fields

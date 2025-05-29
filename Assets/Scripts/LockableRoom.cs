@@ -1,4 +1,6 @@
 using GameManagers;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class LockableRoom : MonoBehaviour
@@ -37,7 +39,18 @@ public class LockableRoom : MonoBehaviour
         if (meshRenderer == null)
             CreateCeiling();
 
-        meshRenderer.enabled = active;
+
+        StartCoroutine(FogCeilingFade(active));
     }
 
+    IEnumerator FogCeilingFade(bool active)
+    {
+        yield return new WaitForSeconds(2f);
+
+        meshRenderer.enabled = active;
+        yield return new Timer(10f).GetRoutine(a =>
+        {
+            meshRenderer.material.SetFloat("_Alpha", active ? a : 1f - a);
+        });
+    }
 }

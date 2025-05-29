@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8b479e6fb135b4ab835532a476bbfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BorderSize: 4.5
+  BorderSize: 7
   smoothing: 0.03
   zoom: 7.455
   position: {x: 0, y: 0.2075}

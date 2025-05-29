@@ -182,7 +182,7 @@ namespace GameManagers
 
         internal void ResetData() // TODO: Add remaining fields
         {
-            currentShift = 0;
+            currentShift = 3;
             currentTimeIntoShift = 0f;
             bookingShiftSequence = null;
             currentShiftBookingRequirements = null;

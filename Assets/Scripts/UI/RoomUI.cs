@@ -37,7 +37,7 @@ public class RoomUI : MonoBehaviour
 
         UpdateArrow();
     }
-    public static Color[] bookingPriorityColors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255) };
+    public static Color[] bookingPriorityColors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255), new(0.1254902f, 0.1764706f, 0.1686275f) };
 
     public void UpdateRoomOrderColors(int priority)
     {

@@ -117,6 +117,8 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             Debug.Log($"LaundryMashine: Inserted Goo {gooCount}");
             if (gooCount == 2)
             {
+                dirtyLaundryVisual.material = dirtyLaundryMat[2];
+                dirtyLaundryVisual.enabled = true;
                 isLaundering = true;
                 StartCoroutine(LaunderingRoutine(CarriableType.Soap));
                 return true;

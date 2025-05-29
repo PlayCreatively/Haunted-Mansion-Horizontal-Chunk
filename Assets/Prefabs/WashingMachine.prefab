@@ -255,6 +255,7 @@ MonoBehaviour:
   dirtyLaundryMat:
   - {fileID: 2100000, guid: 47b829ca3f0d6614fb5581f813537822, type: 2}
   - {fileID: 2100000, guid: 8cb7d9b57fadc1b48ae1ca38582e99c8, type: 2}
+  - {fileID: -876546973899608171, guid: e19b491f93df9fc4fb44775094fa781a, type: 3}
 --- !u!65 &9192384939971869943
 BoxCollider:
   m_ObjectHideFlags: 0

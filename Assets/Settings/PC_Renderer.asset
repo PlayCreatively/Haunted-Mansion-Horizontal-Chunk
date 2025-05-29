@@ -152,13 +152,13 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
+  - {fileID: 6393048556901642476}
   - {fileID: -1994492371376025807}
   - {fileID: -3841028115270028692}
-  - {fileID: 6393048556901642476}
   - {fileID: -2038415127201941332}
   - {fileID: 456169209711766863}
   - {fileID: 1959771699065503973}
-  m_RendererFeatureMap: ad6b866f10d7b46c31cfe768c12352e46cb20aa147edb1caec30f269caabb858ac7858e63d18b6e34f2d57b67aa35406e5c0a91bfa81321b
+  m_RendererFeatureMap: ad6b866f10d7b46cec30f269caabb85831cfe768c12352e46cb20aa147edb1caac7858e63d18b6e34f2d57b67aa35406e5c0a91bfa81321b
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: RenderObjects
+    passTag: HighlightTransparents
     Event: 300
     filterSettings:
       RenderQueueType: 0
@@ -256,26 +256,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderObjects
+  m_Name: ObjectScrollingTexture
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: RenderObjects
-    Event: 300
+    passTag: ObjectScrollingTexture
+    Event: 500
     filterSettings:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 5120
+        m_Bits: 5376
       PassNames: []
     overrideMaterial: {fileID: -876546973899608171, guid: ba413b4330bc92844955d1395dcd7cc7, type: 3}
     overrideMaterialPassIndex: 1
     overrideShader: {fileID: 0}
     overrideShaderPassIndex: 0
     overrideMode: 1
-    overrideDepthState: 1
+    overrideDepthState: 0
     depthCompareFunction: 8
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 0
       stencilReference: 9

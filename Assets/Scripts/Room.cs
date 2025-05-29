@@ -55,6 +55,7 @@ public class Room : MonoBehaviour, IRoom
     public RoomState state = RoomState.Occupied;
     public Requirements requirements;
     public int unlockShift = 0;
+    public bool IsLocked => unlockShift > ShiftData.Instance.CurrentShift;
 
     RoomUI roomUI;
     public Vector2 UIOffset;
@@ -62,6 +63,7 @@ public class Room : MonoBehaviour, IRoom
     public event Action<RoomState> OnStateChange;
     public event Action<Requirements> OnRequirementsChange;
     Animator shineAnimator;
+    LockableRoom lockableRoom;
 
     RoomManager RoomManager;
 
@@ -81,6 +83,7 @@ public class Room : MonoBehaviour, IRoom
 
         var roomUIObj = Resources.Load<GameObject>("RoomUI");
         shineAnimator = GetComponent<Animator>();
+        lockableRoom = GetComponent<LockableRoom>();
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
 
         GameObject canvas = GameObject.Find("Canvas");
@@ -176,6 +179,7 @@ public class Room : MonoBehaviour, IRoom
         Debug.Log($"{gameObject.name} booked", gameObject);
 
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
+        lockableRoom.SetFogCeilingActive(false);
         OnStateChange?.Invoke(state);
         RoomManager.OnRoomStateChange?.Invoke(this);
     }
@@ -195,6 +199,7 @@ public class Room : MonoBehaviour, IRoom
         }
 
         state = RoomState.Occupied;
+        lockableRoom.SetFogCeilingActive(true);
 
         OnStateChange?.Invoke(state);
         RoomManager.OnRoomStateChange?.Invoke(this);

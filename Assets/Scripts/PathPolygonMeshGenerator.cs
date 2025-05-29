@@ -58,10 +58,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 DestroyImmediate(colliders[1]);
         }
 
-    }
-
-    void Start()
-    {
         Generate2DPolygonMesh();
         meshCollider.sharedMesh = ExtrudeOnY(meshFilter.sharedMesh, -.2f);
     }
@@ -225,6 +221,12 @@ public class PathPolygonMeshGenerator : MonoBehaviour
 
         bool isRoom = TryGetComponent<Room>(out var _);
         gameObject.name = string.Format(isRoom ? "Floor {0:F0} (Guest Room)" : "Floor {0:F0}", transform.position.y);
+
+#if UNITY_EDITOR
+        if(Application.isPlaying)
+#endif
+            if (isRoom)
+                GetComponent<LockableRoom>().AssignCeilingMesh(mesh);
 
         SpawnConnectionPrefabs();
     }
@@ -551,7 +553,6 @@ public class PathPolygonMeshGenerator : MonoBehaviour
                 }
 
                 instance.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable | HideFlags.DontSaveInEditor;
-
             }
         }
 

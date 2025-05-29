@@ -42,7 +42,6 @@ public class Mummy : Enemy
             }
 
         float deltaMove = doMove * Time.fixedDeltaTime;
-        Debug.Log(deltaMove);
         rb.MovePosition(rb.position + speed * speedMultiplier * animSpeedMul * deltaMove * MoveDir);
 
         anim.speed = speed * animSpeedMul;

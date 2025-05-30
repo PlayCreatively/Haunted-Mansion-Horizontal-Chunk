@@ -14,8 +14,15 @@ public class SkinSelector : MonoBehaviour
         skins = Resources.LoadAll<SkinsSO>("Skins");
         var body = transform.Find("Visuals/Body");
         rend = body.GetComponentInChildren<SkinnedMeshRenderer>();
-        currentSkinIndex = PlayerPrefs.GetInt(gameObject.name + " CurrentSkinIndex", 0);
+        currentSkinIndex = diffSkin(currentSkinIndex + 3);
+            //PlayerPrefs.GetInt(gameObject.name + " CurrentSkinIndex", 0);
         SetSkin(currentSkinIndex);
+    }
+
+    private int diffSkin(int num)
+    {
+        num++;
+        return num;
     }
 
     void SetSkin(int skinIndex)
@@ -23,7 +30,7 @@ public class SkinSelector : MonoBehaviour
         currentSkinIndex = (skinIndex + skins.Length) % skins.Length;
         PlayerPrefs.SetInt(gameObject.name + " CurrentSkinIndex", currentSkinIndex);
         PlayerPrefs.Save();
-        Debug.Log($"{gameObject.name} Skin index: {skins[currentSkinIndex].name}");
+        Debug.Log($"{gameObject.name} Skin index: {skins[currentSkinIndex].name} {skinIndex}");
         rend.material = skins[currentSkinIndex].material;
         rend.sharedMesh = skins[currentSkinIndex].mesh;
     }

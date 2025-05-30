@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
                 case "Interact": hand.Interact(); break;
                 case "Drop": hand.DropFromHand(); break;
                 case "Dash": DashInput(); break;
-                case "Jump": Jump(); break;
+                //case "Jump": Jump(); break;
                 case "Throw": Throw(); break;
                 case "Pause": Game.ToMainMenu(); break;
             }

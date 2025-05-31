@@ -36,6 +36,7 @@ public class RoomUI : MonoBehaviour
         (transform as RectTransform).position = GetRoomPosInScreenSpace();
 
         UpdateArrow();
+        bookingUI.transform.parent.localScale = Vector3.one * (GetUrgencySine(priority, .05f) + 1f);
     }
     public static Color[] bookingPriorityColors = { new(214f / 255, 105f / 255, 107f / 255), new(214f / 255, 153f / 255, 105f / 255), new(218f / 255, 213f / 255, 202f / 255), new(0.1254902f, 0.1764706f, 0.1686275f) };
 
@@ -76,9 +77,7 @@ public class RoomUI : MonoBehaviour
             Mathf.Clamp(rectTrans.anchoredPosition.y, -extents.y, extents.y)
         );
 
-        int arrowUrgency = 2 - priority;
-
-        float sinOffset = (Mathf.Sin(Time.time * arrowUrgency * 4f) * .5f - .5f) * 2 * 35;
+        float sinOffset = (GetUrgencySine(priority, .5f) - .5f) * 70;
 
         roomArrowUI.rectTransform.anchoredPosition += roomArrowUI.rectTransform.anchoredPosition.normalized * sinOffset;
 
@@ -87,6 +86,13 @@ public class RoomUI : MonoBehaviour
         dif /= 200f;
 
         roomArrowUI.rectTransform.localScale = new Vector2(dif, dif);
+    }
+
+    float GetUrgencySine(int urgency, float magnitude = .5f)
+    {
+        int inverseUrgency = 2 - urgency;
+
+        return Mathf.Sin(Time.time * inverseUrgency * 4f) * magnitude;
     }
 
     public void UpdateRequirementsUI(Room.Requirements requirements)

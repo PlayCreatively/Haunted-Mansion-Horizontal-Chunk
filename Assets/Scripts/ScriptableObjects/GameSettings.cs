@@ -22,6 +22,14 @@ namespace GameManagers
             SceneManager.LoadScene(0);
         }
 
+        public static void ToNightShift()
+        {
+            Time.timeScale = 1f;
+            // destroy all not destroy on load
+            GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
+            SceneManager.LoadScene("NightShiftMode");
+        }
+
         static IEnumerator GameOverRoutine(Room failedRoom)
         {
             float timeT = 1f;
@@ -46,6 +54,13 @@ namespace GameManagers
                 yield return null;
             }
             gameOverScreen.color = Color.white;
+
+            yield return new WaitForSecondsRealtime(8f);
+
+            // clean
+            ShiftData.Instance.ResetData();
+
+            ToMainMenu();
         }
 
         static IEnumerator PanCamera(Vector3 target, float time)

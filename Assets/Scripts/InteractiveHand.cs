@@ -1,15 +1,34 @@
 using GameManagers;
 using UnityEngine;
 using UnityEngine.Assertions;
-
-#nullable enable
+using UnityEngine.SceneManagement;
 
 public class InteractiveHand : MonoBehaviour, IInventory
 {
     [SerializeField]
     Backpack backpackPrefab;
 
-    InventoryUI backpackUI;
+    InventoryUI _backpackUI;
+    InventoryUI BackpackUI
+    {
+        get
+        {
+            if (_backpackUI == null)
+            {
+                bool canCreateUI = InventoryUI.CreateUI(5, transform.parent, out _backpackUI);
+                if (!canCreateUI)
+                {
+                    enabled = false;
+                    return null;
+                }
+
+                _backpackUI.gameObject.SetActive(false);
+                backpack.Inventory.OnInventoryUpdate += BackpackUI.UpdateSlot;
+                BackpackUI.Setup(backpack.Inventory, backpack.Selected);
+            }
+            return _backpackUI;
+        }
+    }
     Backpack __backpack;
     Backpack backpack { 
         get => __backpack; 
@@ -28,8 +47,9 @@ public class InteractiveHand : MonoBehaviour, IInventory
     bool __displayBackpack = false;
     public void DisplayInventoryUI(float scale)
     {
-        backpackUI.gameObject.SetActive(scale > .1f);
-        backpackUI.transform.localScale = Vector3.one * scale;
+        if (BackpackUI == null) return;
+        BackpackUI.gameObject.SetActive(scale > .1f);
+        BackpackUI.transform.localScale = Vector3.one * scale;
     }
 
     public Inventory Inventory => backpack.Inventory;
@@ -38,6 +58,22 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     void Awake()
     {
+        
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneUnloaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneUnloaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene)
+    {
+        _backpackUI = null; // reset backpack UI when scene is unloaded
     }
 
     void Start()
@@ -45,14 +81,12 @@ public class InteractiveHand : MonoBehaviour, IInventory
         defaultLocalPosition = transform.localPosition;
         
 
-        backpackUI = InventoryUI.CreateUI(5, transform.parent);
-        backpackUI.gameObject.SetActive(false);
         CreateNewBackpack();
     }
 
     void OnDestroy()
     {
-        Destroy(backpackUI);
+        Destroy(BackpackUI);
     }
 
     void Update()
@@ -71,11 +105,13 @@ public class InteractiveHand : MonoBehaviour, IInventory
 
     public void UpdateSelection(int index)
     {
+        if(BackpackUI == null) return;
+
         if (index == backpack.Selected) return; // same selection, do nothing
 
         FMODAudioManager.Instance.TriggerItemSelectionInTheBagSfx();
         backpack.SetSelected(index);
-        backpackUI.UpdateSelected(index);
+        BackpackUI.UpdateSelected(index);
     }
 
     public void Throw(float force)
@@ -127,8 +163,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
         var fromRef = backpack.Inventory[from];
         var toRef = backpack.Inventory[to];
 
-        backpackUI.UpdateSlot(from, toRef != null ? toRef!.type : (CarriableType)(-1));
-        backpackUI.UpdateSlot(to, fromRef != null ? fromRef!.type : (CarriableType)(-1));
+        BackpackUI.UpdateSlot(from, toRef != null ? toRef!.type : (CarriableType)(-1));
+        BackpackUI.UpdateSlot(to, fromRef != null ? fromRef!.type : (CarriableType)(-1));
 
         if(fromRef != null)
             fromRef!.EnableVisibility(to == backpack.Selected);
@@ -192,11 +228,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
         backpack.EnableCollider(false);
         backpack.EnableVisibility(false);
         backpack.transform.SetLocalPositionAndRotation(Vector3.back * .75f, Quaternion.identity);
-
-        // UI
-        backpackUI.gameObject.SetActive(false);
-        backpack.Inventory.OnInventoryUpdate += backpackUI.UpdateSlot;
-        backpackUI.Setup(backpack.Inventory, backpack.Selected);
     }
 
     public bool InsertAt(int index, Carriable carriable)
@@ -250,7 +281,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         if (foundSpace)
         {
             /// TODO: validate
-            backpackUI.Setup(backpack.Inventory, index); // update backpack UI
+            BackpackUI.Setup(backpack.Inventory, index); // update backpack UI
         }
 
         return foundSpace;
@@ -339,7 +370,7 @@ public class InteractiveHand : MonoBehaviour, IInventory
         Destroy(backpack);
         backpack = null;
 
-        backpackUI.gameObject.SetActive(false);
+        BackpackUI.gameObject.SetActive(false);
     }
 
     void OnTriggerStay(Collider other)
@@ -405,5 +436,3 @@ public class InteractiveHand : MonoBehaviour, IInventory
         }
     }
 }
-
-#nullable disable

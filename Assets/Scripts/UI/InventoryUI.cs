@@ -16,11 +16,16 @@ public class InventoryUI : MonoBehaviour
         transform.localScale = Vector3.zero;
     }
 
-    public static InventoryUI CreateUI(int count, Transform target)
+    public static bool CreateUI(int count, Transform target, out InventoryUI inventoryUI)
     {
-        var canvas = GameObject.Find("Canvas").transform;
+        var canvas = GameObject.Find("Canvas");
+        if (canvas == null)
+        {
+            inventoryUI = null;
+            return false;
+        }
         Assert.IsNotNull(canvas, "Canvas not found in the scene.");
-        InventoryUI inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"), canvas.transform);
+        inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"), canvas.transform);
         inventoryUI.icons = new Image[count];
         inventoryUI.target = target;
 
@@ -40,7 +45,7 @@ public class InventoryUI : MonoBehaviour
             newSlotUI.transform.localPosition = Quaternion.Euler(0, 0, -rotSteps * i) * Vector2.up * distance;
         }
 
-        return inventoryUI;
+        return true;
     }
 
     public void UpdateSlot(int index, CarriableType type)

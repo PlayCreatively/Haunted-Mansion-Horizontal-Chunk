@@ -149,7 +149,7 @@ namespace GameManagers
             {
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
-                Game.ToMainMenu();
+                Game.ToNightShift();
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
@@ -182,7 +182,7 @@ namespace GameManagers
 
         internal void ResetData() // TODO: Add remaining fields
         {
-            currentShift = 3;
+            currentShift = 0;
             currentTimeIntoShift = 0f;
             bookingShiftSequence = null;
             currentShiftBookingRequirements = null;

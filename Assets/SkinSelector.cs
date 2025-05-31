@@ -30,7 +30,11 @@ public class SkinSelector : MonoBehaviour
 
     void OnEnable()
     {
-        GetComponent<PlayerInput>().onActionTriggered += HandleInput;
+        var playerInput = GetComponent<PlayerInput>();
+        Debug.Log(playerInput.inputIsActive);
+        playerInput.SwitchCurrentActionMap("Player");
+
+        playerInput.onActionTriggered += HandleInput;
     }
 
     void OnDisable()
@@ -40,6 +44,7 @@ public class SkinSelector : MonoBehaviour
 
     private void HandleInput(InputAction.CallbackContext context)
     {
+        Debug.Log($"Input action triggered: {context.action.name}");
         if (context.action.name == "Next" && context.performed)
         {
             OnNext();

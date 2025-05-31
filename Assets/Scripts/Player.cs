@@ -220,14 +220,14 @@ public class Player : MonoBehaviour
 
     public void LandingVibrate() => Vibrate(.3f, .1f, true, true);
 
-    public void Stun(Vector3 origin)
+    public void Stun(Collider other)
     {
         if (stunned) return;
 
         //gamepad.ResumeHaptics();
         Vibrate(1f);
 
-        var dir = transform.position - origin;
+        var dir = transform.position - other.transform.position;
         dir.y = 0;
         dir.Normalize();
 
@@ -242,10 +242,10 @@ public class Player : MonoBehaviour
         rb.linearVelocity = dir;
 
         FMODAudioManager.Instance.TriggerStunnedSfx();
-        StartCoroutine(StunRoutine());
+        StartCoroutine(StunRoutine(other));
     }
 
-    IEnumerator StunRoutine()
+    IEnumerator StunRoutine(Collider other)
     {
         enabled = false;
         SetStunned(true);
@@ -262,7 +262,19 @@ public class Player : MonoBehaviour
 
         SetStunned(false);
         enabled = true;
+
+        yield return IgnoreUntilExit(other);
     }
+
+    IEnumerator IgnoreUntilExit(Collider col)
+    {
+        if(!col.bounds.Intersects(this.col.bounds)) yield break;
+
+        Physics.IgnoreCollision(col, this.col, true);
+        yield return new WaitWhile(() => col.bounds.Intersects(this.col.bounds));
+        Physics.IgnoreCollision(col, this.col, false);
+    }
+
 
     void SetStunned(bool value)
     {

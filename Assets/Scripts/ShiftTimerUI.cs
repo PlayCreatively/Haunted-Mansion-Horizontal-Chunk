@@ -30,11 +30,6 @@ public class ShiftTimerUI : MonoBehaviour
         RoomManager.Instance.OnBookingCompleted += OnBookingCompleted;
     }
 
-    void OnDisable()
-    {
-        RoomManager.Instance.OnBookingCompleted -= OnBookingCompleted;
-    }
-
     void OnBookingCompleted(int bookingID)
     {
         bookingBookmarksUI[bookingID].color = Color.gray * .5f;

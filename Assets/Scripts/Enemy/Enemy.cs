@@ -225,8 +225,7 @@ public class Enemy : MonoBehaviour
             }
             else // player stunned
             {
-                player.Stun(transform.position);
-                player.Vibrate(1f);
+                player.Stun(col);
             }
         }
     }

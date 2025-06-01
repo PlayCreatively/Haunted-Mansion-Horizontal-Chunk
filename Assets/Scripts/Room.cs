@@ -1,5 +1,6 @@
 using GameManagers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -150,6 +151,7 @@ public class Room : MonoBehaviour, IRoom
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         shineAnimator.Play("GlassAnimation", 0, 0f);
+        ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements);
 
         isDirty = false;
 
@@ -211,6 +213,7 @@ public class Room : MonoBehaviour, IRoom
         {
             requirements[type] += enter ? -1 : 1;
             OnRequirementsChange?.Invoke(requirements);
+
             //Debug.Log($"{gameObject.name} {type} {(enter ? "added" : "removed")}. Remaining: {requirements[type]}", gameObject);
 
             if (requirements.IsFulfilled())
@@ -219,7 +222,10 @@ public class Room : MonoBehaviour, IRoom
                 Clean();
             }
             else if(enter)
+            {
+                ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements);
                 FMODAudioManager.Instance.TriggerResourcePlacedInRoom();
+            }
         }
     }
 
@@ -241,7 +247,7 @@ public class Room : MonoBehaviour, IRoom
 
     float Lerp(float a, float b, float t) => a + (b - a) * t;
 
-    public struct Requirements
+    public struct Requirements : IEnumerable<(CarriableType type, int count)>
     {
         public int[] resourceRequirement;
         public readonly int Count => resourceRequirement.Length;
@@ -308,6 +314,18 @@ public class Room : MonoBehaviour, IRoom
         }
 
         public readonly bool IsRequired(CarriableType type) => (int)type < 4 && resourceRequirement[(int)type] > 0;
+
+        public readonly IEnumerator<(CarriableType type, int count)> GetEnumerator()
+        {
+            for (int i = 0; i < resourceRequirement.Length; i++)
+                if (resourceRequirement[i] > 0)
+                    yield return ((CarriableType)i, resourceRequirement[i]);
+        }
+
+        readonly IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public readonly int this[CarriableType type]
         {

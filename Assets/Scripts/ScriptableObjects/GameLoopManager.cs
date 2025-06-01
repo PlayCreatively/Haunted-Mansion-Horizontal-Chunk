@@ -31,6 +31,13 @@ namespace GameManagers
         }
 
         static GameLoopManager _instance;
-        public static GameLoopManager Instance => _instance;
+        public static GameLoopManager Instance
+        {
+            get
+            {
+                Debug.Assert(_instance != null, "GameLoopManager instance is null. Ensure it is present in the scene.");
+                return _instance;
+            }
+        }
     }
 }

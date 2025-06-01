@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MotionUtils;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -43,6 +44,19 @@ public struct Timer
         {
             yield return null;
             action.Invoke(Normal);
+        }
+    }
+
+    public readonly IEnumerator GetSpringRoutine(float angularFrequency, float dampingRatio, float waitTime, Action<float> action)
+    {
+        float position = 0, velocity = 0;
+        while (!Finished)
+        {
+            yield return null;
+
+            DampedSpring.Step(ref position, ref velocity, 1f, Time.deltaTime, angularFrequency, dampingRatio);
+
+            action.Invoke(position);
         }
     }
 

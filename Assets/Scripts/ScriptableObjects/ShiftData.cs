@@ -13,12 +13,15 @@ namespace GameManagers
 
         //// GAME SETTINGS ////
         [Header("Shift Settings")]
-        public float shiftDuration = 60 * 3;
+        public float shiftDuration = 60 * 4;
         public int minBookings = 1, maxBookings = 7;
         //public int minResourcesPerBooking = 1, maxResourcesPerBooking = 3;
         const int addedResourcesPerShift = 2;
         [Range(0, 1)]
         public float maxAlpha = .5f;
+        [Header("Score Settings")]
+        public int scorePerCleanedRoom = 10;
+        public int scorePerResource = 5;
 
         //// LOCAL VARIABLES ////
         int currentShift = 0;
@@ -27,19 +30,13 @@ namespace GameManagers
         Room.Requirements[] currentShiftBookingRequirements;
         int currentShiftMaxConcurrentBookings = 0;
 
+        //// SCORING DATA ////
+        int currentScore = 0;
+        int roomsCleanedCount = 0;
+
         void OnEnable()
         {
             ResetData();
-        }
-
-        private void Awake()
-        {
-            
-        }
-
-        void OnDisable()
-        {
-            //RoomManager.Instance.OnBookingCompleted -= OnBookingCompleted;
         }
 
         ////PUBLIC API ////
@@ -49,8 +46,51 @@ namespace GameManagers
         public float TimeIntoShiftAlpha => currentTimeIntoShift / shiftDuration;
         public int CurrentBookingCount => GetBookingCount(currentShift);
         public event Action<int> OnShiftEnd;
+        public int CurrentScore => currentScore;
+        public int CalculateTimeBonus(float timeLeft) => Mathf.RoundToInt(timeLeft * .1f);
+        public int CalculatePerResourceBonus(CarriableType resourceType) => resourceType switch
+        {
+            CarriableType.ToiletPaper => scorePerResource,
+            _ => scorePerResource * 2, // Towel, BedSheet, Soap
+        };
+        public int CalculateCumulativeRequirementsBonus(Room.Requirements requirements)
+        {
+            int resourcesValueCount = 0;
+            foreach (var (type, count) in requirements)
+                if (type == CarriableType.ToiletPaper)
+                    resourcesValueCount += count;
+                else
+                    resourcesValueCount += count * 2; // Towel, BedSheet, Soap
+
+            return Mathf.RoundToInt(Mathf.Pow(resourcesValueCount, 1.4f)) * 5;
+
+            float r = resourcesValueCount;
+            const float a = 3.33333f, b = -17.5f, c = 44.16667f, d = -20f;
+            return Mathf.RoundToInt(a * r * r * r + b * r * r + c * r + d);
+        }
 
         //// PUBLIC API ////
+        public void AddCleanedRoom(Room room, float timeLeft, Room.Requirements requirements)
+        {
+            roomsCleanedCount++;
+
+            int deltaScore = 0;
+            deltaScore += CalculateTimeBonus(timeLeft);
+            deltaScore += CalculateCumulativeRequirementsBonus(requirements);
+
+            currentScore += deltaScore;
+
+            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
+        }
+
+        public void AddResourceDelivered(Room room, CarriableType resourceType)
+        {
+            int deltaScore = CalculatePerResourceBonus(resourceType);
+            currentScore += deltaScore;
+            
+            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
+        }
+
         public float GetBookingTime(int bookingIndex) => (float)(GetRoomTimeAlpha(GetAlpha(currentShift), GetBookingCount(currentShift), bookingIndex) * shiftDuration);
         public float GetBookingTimeAlpha(int bookingIndex) => (float)GetRoomTimeAlpha(GetAlpha(currentShift), GetBookingCount(currentShift), bookingIndex);
 
@@ -323,4 +363,24 @@ namespace GameManagers
 
 
     #endif
+}
+
+public struct LeaderBoardData
+{
+    public char[] name;
+    public int score;
+    public int shift;
+    public int roomsCleaned;
+
+    public LeaderBoardData(char[] name, int score, int shift, int roomsCLeaned)
+    {
+        this.name = name;
+        this.score = score;
+        this.shift = shift;
+        this.roomsCleaned = roomsCLeaned;
+    }
+    public override readonly string ToString()
+    {
+        return $"{name} - {score} (Shift {shift})";
+    }
 }

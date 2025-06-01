@@ -8,6 +8,8 @@ namespace GameManagers
 { 
     public static class Game
     {
+        public static Canvas Canvas => GameLoopManager.Instance.canvas;
+
         public static void GameOver(Room failedRoom)
         {
             FMODAudioManager.Instance.TriggerGameOver();

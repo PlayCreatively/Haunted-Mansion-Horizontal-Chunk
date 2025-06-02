@@ -31,6 +31,12 @@ public class ScoreBubbleUI : MonoBehaviour
         Camera mainCamera = Camera.main;
         yield return new Timer(5).GetSpringRoutine(14f, .2f, 8f, a =>
         {
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("Main camera not found. Score bubble will not be displayed.");
+                Destroy(gameObject);
+                return;
+            }
 
             transform.localScale = (a * Vector3.one);
             transform.position = mainCamera.WorldToScreenPoint(position);

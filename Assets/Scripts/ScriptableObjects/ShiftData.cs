@@ -190,6 +190,7 @@ namespace GameManagers
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
                 Game.ToNightShift();
+                Destroy(GameLoopManager.Instance.gameObject);
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);

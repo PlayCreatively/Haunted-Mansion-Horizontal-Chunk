@@ -7,6 +7,32 @@ using UnityEngine;
 
 namespace MotionUtils
 {
+    public class Spring
+    {
+        public float position, velocity; // Current position and velocity of the spring
+
+        public float equilibrium; // The position the spring will eventually settle at
+        public float angularFrequency; // The natural frequency of the spring
+        public float dampingRatio; // The damping ratio of the spring
+
+        public Spring(float equilibrium = 0f, float angularFrequency = 1f, float dampingRatio = 0f)
+        {
+            this.equilibrium = equilibrium;
+            this.angularFrequency = angularFrequency;
+            this.dampingRatio = dampingRatio;
+            position = equilibrium;
+            velocity = 0f;
+        }
+
+        public void Step(float dt)
+        {
+            // Calculate coefficients for the current step
+            var coefficients = DampedSpring.CalcCoefficients(dt, angularFrequency, dampingRatio);
+            // Update position and velocity using the coefficients
+            DampedSpring.Step(ref position, ref velocity, equilibrium, coefficients);
+        }
+    }
+
     /// <summary>
     /// Pre‑computed coefficients that turn an O(Δt) integration step into a few multiplies.
     /// </summary>

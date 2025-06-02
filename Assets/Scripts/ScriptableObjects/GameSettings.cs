@@ -10,6 +10,81 @@ namespace GameManagers
     {
         public static Canvas Canvas => GameLoopManager.Instance.canvas;
 
+        static Image _transitionImage;
+        public static Image TransitionImage
+        {
+            get
+            {
+                if (_transitionImage == null)
+                {
+                    var canvasObj = GameObject.Find("TransitionCanvas");
+                    if (_transitionImage != null)
+                        _transitionImage = canvasObj.GetComponent<Canvas>().transform.Find("TransitionImage").GetComponent<Image>();
+                    else
+                    {
+                        GameObject obj = new GameObject("TransitionCanvas");
+                        GameObject.DontDestroyOnLoad(obj);
+                        var transitionCanvas = obj.AddComponent<Canvas>();
+                        transitionCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                        transitionCanvas.sortingOrder = 1000; // Ensure it's on top
+                        obj.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+
+                        _transitionImage = new GameObject("TransitionImage").AddComponent<Image>();
+                        _transitionImage.preserveAspect = true;
+                        _transitionImage.enabled = false;
+                        _transitionImage.transform.SetParent(transitionCanvas.transform, false);
+                        // fill image
+                        _transitionImage.rectTransform.anchorMin = new Vector2(0, .5f);
+                        _transitionImage.rectTransform.anchorMax = new Vector2(1, .5f);
+                        _transitionImage.rectTransform.rect.Set(0, 0, 0, 1080 * 2);
+                        _transitionImage.rectTransform.offsetMin = Vector2.zero;
+                        _transitionImage.rectTransform.offsetMax = Vector2.zero;
+                        _transitionImage.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                        _transitionImage.rectTransform.anchoredPosition = Vector2.zero;
+                    }
+                }
+                return _transitionImage;
+            }
+        }
+
+        static void SceneTransition(Action loadScene, float time, Sprite sprite)
+        {
+            var image = TransitionImage;
+            TransitionImage.StartCoroutine(SceneTransitionRoutine(loadScene, time, sprite, image));
+        }
+        static IEnumerator SceneTransitionRoutine(Action loadScene, float time, Sprite sprite, Image transitionImage)
+        {
+            Time.timeScale = 0;
+            transitionImage.rectTransform.anchorMin = Vector2.zero;
+            transitionImage.rectTransform.anchorMax = Vector2.one;
+            transitionImage.sprite = sprite;
+            float halfTime = time * 0.5f;
+            Camera cam = Camera.main;
+            
+            yield return new Timer(halfTime, true).GetRoutine(a =>
+            {
+                _transitionImage.rectTransform.anchorMin = new Vector2(0, .5f);
+                _transitionImage.rectTransform.anchorMax = new Vector2(1, .5f);
+                _transitionImage.rectTransform.sizeDelta = new Vector2(0, 1080 * 2);
+                _transitionImage.rectTransform.anchoredPosition = new Vector2(0, 1080 * (1f - a));
+                transitionImage.enabled = true;
+            });
+
+            loadScene.Invoke();
+
+            Time.timeScale = 1;
+
+            yield return new Timer(halfTime, true).GetRoutine(a =>
+            {
+                _transitionImage.rectTransform.anchorMin = new Vector2(0, .5f);
+                _transitionImage.rectTransform.anchorMax = new Vector2(1, .5f);
+                _transitionImage.rectTransform.sizeDelta = new Vector2(0, 1080 * 2);
+                _transitionImage.rectTransform.anchoredPosition = new Vector2(0, -1080 * a);
+            });
+
+            transitionImage.enabled = false;
+        }
+
         public static void GameOver(Room failedRoom)
         {
             FMODAudioManager.Instance.TriggerGameOver();
@@ -19,17 +94,27 @@ namespace GameManagers
         public static void ToMainMenu()
         {
             Time.timeScale = 1f;
-            // destroy all not destroy on load
-            GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
-            SceneManager.LoadScene(0);
+
+            SceneTransition(() =>
+            {
+                // destroy all not destroy on load
+                GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
+                SceneManager.LoadScene(0);
+            }, 1f, GameSettings.Instance.transitionSprite);
+
         }
 
         public static void ToNightShift()
         {
             Time.timeScale = 1f;
-            // destroy all not destroy on load
-            GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
-            SceneManager.LoadScene("NightShiftMode");
+
+            SceneTransition(() =>
+            {
+                // destroy all not destroy on load
+                GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
+                SceneManager.LoadScene("NightShiftMode");
+            }, 1f, GameSettings.Instance.transitionSprite);
+
         }
 
         static IEnumerator GameOverRoutine(Room failedRoom)
@@ -183,6 +268,7 @@ namespace GameManagers
         public ResourceInfo soap;
         public ResourceInfo dirtyTowel;
         public ResourceInfo dirtyBedSheet;
+        public Sprite transitionSprite;
         [Space(20), Header("Enemies")]
         public Ghost ghost;
         public Mummy mummy;

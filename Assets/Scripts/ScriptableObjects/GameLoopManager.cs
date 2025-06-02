@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameManagers
 {
@@ -7,6 +9,7 @@ namespace GameManagers
     {
         [HideInInspector]
         public Canvas canvas;
+        
         ShiftData ShiftData;
 
         void Awake()

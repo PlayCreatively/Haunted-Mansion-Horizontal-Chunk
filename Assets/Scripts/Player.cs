@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public CapsuleCollider col;
     SphereCollider ballCollider;
     [HideInInspector]
-    public Renderer rend;
+    public SkinnedMeshRenderer rend;
     InteractiveHand hand;
     Transform visuals;
     Animator animator;
@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     bool zoomInput = false;
     float airTime = 0;
     public bool ZoomInput => zoomInput;
+    public bool IsStunned => stunned;
+    public SkinnedMeshRenderer MeshRenderer => rend;
 
     void Awake()
     {
@@ -47,7 +49,7 @@ public class Player : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponentInChildren<Animator>();
         visuals = transform.Find("Visuals");
-        rend = visuals.Find("Body").GetComponentInChildren<Renderer>();
+        rend = visuals.Find("Body").GetComponentInChildren<SkinnedMeshRenderer>();
         col = GetComponent<CapsuleCollider>();
         ballCollider = visuals.GetComponent<SphereCollider>();
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");

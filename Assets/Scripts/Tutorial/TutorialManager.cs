@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GameManagers;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -51,7 +52,7 @@ public class TutorialManager : MonoBehaviour
 
         Destroy(players[0].transform.parent.gameObject);
 
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        Game.ToMainMenu();
     }
 
     public TutorialRoom secondRoom;

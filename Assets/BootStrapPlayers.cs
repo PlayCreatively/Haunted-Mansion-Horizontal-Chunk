@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
@@ -41,7 +42,15 @@ public class BootstrapPlayers : MonoBehaviour
         rb.position = transform.TransformPoint(offset);
         rb.rotation = Quaternion.Euler(0, -90f, 0);
         player.gameObject.name = "Player " + (player.playerIndex + 1); // rename the player object
+        SkinSelector.ReassignDefaultSkin(player.GetComponent<Player>());
         //player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();
+        StartCoroutine(ActivateControllerRoutine(player));
+    }
+
+    IEnumerator ActivateControllerRoutine(PlayerInput player)
+    {
+        yield return new WaitForEndOfFrame(); // Wait for the next frame to ensure the player is fully initialized
         player.SwitchCurrentActionMap("Player");
+        player.ActivateInput();
     }
 }

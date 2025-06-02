@@ -1,17 +1,26 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SkinSelector : MonoBehaviour
 {
-    SkinsSO[] skins;
+    static SkinsSO[] _skins;
+    static SkinsSO[] Skins
+    {
+        get
+        {
+            if (_skins == null || _skins.Length == 0)
+                _skins = Resources.LoadAll<SkinsSO>("Skins");
+            return _skins;
+        }
+    }
     int currentSkinIndex;
 
     SkinnedMeshRenderer rend;
 
     void Awake()
     {
-        skins = Resources.LoadAll<SkinsSO>("Skins");
         var body = transform.Find("Visuals/Body");
         rend = body.GetComponentInChildren<SkinnedMeshRenderer>();
         currentSkinIndex = PlayerPrefs.GetInt(gameObject.name + " CurrentSkinIndex", 0);
@@ -20,21 +29,31 @@ public class SkinSelector : MonoBehaviour
 
     void SetSkin(int skinIndex)
     {
-        currentSkinIndex = (skinIndex + skins.Length) % skins.Length;
+        currentSkinIndex = (skinIndex + Skins.Length) % Skins.Length;
         PlayerPrefs.SetInt(gameObject.name + " CurrentSkinIndex", currentSkinIndex);
         PlayerPrefs.Save();
-        Debug.Log($"{gameObject.name} Skin index: {skins[currentSkinIndex].name}");
-        rend.material = skins[currentSkinIndex].material;
-        rend.sharedMesh = skins[currentSkinIndex].mesh;
+        Debug.Log($"{gameObject.name} Skin index: {Skins[currentSkinIndex].name}");
+        rend.material = Skins[currentSkinIndex].material;
+        rend.sharedMesh = Skins[currentSkinIndex].mesh;
+    }
+
+    public static void ReassignDefaultSkin(Player player)
+        => SetSkin(player, PlayerPrefs.GetInt(player.gameObject.name + " CurrentSkinIndex", 0));
+
+    public static void SetSkin(Player player, int skinIndex)
+    {
+        var rend = player.MeshRenderer;
+        skinIndex = (skinIndex + Skins.Length) % Skins.Length;
+        PlayerPrefs.SetInt(player.gameObject.name + " CurrentSkinIndex", skinIndex);
+        PlayerPrefs.Save();
+        Debug.Log($"{player.gameObject.name} Skin index: {Skins[skinIndex].name}");
+        rend.material = Skins[skinIndex].material;
+        rend.sharedMesh = Skins[skinIndex].mesh;
     }
 
     void OnEnable()
     {
-        var playerInput = GetComponent<PlayerInput>();
-        Debug.Log(playerInput.inputIsActive);
-        playerInput.SwitchCurrentActionMap("Player");
-
-        playerInput.onActionTriggered += HandleInput;
+        GetComponent<PlayerInput>().onActionTriggered += HandleInput;
     }
 
     void OnDisable()
@@ -44,7 +63,6 @@ public class SkinSelector : MonoBehaviour
 
     private void HandleInput(InputAction.CallbackContext context)
     {
-        Debug.Log($"Input action triggered: {context.action.name}");
         if (context.action.name == "Next" && context.performed)
         {
             OnNext();

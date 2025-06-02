@@ -211,6 +211,22 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    IEnumerator PushbackRoutine(Vector3 source)
+    {
+        Vector3 dir = (rb.position - source);
+        dir.y = 0; // keep it horizontal
+        dir.Normalize();
+        dir.y = 1f;
+        const float pushbackForce = 3f;
+
+        enabled = false;
+        rb.AddForce(dir * pushbackForce, ForceMode.VelocityChange);
+
+        yield return new WaitForSeconds(1f);
+
+        enabled = true;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -228,9 +244,10 @@ public class Enemy : MonoBehaviour
                 player.LandingVibrate();
                 Hit();
             }
-            else
+            else if(!player.IsStunned) // player stunned
             {
                 player.Stun(col);
+                StartCoroutine(PushbackRoutine(playerCol.bounds.center));
             }
         }
     }

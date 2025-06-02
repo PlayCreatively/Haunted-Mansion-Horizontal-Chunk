@@ -30,8 +30,15 @@ public class GooSettings : EnemySettings
 public class Enemy : MonoBehaviour
 {
     protected int hp = 1;
-    [SerializeField]
-    GameObject plaster;
+    [SerializeField] GameObject plaster;
+
+    [Tooltip("Optional particle effect prefab to play once when hit.")]
+    public GameObject hitParticlesPrefab1;
+    public GameObject hitParticlesPrefab2;
+
+    [Tooltip("How long the hit particles should stay before being destroyed.")]
+    public float hitParticlesDuration = 2f;
+
     public int HP => hp;
     public EnemyType enemyType;
     public Carriable resourceDrop;
@@ -49,18 +56,17 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    // components
+
     protected Rigidbody rb;
     protected Collider col;
     protected Transform visuals;
-
     protected EnemySettings settings;
 
     protected virtual void Awake()
     {
         visuals = transform.GetChild(0);
         rb = GetComponent<Rigidbody>();
-        if(!TryGetComponent(out col))
+        if (!TryGetComponent(out col))
             col = GetComponentInChildren<Collider>();
 
         rb.isKinematic = false;
@@ -84,6 +90,19 @@ public class Enemy : MonoBehaviour
     IEnumerator HitRoutine()
     {
         hp--;
+
+        if (hitParticlesPrefab1 != null)
+        {
+            var particles1 = Instantiate(hitParticlesPrefab1, transform.position, Quaternion.identity);
+            Destroy(particles1, hitParticlesDuration);
+        }
+
+        if (hitParticlesPrefab2 != null)
+        {
+            var particles2 = Instantiate(hitParticlesPrefab2, transform.position, Quaternion.identity);
+            Destroy(particles2, hitParticlesDuration);
+        }
+
         plaster.SetActive(true);
         visuals.GetComponentInChildren<Renderer>().material.SetFloat("_Angry", 1f);
         FMODAudioManager.Instance.TriggerLandingOnEnemySfx(enemyType, hp);
@@ -91,7 +110,7 @@ public class Enemy : MonoBehaviour
         if (hp <= 0)
         {
             Die();
-           yield break;
+            yield break;
         }
         speed *= settings.hurtSpeedMultiplier;
     }
@@ -154,7 +173,6 @@ public class Enemy : MonoBehaviour
 
     void ReflectOffWall(Vector3 normal)
     {
-        // Reflect the move direction off the wall normal
         Vector3 dir = MoveDir;
         dir = Vector3.Reflect(dir, normal);
         dir.y = 0;
@@ -170,8 +188,7 @@ public class Enemy : MonoBehaviour
             SetRandomDirection();
         }
 
-        // check for wall
-        if (Physics.SphereCast(transform.position, .2f , MoveDir, out RaycastHit hit, .35f, ~LayerMask.GetMask("Player", "Enemy", "Item", "Highlight"), QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(transform.position, .2f, MoveDir, out RaycastHit hit, .35f, ~LayerMask.GetMask("Player", "Enemy", "Item", "Highlight"), QueryTriggerInteraction.Ignore))
         {
             ReflectOffWall(hit.normal);
         }
@@ -182,23 +199,12 @@ public class Enemy : MonoBehaviour
         switch (enemyType)
         {
             case EnemyType.Ghost:
-                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
-
-                break;
             case EnemyType.Mummy:
-                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
-
-                break;
             case EnemyType.TowelMonster:
-                rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
-
-                break;
-            case EnemyType.Goo:
-                
-                break;
             case EnemyType.Trash:
                 rb.MovePosition(rb.position + speed * Time.fixedDeltaTime * MoveDir);
-
+                break;
+            case EnemyType.Goo:
                 break;
             default:
                 break;
@@ -213,7 +219,6 @@ public class Enemy : MonoBehaviour
             Vector3 playerFeetPos = playerCol.bounds.center - Vector3.up * playerCol.bounds.extents.y;
             Vector3 enemyCenterPos = col.bounds.center;
 
-            // touching: 0 == enemy center, 1 == enemy head, 0 > below enemy center
             float touchHeightPercent = (playerFeetPos.y - enemyCenterPos.y) / col.bounds.extents.y;
 
             var player = collision.gameObject.GetComponent<Player>();
@@ -223,13 +228,13 @@ public class Enemy : MonoBehaviour
                 player.LandingVibrate();
                 Hit();
             }
-            else // player stunned
+            else
             {
                 player.Stun(col);
             }
         }
     }
 
-    public static T Spawn<T>(Vector3 position) where T : Enemy 
+    public static T Spawn<T>(Vector3 position) where T : Enemy
         => GameSettings.Instance.GetEnemyPrefab<T>().Spawn(position, Quaternion.identity);
 }

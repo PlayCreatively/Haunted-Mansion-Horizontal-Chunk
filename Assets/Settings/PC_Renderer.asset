@@ -153,12 +153,13 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: 6393048556901642476}
+  - {fileID: 3641208691275212950}
   - {fileID: -1994492371376025807}
   - {fileID: -3841028115270028692}
   - {fileID: -2038415127201941332}
   - {fileID: 456169209711766863}
   - {fileID: 1959771699065503973}
-  m_RendererFeatureMap: ad6b866f10d7b46cec30f269caabb85831cfe768c12352e46cb20aa147edb1caac7858e63d18b6e34f2d57b67aa35406e5c0a91bfa81321b
+  m_RendererFeatureMap: ad6b866f10d7b46cec30f269caabb85896288644032c883231cfe768c12352e46cb20aa147edb1caac7858e63d18b6e34f2d57b67aa35406e5c0a91bfa81321b
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -246,6 +247,48 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &3641208691275212950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: TransparentObjectScrolling
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: TransparentObjectScrolling
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 5376
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 15929619a48c0544998c604a46eaf79c, type: 2}
+    overrideMaterialPassIndex: 1
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &6393048556901642476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,11 +299,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: ObjectScrollingTexture
+  m_Name: OpaqueObjectScrollingTexture
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: ObjectScrollingTexture
+    passTag: OpaqueObjectScrollingTexture
     Event: 500
     filterSettings:
       RenderQueueType: 0
@@ -268,7 +311,7 @@ MonoBehaviour:
         serializedVersion: 2
         m_Bits: 5376
       PassNames: []
-    overrideMaterial: {fileID: -876546973899608171, guid: ba413b4330bc92844955d1395dcd7cc7, type: 3}
+    overrideMaterial: {fileID: 2100000, guid: 15929619a48c0544998c604a46eaf79c, type: 2}
     overrideMaterialPassIndex: 1
     overrideShader: {fileID: 0}
     overrideShaderPassIndex: 0

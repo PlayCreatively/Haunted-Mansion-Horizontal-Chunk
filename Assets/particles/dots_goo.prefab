@@ -86,7 +86,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -109,12 +109,24 @@ PrefabInstance:
       value: 6.283185
       objectReference: {fileID: 0}
     - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.8421725
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.5566037
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: ClampVelocityModule.magnitude.scalar
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: InitialModule.gravityModifier.scalar
-      value: 0.0006
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4704852840847573400, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: InitialModule.startSpeed.minMaxState
@@ -314,7 +326,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: deb6d01f6f8240e4c9abc95cb6f43ec6, type: 2}
     - target: {fileID: 6653321030298383096, guid: 97cb7e0014b7b904e89c6173141d72f6, type: 3}
       propertyPath: m_Name
-      value: dots
+      value: dots_goo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

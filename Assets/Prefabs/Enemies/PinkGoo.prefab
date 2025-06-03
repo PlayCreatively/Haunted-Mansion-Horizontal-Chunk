@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plaster: {fileID: 7967223576613897600}
+  hitParticlesPrefab1: {fileID: 1826992442530650226, guid: adbe80c8d2d682943afccd91ff2c3754, type: 3}
+  hitParticlesPrefab2: {fileID: 0}
+  hitParticlesDuration: 2
   enemyType: 3
   resourceDrop: {fileID: 2513014634330291281, guid: 36f4e134b5e14c541b8c6befdb47b715, type: 3}
 --- !u!54 &3923314876375813597

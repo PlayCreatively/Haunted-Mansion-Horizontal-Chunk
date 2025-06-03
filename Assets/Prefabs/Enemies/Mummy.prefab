@@ -75,6 +75,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plaster: {fileID: 437388018169245910}
+  hitParticlesPrefab1: {fileID: 1826992442530650226, guid: a21b42dd788f31f439191d6a0580f5fa, type: 3}
+  hitParticlesPrefab2: {fileID: 0}
+  hitParticlesDuration: 2
   enemyType: 0
   resourceDrop: {fileID: -7235903851819569586, guid: badca6beb724cdc4592a4064a30817e8, type: 3}
   moveCurve:
@@ -174,6 +177,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speedMultiplier: 0.65
+  visionRadius: 4
 --- !u!136 &2430939379012978197
 CapsuleCollider:
   m_ObjectHideFlags: 0

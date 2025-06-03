@@ -56,7 +56,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0
-    - _TileY: 0
+    - _TileY: 1
     - _Tiling: 1
     m_Colors:
     - _Offset: {r: 0, g: 1, b: 0, a: 0}

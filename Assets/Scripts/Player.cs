@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     ParticleSystem[] dashParticles;
     ParticleSystem[] walkParticles;
     ParticleSystem[] sparkParticles;
- 
+    ParticleSystem[] landingParticles;
     Vector3 moveInput;
     bool grounded;
     private bool wasRunBoosting = false;
@@ -57,7 +57,9 @@ public class Player : MonoBehaviour
         Assert.IsNotNull(visuals, $"child named Visuals missing in {name}");
         walkParticles = visuals.GetChild(0).GetComponentsInChildren<ParticleSystem>();
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
+        landingParticles = visuals.GetChild(4).GetComponentsInChildren<ParticleSystem>();
         sparkParticles = visuals.GetChild(5).GetComponentsInChildren<ParticleSystem>();
+        
     }
 
     void SetUpController()
@@ -345,6 +347,15 @@ public class Player : MonoBehaviour
 
         if (grounded)
         {
+            if (airTime > .6f)
+            {
+                foreach (var particle in landingParticles)
+                {
+                    particle.Play();
+                }
+
+            }
+            
             if (airTime > .7f)
             {
                 boostRunEnergy = boostRunDuration;
@@ -392,7 +403,7 @@ public class Player : MonoBehaviour
 // Handle continuous boost trail emission
 if (isRunBoosting && !wasRunBoosting)
 {
-    // Just started boosting — start emitting trail
+    
     foreach (var trail in sparkParticles)
     {
         trail.Play();
@@ -400,7 +411,6 @@ if (isRunBoosting && !wasRunBoosting)
 }
 else if (!isRunBoosting && wasRunBoosting)
 {
-    // Just stopped boosting — stop emitting trail
     foreach (var trail in sparkParticles)
     {
         trail.Stop();

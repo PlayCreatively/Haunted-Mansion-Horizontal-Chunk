@@ -1,4 +1,5 @@
 using GameManagers;
+using MotionUtils;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -19,7 +20,8 @@ public class NightShiftManager : MonoBehaviour
         shiftComplete.gameObject.SetActive(false);
         shiftScore.gameObject.SetActive(false);
         pointsFromX.gameObject.SetActive(false);
-        countDown.transform.parent.gameObject.SetActive(true);
+        var clock = countDown.transform.parent as RectTransform;
+        clock.gameObject.SetActive(false);
 
         const float panTime = 1.5f, duration = .5f;
         var shiftData = ShiftData.Instance;
@@ -28,11 +30,20 @@ public class NightShiftManager : MonoBehaviour
         yield return ShowText(shiftScore, shiftData.ShiftScore.ToString(), panTime, duration);
         yield return ShowText(pointsFromX, "x,x", panTime, duration);
 
+        const int countDownDuration = 5;
+
         var directionalLight = GameObject.Find("Directional Light").GetComponent<Light>();
-        yield return new Timer(2f).GetRoutine(a =>
-        {
-            directionalLight.colorTemperature = Mathf.Lerp(20000, 1500f, a);
-        });
+        var sunsetRoutine = new Timer(countDownDuration).GetRoutine(a => directionalLight.colorTemperature = Mathf.Lerp(20000, 1500f, a));
+        StartCoroutine(sunsetRoutine);
+
+        clock.gameObject.SetActive(true);
+        countDown.text = countDownDuration.ToString();
+        yield return new Timer(panTime).GetMoveRoutine(new Vector3(clock.anchoredPosition.x, -1000), clock.anchoredPosition, pos => clock.anchoredPosition = pos);
+
+        yield return CountDown(countDownDuration);
+
+        yield return new Timer(panTime).GetMoveRoutine(clock.anchoredPosition, new Vector3(clock.anchoredPosition.x, -1000), pos => clock.anchoredPosition = pos);
+
 
         dynamicCamera.enabled = true;
 
@@ -51,5 +62,24 @@ public class NightShiftManager : MonoBehaviour
             rect.anchoredPosition = new Vector2(-1000f * aInverse, rect.anchoredPosition.y);
         });
         yield return new WaitForSeconds(duration);
+    }
+
+    IEnumerator CountDown(int duration)
+    {
+        while (duration >= 0)
+        {
+            countDown.StartCoroutine(Spring.StepRoutine(30f, .15f, a =>
+            {
+                countDown.transform.parent.localEulerAngles = new Vector3(0, 0, a * 45);
+            }, 0, 0, 15));
+
+            if(duration != 0)
+                countDown.text = duration.ToString();
+            else
+                countDown.text = "GO!";
+
+            yield return new WaitForSeconds(1f);
+            duration--;
+        }
     }
 }

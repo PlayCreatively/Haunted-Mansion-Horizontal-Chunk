@@ -122,7 +122,7 @@ public static class ExtensionMethods
         carriable.StartCoroutine(thenDestroy);
     }
 
-    static IEnumerator WaitForAll(params IEnumerator[] routines)
+    public static IEnumerator WaitForAll(params IEnumerator[] routines)
     {
         bool running = true;
 

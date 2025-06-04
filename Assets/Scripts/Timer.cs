@@ -47,6 +47,17 @@ public struct Timer
         }
     }
 
+    public readonly IEnumerator GetMoveRoutine(Vector3 fromPos, Vector3 toPos, Action<Vector3> action)
+    {
+        while (!Finished)
+        {
+            var a = Normal;
+            a = -2f * a * a + 3f * a * a * a; // Smoothstep
+            action.Invoke(Vector3.Slerp(fromPos, toPos, a));
+            yield return null;
+        }
+    }
+
     public readonly IEnumerator GetSpringRoutine(float angularFrequency, float dampingRatio, Action<float> action)
     {
         float position = 0, velocity = 0;

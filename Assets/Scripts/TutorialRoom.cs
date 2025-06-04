@@ -22,18 +22,6 @@ public class TutorialRoom : MonoBehaviour, IRoom
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
     }
-    int _urgencyState = 0;
-    int UrgencyState
-    {
-        get => _urgencyState;
-        set
-        {
-            if (_urgencyState == value) return;
-            _urgencyState = value;
-            //roomUI.OnUrgencyUpdated(value);
-            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx();
-        }
-    }
 
     bool isDirty = false;
     public RoomState state;
@@ -94,7 +82,6 @@ public class TutorialRoom : MonoBehaviour, IRoom
     [ContextMenu("Clean")]
     public void Clean()
     {
-        UrgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         shineAnimator.Play("GlassAnimation", 0, 0f);
@@ -120,8 +107,6 @@ public class TutorialRoom : MonoBehaviour, IRoom
 
     public void CheckIn()
     {
-        UrgencyState = 0;
-
         Debug.Log($"{gameObject.name} checked in", gameObject);
 
         if(isDirty)

@@ -39,18 +39,7 @@ public class Room : MonoBehaviour, IRoom
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
     }
-    int _urgencyState = 0;
-    int UrgencyState
-    {
-        get => _urgencyState;
-        set
-        {
-            if (_urgencyState == value) return;
-            _urgencyState = value;
-            //roomUI.OnUrgencyUpdated(value);
-            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx();
-        }
-    }
+    int urgencyState = 0;
 
     bool isDirty = false;
     public RoomState state = RoomState.Occupied;
@@ -148,7 +137,7 @@ public class Room : MonoBehaviour, IRoom
     public void Clean()
     {
         RoomManager.CleanedRoomsCount++;
-        UrgencyState = 0;
+        urgencyState = 0;
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         shineAnimator.Play("GlassAnimation", 0, 0f);

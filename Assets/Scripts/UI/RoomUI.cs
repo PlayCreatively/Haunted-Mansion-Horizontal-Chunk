@@ -8,6 +8,7 @@ public class RoomUI : MonoBehaviour
 {
     public IRoom room;
     public Image roomArrowUI;
+    public TextMeshProUGUI roomArrowTimerUI;
     public GameObject bookingUI;
     public ResourceRequirementsUI[] resourceRequirementsUI;
     public TextMeshProUGUI bookingTimeUI;
@@ -16,10 +17,13 @@ public class RoomUI : MonoBehaviour
     public GameObject requirementsParent;
     //public GameObject bookedIconUI;
     int priority = 0;
+    bool isUrgent = false;
+    const int UrgentTime = 15;
 
     void Awake()
     {
         bookingTimeUI = bookingUI.GetComponentInChildren<TextMeshProUGUI>(true);
+        roomArrowTimerUI = roomArrowUI.GetComponentInChildren<TextMeshProUGUI>(true);
     }
 
     public void AssignRoom(IRoom room)
@@ -46,10 +50,12 @@ public class RoomUI : MonoBehaviour
 
         var color = bookingPriorityColors[priority];
         roomArrowUI.color = color;
+        roomArrowTimerUI.faceColor = color;
         bookingTimeUI.faceColor = color;
         Color darkerShade = color * .3f;
         darkerShade.a = 1f;
         bookingTimeUI.outlineColor = darkerShade;
+        roomArrowTimerUI.outlineColor = darkerShade;
     }
 
     public Vector2 GetRoomPosInScreenSpace() => Camera.main.WorldToScreenPoint(room.Transform.position + room.UIOffset.XZ());
@@ -86,6 +92,9 @@ public class RoomUI : MonoBehaviour
         dif /= 200f;
 
         roomArrowUI.rectTransform.localScale = new Vector2(dif, dif);
+
+        if(isUrgent)
+            roomArrowTimerUI.text = bookingTimeUI.text;
     }
 
     float GetUrgencySine(int urgency, float magnitude = .5f)
@@ -124,5 +133,18 @@ public class RoomUI : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
 
         bookingTimeUI.text = $"{minutes:D2}:{seconds:D2}";
+
+        if(!isUrgent && time < UrgentTime)
+        {
+            isUrgent = true;
+            roomArrowTimerUI.gameObject.SetActive(true);
+            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(true);
+        }
+        else if (isUrgent && time > UrgentTime)
+        {
+            isUrgent = false;
+            roomArrowTimerUI.gameObject.SetActive(false);
+            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(false);
+        }
     }
 }

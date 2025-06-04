@@ -29,8 +29,8 @@ public class Player : MonoBehaviour
     Vector3 moveInput;
     bool grounded;
     private bool wasRunBoosting = false;
-    float dashValue = 0.5f;
-    float jumpSquash = 0.5f;
+    float dashValue = 0f;
+    float jumpSquash = 0f;
     bool stunned;
     const float boostRunDuration = 1f;
     float boostRunEnergy = 0;

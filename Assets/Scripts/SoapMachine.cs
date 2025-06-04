@@ -100,7 +100,6 @@ public class SoapMachine : MonoBehaviour, IInteractable
 
     void SpawnSoap()
     {
-        FMODAudioManager.Instance.TriggerSoapBarDoneSfx();
         var spawnedSoap = soapPrefab.Spawn(spawnPoint.position, spawnPoint.rotation, .1f);
         spawnedSoap.SetVelocity((spawnPoint.right + Vector3.up) * 3f);
     }

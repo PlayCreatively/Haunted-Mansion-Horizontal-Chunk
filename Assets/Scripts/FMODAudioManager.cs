@@ -32,7 +32,7 @@ public class FMODAudioManager : MonoBehaviour
         EventInstance gameOverInstance; //Rename where needed!
         EventInstance runningOutOfTimeInstance;
         EventInstance laundryDoneInstance;
-        EventInstance soapBarDoneInstance;
+        EventInstance laundryStartInstance;
     #endregion
     #region RoomSFXInstances
         EventInstance roomCleanedInstance;
@@ -86,7 +86,7 @@ public class FMODAudioManager : MonoBehaviour
                 roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
                 runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ticktack");
                 laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
-                soapBarDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/soap bar done");
+                laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
 
                 #endregion
     }
@@ -187,8 +187,7 @@ public class FMODAudioManager : MonoBehaviour
         }
         //Plays a laundry done SFX. No parameter
         public void TriggerLaundryDoneSfx() => laundryDoneInstance.start();
-        //Plays a soap bar done SFX. No parameter
-        public void TriggerSoapBarDoneSfx() => soapBarDoneInstance.start();
+        public void TriggerLaundryStartSfx() => laundryStartInstance.start();
     #endregion
     public void TriggerLandingOnEnemySfx(EnemyType type, int hp) 
     {
@@ -232,8 +231,8 @@ public class FMODAudioManager : MonoBehaviour
                 runningOutOfTimeInstance.release();
                 laundryDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 laundryDoneInstance.release();
-                soapBarDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                soapBarDoneInstance.release();
+                laundryStartInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                laundryStartInstance.release();
         #endregion
         #region LandingOnEnemiesDestroys
                 landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

@@ -31,7 +31,7 @@ public class TutorialRoom : MonoBehaviour, IRoom
             if (_urgencyState == value) return;
             _urgencyState = value;
             //roomUI.OnUrgencyUpdated(value);
-            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(value);
+            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx();
         }
     }
 

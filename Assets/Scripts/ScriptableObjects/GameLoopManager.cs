@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +11,10 @@ namespace GameManagers
     {
         [HideInInspector]
         public Canvas canvas;
+        [HideInInspector]
+        public TextMeshProUGUI shiftScoreUI;
         
-        ShiftData ShiftData;
+        ShiftData shiftData;
 
         void Awake()
         {
@@ -18,19 +22,20 @@ namespace GameManagers
 
             _instance = this;
 
-            ShiftData = ShiftData.Instance;
+            shiftData = ShiftData.Instance;
 
-            canvas = FindFirstObjectByType<Canvas>();
+            canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+            shiftScoreUI = canvas.transform.Find("ShiftScore").GetComponent<TextMeshProUGUI>();
         }
 
         void Start()
         {
-            ShiftData.StartNewShift();
+            shiftData.StartNewShift();
         }
 
         void Update()
         {
-            ShiftData.UpdateShiftTime(Time.deltaTime);
+            shiftData.UpdateShiftTime(Time.deltaTime);
         }
 
         static GameLoopManager _instance;

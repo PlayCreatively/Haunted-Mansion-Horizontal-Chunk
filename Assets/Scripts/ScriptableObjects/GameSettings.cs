@@ -104,8 +104,14 @@ namespace GameManagers
 
         }
 
-        public static void ToNightShift()
+        public static async void ToNightShift(float delay)
         {
+            while(delay > 0f)
+            {
+                delay -= Time.unscaledDeltaTime;
+                await System.Threading.Tasks.Task.Yield();
+            }
+
             Time.timeScale = 1f;
 
             SceneTransition(() =>

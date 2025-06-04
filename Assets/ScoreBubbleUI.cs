@@ -1,7 +1,9 @@
 using GameManagers;
+using MotionUtils;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class ScoreBubbleUI : MonoBehaviour
 {
@@ -28,8 +30,20 @@ public class ScoreBubbleUI : MonoBehaviour
 
     IEnumerator DisplayRoutine(int score, Vector3 position)
     {
+        Vector3 offset = new Vector3(0, 0, 0);
+        void MoveUp()
+        {
+            offset += Time.deltaTime * Vector3.up;
+            transform.localPosition += offset;
+        }
+
+        Spring spring = new(1f, 14f, .3f)
+        {
+            position = 0
+        };
+
         Camera mainCamera = Camera.main;
-        yield return new Timer(5).GetSpringRoutine(14f, .2f, 8f, a =>
+        yield return new Timer(.3f).GetRoutine(a =>
         {
             if (mainCamera == null)
             {
@@ -38,12 +52,93 @@ public class ScoreBubbleUI : MonoBehaviour
                 return;
             }
 
-            transform.localScale = (a * Vector3.one);
-            transform.position = mainCamera.WorldToScreenPoint(position);
-            transform.rotation = Quaternion.Euler(0, 0, (a * 180f) - 180f);
+            spring.Step(Time.deltaTime);
+            transform.localScale = spring.position * Vector3.one;
 
-            textMesh.text = score.ToString();
+            float powA = a * a;
+
+            //textMesh.color = new Color(1f, 1f, 1f, powA);
+
+            transform.position = mainCamera.WorldToScreenPoint(position);
+            MoveUp();
+
+            textMesh.text = (score * powA).ToString("0");
         });
+
+
+        yield return new Timer(.4f).GetRoutine(a =>
+        {
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("Main camera not found. Score bubble will not be displayed.");
+                Destroy(gameObject);
+                return;
+            }
+            transform.position = mainCamera.WorldToScreenPoint(position);
+
+            spring.Step(Time.deltaTime);
+            transform.localScale = spring.position * Vector3.one;
+
+
+        });
+        var shiftScoreUI = GameLoopManager.Instance.shiftScoreUI;
+        float originalRotation = transform.localEulerAngles.z;
+
+        //spring = new(1f, 8f, .3f)
+        //{
+        //    position = 0,
+        //    velocity = 0
+        //};
+
+        yield return new Timer(.15f).GetRoutine(a =>
+        {
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("Main camera not found. Score bubble will not be displayed.");
+                Destroy(gameObject);
+                return;
+            }
+
+            spring.Step(Time.deltaTime);
+
+            float aPow = a * a;
+
+            float targetRotation = (-transform.position + shiftScoreUI.transform.position).z + 90;
+            transform.localEulerAngles = Mathf.Lerp(originalRotation, targetRotation, aPow) * Vector3.forward;
+            transform.localPosition -= 1800f * Time.deltaTime * (1f - aPow) * transform.up;
+        });
+        transform.up = -transform.position + shiftScoreUI.transform.position;
+
+        yield return Spring.StepRoutine(transform.position, -transform.up * 1f, shiftScoreUI.transform.position, 3f, .0f, (a, data) =>
+        {
+            (Vector2 pos, Vector2 vel) = data;
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("Main camera not found. Score bubble will not be displayed.");
+                Destroy(gameObject);
+                return;
+            }
+
+            float powA = a * a * a;
+
+            transform.position = pos;
+            transform.Squash(Mathf.Lerp(vel.magnitude, 1f, .3f));
+            transform.localScale *= (1f - a);
+        });
+
+        float prevScore = ShiftData.Instance.ShiftScore - score;
+        Debug.Log($"{GameLoopManager.Instance.shiftScoreUI}", GameLoopManager.Instance.shiftScoreUI);
+
+        shiftScoreUI.StartCoroutine(new Timer(score * .05f).GetRoutine(a =>
+        {
+            GameLoopManager.Instance.shiftScoreUI.text = (prevScore + score * a).ToString("0");
+        }));
+
+        float initFontSize = shiftScoreUI.fontSize;
+        shiftScoreUI.StartCoroutine(Spring.StepRoutine(18f, .2f, a =>
+        {
+            GameLoopManager.Instance.shiftScoreUI.fontSize = initFontSize * a;
+        }, 1.2f, 1f, 8f));
 
         Destroy(gameObject);
     }

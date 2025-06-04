@@ -30,9 +30,11 @@ namespace GameManagers
         Room.Requirements[] currentShiftBookingRequirements;
         int currentShiftMaxConcurrentBookings = 0;
 
-        //// SCORING DATA ////
-        int currentScore = 0;
+        //// SCORING DATA - SHIFT ////
+        int shiftScore;
         int roomsCleanedCount = 0;
+        //// SCORING DATA - GLOBAL ////
+        int totalScore;
 
         void OnEnable()
         {
@@ -46,7 +48,7 @@ namespace GameManagers
         public float TimeIntoShiftAlpha => currentTimeIntoShift / shiftDuration;
         public int CurrentBookingCount => GetBookingCount(currentShift);
         public event Action<int> OnShiftEnd;
-        public int CurrentScore => currentScore;
+        public int ShiftScore => shiftScore;
         public int CalculateTimeBonus(float timeLeft) => Mathf.RoundToInt(timeLeft * .1f);
         public int CalculatePerResourceBonus(CarriableType resourceType) => resourceType switch
         {
@@ -70,15 +72,16 @@ namespace GameManagers
         }
 
         //// PUBLIC API ////
-        public void AddCleanedRoom(Room room, float timeLeft, Room.Requirements requirements)
+        public void AddCleanedRoom(Room room, float timeLeft, Room.Requirements requirements, CarriableType lastResource)
         {
             roomsCleanedCount++;
 
             int deltaScore = 0;
             deltaScore += CalculateTimeBonus(timeLeft);
             deltaScore += CalculateCumulativeRequirementsBonus(requirements);
+            deltaScore += CalculatePerResourceBonus(lastResource);
 
-            currentScore += deltaScore;
+            shiftScore += deltaScore;
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
         }
@@ -86,7 +89,7 @@ namespace GameManagers
         public void AddResourceDelivered(Room room, CarriableType resourceType)
         {
             int deltaScore = CalculatePerResourceBonus(resourceType);
-            currentScore += deltaScore;
+            shiftScore += deltaScore;
             
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
         }
@@ -102,6 +105,9 @@ namespace GameManagers
         (Room room, Room.Requirements requirements, bool done)[] bookingShiftSequence;
         internal void StartNewShift()
         {
+            totalScore += shiftScore;
+            shiftScore = 0;
+
             currentTimeIntoShift = 0f;
 
             AddResourceAndBooking(ref bookingRequirementCountPerShift, CurrentShift);
@@ -185,12 +191,12 @@ namespace GameManagers
         internal void UpdateShiftTime(float deltaTime)
         {
             currentTimeIntoShift += deltaTime;
-            if (currentTimeIntoShift >= shiftDuration || AreAllBookingsCompleted)
+            if ((currentTimeIntoShift >= shiftDuration || AreAllBookingsCompleted))
             {
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
-                Game.ToNightShift();
-                Destroy(GameLoopManager.Instance.gameObject);
+                Game.ToNightShift(4);
+                GameLoopManager.Instance.gameObject.SetActive(false);
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
@@ -230,6 +236,10 @@ namespace GameManagers
             currentShiftMaxConcurrentBookings = 0;
             for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
                 bookingRequirementCountPerShift[i] = 0;
+
+            shiftScore = 0;
+            roomsCleanedCount = 0;
+            totalScore = 0;
         }
 
         Room.Requirements[] GetRequirementsForShift(int[] bookingRequirementCountPerShift)

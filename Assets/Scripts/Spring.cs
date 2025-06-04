@@ -3,10 +3,31 @@
 // Source derivation: https://www.ryanjuckett.com/damped-springs/
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace MotionUtils
 {
+    public readonly struct SpringData<T> where T : struct
+    {
+        readonly T position;
+        readonly T velocity;
+
+        public SpringData(T position, T velocity)
+        {
+            this.position = position;
+            this.velocity = velocity;
+        }
+
+        public (T position, T velocity) Unwrap() => (position, velocity);
+
+        public void Deconstruct(out T position, out T velocity)
+        {
+            position = this.position;
+            velocity = this.velocity;
+        }
+    }
+
     public class Spring
     {
         public float position, velocity; // Current position and velocity of the spring
@@ -30,6 +51,47 @@ namespace MotionUtils
             var coefficients = DampedSpring.CalcCoefficients(dt, angularFrequency, dampingRatio);
             // Update position and velocity using the coefficients
             DampedSpring.Step(ref position, ref velocity, equilibrium, coefficients);
+        }
+
+
+        public static IEnumerator StepRoutine(Vector2 startPos, Vector2 initVelocity, Vector2 equilibrium, float angularFrequency, float dampingRatio, Action<float, SpringData<Vector2>> action)
+        {
+            Vector2 position = startPos;
+            float startDist = Vector2.Distance(startPos, equilibrium);
+            position /= startDist;
+            equilibrium /= startDist;
+
+            Vector2 velocity = initVelocity + (equilibrium - position) * .1f;
+
+            float a = 0f;
+            while (a < .95f)
+            {
+                // Calculate coefficients for the current step
+                var coefficients = DampedSpring.CalcCoefficients(Time.deltaTime, angularFrequency, dampingRatio);
+                // Update position and velocity using the coefficients
+                DampedSpring.Step(ref position, ref velocity, equilibrium, coefficients);
+
+                a = 1f - Mathf.Clamp01(Vector2.Distance(position, equilibrium));
+                action(a, new SpringData<Vector2>(position * startDist, velocity));
+                yield return null;
+            }
+        }
+
+        public static IEnumerator StepRoutine(float angularFrequency, float dampingRatio, Action<float> action, float startPos = 0, float equilibrium = 1, float initVelocity = 0)
+        {
+            float position = startPos;
+            float lastVelocity = initVelocity;
+
+            while (MathF.Abs(position - equilibrium) > 0.01f || initVelocity > 0.01f || MathF.Abs(lastVelocity - initVelocity) > 0.01f)
+            {
+                // Calculate coefficients for the current step
+                var coefficients = DampedSpring.CalcCoefficients(Time.deltaTime, angularFrequency, dampingRatio);
+                // Update position and velocity using the coefficients
+                lastVelocity = initVelocity;
+                DampedSpring.Step(ref position, ref initVelocity, equilibrium, coefficients);
+                action(position);
+                yield return null;
+            }
         }
     }
 

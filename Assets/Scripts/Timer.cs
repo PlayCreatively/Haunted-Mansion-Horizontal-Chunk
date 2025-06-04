@@ -47,7 +47,7 @@ public struct Timer
         }
     }
 
-    public readonly IEnumerator GetSpringRoutine(float angularFrequency, float dampingRatio, float waitTime, Action<float> action)
+    public readonly IEnumerator GetSpringRoutine(float angularFrequency, float dampingRatio, Action<float> action)
     {
         float position = 0, velocity = 0;
         while (!Finished)

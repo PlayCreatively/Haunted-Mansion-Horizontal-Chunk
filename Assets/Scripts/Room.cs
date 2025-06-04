@@ -35,7 +35,7 @@ public class Room : MonoBehaviour, IRoom
             //    UrgencyState = 2;
             //else if(UrgencyState < 1 && _bookedTime < 30f)
             //    UrgencyState = 1;
-            
+
             roomUI.UpdateBookingTimeUI(_bookedTime);
         }
     }
@@ -55,6 +55,7 @@ public class Room : MonoBehaviour, IRoom
     bool isDirty = false;
     public RoomState state = RoomState.Occupied;
     public Requirements requirements;
+    Requirements initialRequirements;
     public int unlockShift = 0;
     public bool IsLocked => unlockShift > ShiftData.Instance.CurrentShift;
 
@@ -103,7 +104,7 @@ public class Room : MonoBehaviour, IRoom
 
     void Start()
     {
-        if(ShiftData.Instance.CurrentShift < unlockShift)
+        if (ShiftData.Instance.CurrentShift < unlockShift)
         {
             LockRoom();
             enabled = false;
@@ -126,12 +127,12 @@ public class Room : MonoBehaviour, IRoom
 
     void Update()
     {
-        if(state == RoomState.Booked)
+        if (state == RoomState.Booked)
         {
             BookedTime -= Time.deltaTime;
-            if (BookedTime <= 0) CheckIn(); 
+            if (BookedTime <= 0) CheckIn();
         }
-        
+
     }
 
     public bool IsClean => !isDirty;
@@ -151,7 +152,6 @@ public class Room : MonoBehaviour, IRoom
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         shineAnimator.Play("GlassAnimation", 0, 0f);
-        ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements);
 
         isDirty = false;
 
@@ -176,6 +176,7 @@ public class Room : MonoBehaviour, IRoom
         state = RoomState.Booked;
         isDirty = true;
         this.requirements = requirements;
+        initialRequirements = requirements;
         OnRequirementsChange?.Invoke(requirements);
 
         Debug.Log($"{gameObject.name} booked", gameObject);
@@ -190,7 +191,7 @@ public class Room : MonoBehaviour, IRoom
     {
         //Debug.Log($"{gameObject.name} checked in", gameObject);
 
-        if(isDirty)
+        if (isDirty)
         {
             //Clean(); // REMOVE FOR PLAYTEST
             //return;
@@ -218,12 +219,15 @@ public class Room : MonoBehaviour, IRoom
 
             if (requirements.IsFulfilled())
             {
+                ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements, type);
+
                 //Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
                 Clean();
             }
-            else if(enter)
+            else if (enter)
             {
-                ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements);
+                ShiftData.Instance.AddResourceDelivered(this, type);
+
                 FMODAudioManager.Instance.TriggerResourcePlacedInRoom();
             }
         }
@@ -269,7 +273,7 @@ public class Room : MonoBehaviour, IRoom
         {
             (int minAmount, int maxAmount, int minTypes, int maxTypes) = GameSettings.Instance.requirementSettings;
 
-            Requirements requirements = new(0,0,0,0);
+            Requirements requirements = new(0, 0, 0, 0);
 
             int resourceCount = Random.Range(minAmount, maxAmount + 1);
 
@@ -283,7 +287,7 @@ public class Room : MonoBehaviour, IRoom
         }
         public static Requirements CreateRandom(int count)
         {
-            Requirements requirements = new(0,0,0,0);
+            Requirements requirements = new(0, 0, 0, 0);
 
             for (int i = 0; i < count; i++)
             {

@@ -41,7 +41,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3777494443208251738}
   serializedVersion: 8
-  lengthInSec: 0.3
+  lengthInSec: 0.05
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -116,7 +116,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 0.37
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -2083,7 +2083,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 2.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2692,7 +2692,7 @@ ParticleSystem:
     drag:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 3
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4932,7 +4932,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8140593656526803709}
   serializedVersion: 8
-  lengthInSec: 0.3
+  lengthInSec: 0.05
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -4941,7 +4941,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -5007,7 +5007,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 0.37
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -6974,7 +6974,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 2.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -7583,7 +7583,7 @@ ParticleSystem:
     drag:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 3
       minScalar: 0
       maxCurve:
         serializedVersion: 2

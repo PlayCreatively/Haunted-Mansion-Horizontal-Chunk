@@ -134,8 +134,9 @@ public class Player : MonoBehaviour
 
     void MoveInput(InputAction.CallbackContext ctx)
     {
-        if (ctx.canceled)
+        if (ctx.phase == InputActionPhase.Canceled)
         {
+            Debug.Log("stopped");
             moveInput = Vector3.zero;
             animator.SetFloat("Speed", 0);
             return;

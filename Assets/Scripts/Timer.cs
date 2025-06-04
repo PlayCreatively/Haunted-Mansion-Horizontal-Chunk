@@ -42,8 +42,8 @@ public struct Timer
     {
         while (!Finished)
         {
-            yield return null;
             action.Invoke(Normal);
+            yield return null;
         }
     }
 

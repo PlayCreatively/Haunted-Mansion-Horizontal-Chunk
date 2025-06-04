@@ -131,7 +131,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
             isLaundering = true;
             StartCoroutine(LaunderingRoutine(currentItem - 4));
         }
-
+        FMODAudioManager.Instance.TriggerResourcePlacedInMachine();
         return successful;
     }
 
@@ -148,6 +148,7 @@ public class LaundryMashine : MonoBehaviour, IInteractable
 
         if (!allowedLaundry.IsInMask(type)) return;
 
+        FMODAudioManager.Instance.TriggerResourcePlacedInMachine();
         currentItem = type;
         dirtyLaundryVisual.material = dirtyLaundryMat[(int)type - 5];
         dirtyLaundryVisual.enabled = true;

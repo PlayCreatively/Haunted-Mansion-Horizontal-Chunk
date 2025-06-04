@@ -39,6 +39,8 @@ public class FMODAudioManager : MonoBehaviour
         EventInstance roomCheckInInstance; 
         EventInstance roomBookedInstance;
         EventInstance resourcePlacedInRoomInstance;
+        EventInstance resourcePlacedInMachineInstance;
+
     #endregion
     
     void Awake()
@@ -80,6 +82,7 @@ public class FMODAudioManager : MonoBehaviour
                 roomCheckInInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room check in");
                 roomBookedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room booked");
                 resourcePlacedInRoomInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/resource placed in the room");
+                resourcePlacedInMachineInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/resource placed in the machine");
                 roomCleanedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room cleaned");
                 runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ticktack");
                 laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
@@ -158,6 +161,8 @@ public class FMODAudioManager : MonoBehaviour
         //Plays room booked SFX. No parameter
         public void TriggerRoomBookedSfx() => roomBookedInstance.start();
         public void TriggerResourcePlacedInRoom() => resourcePlacedInRoomInstance.start();
+        public void TriggerResourcePlacedInMachine() => resourcePlacedInMachineInstance.start();
+
         public void TriggerRoomCheckInSfx() => roomCheckInInstance.start();
     #endregion
     #region ENVIRONMENTSFX
@@ -215,6 +220,8 @@ public class FMODAudioManager : MonoBehaviour
                 roomBookedInstance.release();
                 resourcePlacedInRoomInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 resourcePlacedInRoomInstance.release();
+                resourcePlacedInMachineInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                resourcePlacedInMachineInstance.release();
                 roomCleanedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 roomCleanedInstance.release();
                 bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

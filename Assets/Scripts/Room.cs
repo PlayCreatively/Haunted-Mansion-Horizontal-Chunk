@@ -200,7 +200,7 @@ public class Room : MonoBehaviour, IRoom
             enabled = false;
             return;
         }
-
+        FMODAudioManager.Instance.TriggerRoomCheckInSfx();
         state = RoomState.Occupied;
         lockableRoom.SetFogCeilingActive(true);
 

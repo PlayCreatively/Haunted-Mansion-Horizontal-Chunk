@@ -295,7 +295,11 @@ public class Player : MonoBehaviour
     public void Jump(float force = 1f)
     {
         if (!grounded) // means the player landed on an enemy
+        {
+            foreach (var particle in landingParticles)
+                particle.Play();
             boostRunEnergy = boostRunDuration;
+        }
 
         var velocity = rb.linearVelocity;
         velocity.y = GameSettings.Instance.playerJumpForce * force;
@@ -348,18 +352,11 @@ public class Player : MonoBehaviour
 
         if (grounded)
         {
-            if (airTime > .6f)
-            {
-                foreach (var particle in landingParticles)
-                {
-                    particle.Play();
-                }
-
-            }
-            
             if (airTime > .7f)
             {
                 boostRunEnergy = boostRunDuration;
+                foreach (var particle in landingParticles)
+                    particle.Play();
             }
             airTime = 0;
         }

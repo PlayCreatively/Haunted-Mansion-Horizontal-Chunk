@@ -18,7 +18,11 @@
     ],
     "m_Keywords": [],
     "m_Dropdowns": [],
-    "m_CategoryData": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "5dc9b226536b4a1cb60b0c656ac11c4f"
+        }
+    ],
     "m_Nodes": [
         {
             "m_Id": "75ef5923b57143939efc38af30bb727f"
@@ -985,6 +989,27 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "44934936e89b45308b96b81503fde2e7",
+    "m_Id": 1,
+    "m_DisplayName": "UV",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "UV",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "4595dd96500e4bacb59915d29c458efd",
     "m_Id": 3,
     "m_DisplayName": "Out",
@@ -1149,6 +1174,27 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "5dc9b226536b4a1cb60b0c656ac11c4f",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "16050884405945859676467aa669ac48"
+        },
+        {
+            "m_Id": "2c7fc998c38c49d9a803b7024666d5b5"
+        },
+        {
+            "m_Id": "415c97a823464e57ac1d980c2e77b725"
+        },
+        {
+            "m_Id": "97b3b614be3e46b19e86d4e9b046a472"
+        }
+    ]
 }
 
 {
@@ -1319,7 +1365,7 @@
     },
     "m_Slots": [
         {
-            "m_Id": "a8645588d771451e9df6effce2eac794"
+            "m_Id": "44934936e89b45308b96b81503fde2e7"
         }
     ],
     "synonyms": [],
@@ -1809,27 +1855,6 @@
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
-    "m_ObjectId": "a8645588d771451e9df6effce2eac794",
-    "m_Id": 1,
-    "m_DisplayName": "Out_Vector2",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "OutVector2",
-    "m_StageCapability": 3,
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
-    },
     "m_Labels": []
 }
 

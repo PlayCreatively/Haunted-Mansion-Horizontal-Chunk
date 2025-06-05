@@ -81,7 +81,7 @@ Material:
     - Vector2_230FF287: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_3BF8CC3C: {r: 0.001, g: 0.005, b: 0, a: 0}
     - Vector2_3F991457: {r: 0.001, g: 0.01, b: 0, a: 0}
-    - Vector2_402BFE03: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_402BFE03: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _Color: {r: 1, g: 0.0470588, b: 0, a: 1}
     - _Color_1: {r: 0, g: 1, b: 0.10293556, a: 1}
     - _Vector2: {r: 4, g: 4, b: 0, a: 0}

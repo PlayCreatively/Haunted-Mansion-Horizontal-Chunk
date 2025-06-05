@@ -205,6 +205,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ghost_eyes
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 97704d50250f43948b8759c5ad0d489f, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -270,6 +274,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
       propertyPath: m_Name
       value: SM_PLASTER_GHOST
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: beda0e39d16f2d34aa3919738b4b07f3, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -353,6 +361,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6101b8fc36c3bc94d8e9c02b8013a9b8, type: 3}
       propertyPath: m_Name
       value: ghost_body
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6101b8fc36c3bc94d8e9c02b8013a9b8, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -285,6 +285,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 76089a3e209697348bd6c3fcc796a4f1, type: 2}
+    - target: {fileID: -3098817659784929919, guid: d7da0a6ffa2694e4a97e5bf4328529e0, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d7da0a6ffa2694e4a97e5bf4328529e0, type: 3}
       propertyPath: m_Name
       value: HC_Anim_Mummy_Walk
@@ -404,6 +408,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b6419fd062a06ab4485c8af40446229d, type: 3}
       propertyPath: m_Name
       value: SM_PLASTER_PINK_GOO
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b6419fd062a06ab4485c8af40446229d, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

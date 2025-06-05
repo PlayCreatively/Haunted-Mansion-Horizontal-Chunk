@@ -88,7 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 43134076942774453}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: black_eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9084252849656635486}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: eyes_white
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3018778507027287790}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: eyes_white
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 300102004251961441}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: black_eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,6 +258,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b0fbbae17790e574d85fec835b323159, type: 3}
       propertyPath: m_Name
       value: white_eyes (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b0fbbae17790e574d85fec835b323159, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -351,6 +355,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: black_eyes
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69d0274de5c56f34a994b21684a14465, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -443,6 +451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: white_eyes (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b0fbbae17790e574d85fec835b323159, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -534,6 +546,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69d0274de5c56f34a994b21684a14465, type: 3}
       propertyPath: m_Name
       value: black_eyes
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69d0274de5c56f34a994b21684a14465, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -745,7 +761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5483935772499632483, guid: 006b77ad47ee242478f9683559182866, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7591683685382586174, guid: 006b77ad47ee242478f9683559182866, type: 3}
       propertyPath: m_Layer
@@ -921,6 +937,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 04252bc64d17bf24a9aead096c533c86, type: 3}
       propertyPath: m_Name
       value: SM_PLASTER_TOWEL
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 04252bc64d17bf24a9aead096c533c86, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

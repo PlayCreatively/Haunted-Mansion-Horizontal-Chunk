@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plaster: {fileID: 437388018169245910}
-  hitParticlesPrefab1: {fileID: 1826992442530650226, guid: a21b42dd788f31f439191d6a0580f5fa, type: 3}
+  hitParticlesPrefab1: {fileID: 0}
   hitParticlesPrefab2: {fileID: 0}
   hitParticlesDuration: 2
   enemyType: 0

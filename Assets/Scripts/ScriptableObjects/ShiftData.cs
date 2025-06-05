@@ -34,7 +34,7 @@ namespace GameManagers
         int shiftScore;
         int roomsCleanedCount = 0;
         //// SCORING DATA - GLOBAL ////
-        int totalScore;
+        public PlayerScoreData playerScoreData = new ();
 
         void OnEnable()
         {
@@ -105,7 +105,7 @@ namespace GameManagers
         (Room room, Room.Requirements requirements, bool done)[] bookingShiftSequence;
         internal void StartNewShift()
         {
-            totalScore += shiftScore;
+            playerScoreData.score += shiftScore;
             shiftScore = 0;
 
             currentTimeIntoShift = 0f;
@@ -236,10 +236,11 @@ namespace GameManagers
             currentShiftMaxConcurrentBookings = 0;
             for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
                 bookingRequirementCountPerShift[i] = 0;
+            playerScoreData = new();
 
             shiftScore = 0;
             roomsCleanedCount = 0;
-            totalScore = 0;
+            playerScoreData.score = 0;
         }
 
         Room.Requirements[] GetRequirementsForShift(int[] bookingRequirementCountPerShift)
@@ -378,11 +379,11 @@ namespace GameManagers
 
 public static class LeaderBoardManager
 {
-    public static List<LeaderBoardData> leaderBoardDatas = new(10);
+    public static List<PlayerScoreData> leaderBoardDatas = new(10);
     public const string LeaderBoardFile = "LeaderBoardData.json";
     public static string LeaderBoardFilePath => Application.dataPath + "/" + LeaderBoardFile;
 
-    public static void AddLeaderBoardData(LeaderBoardData data)
+    public static void AddLeaderBoardData(PlayerScoreData data)
     {
         if(leaderBoardDatas.Contains(data))
         {
@@ -413,9 +414,9 @@ public static class LeaderBoardManager
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
     public static void LoadLeaderBoardData()
     {
-        AddLeaderBoardData(new LeaderBoardData
+        AddLeaderBoardData(new PlayerScoreData
         {
-            name = new char[] { 'T', 'e', 's', 't' },
+            name = "Test",
             skinID = 0,
             score = 1000,
             shift = 1,
@@ -428,32 +429,28 @@ public static class LeaderBoardManager
             return;
         }
         string json = System.IO.File.ReadAllText(LeaderBoardFilePath);
-        var data = JsonUtility.FromJson<List<LeaderBoardData>>(json);
-        leaderBoardDatas = new List<LeaderBoardData>(data);
+        var data = JsonUtility.FromJson<List<PlayerScoreData>>(json);
+        leaderBoardDatas = new List<PlayerScoreData>(data);
         leaderBoardDatas = leaderBoardDatas.OrderByDescending(d => d.score).ToList();
         Debug.Log("LeaderBoardData loaded from " + LeaderBoardFilePath);
     }
 }
 
-public record LeaderBoardData
+public record PlayerScoreData
 {
-    public char[] name;
+    public string name;
     public int skinID;
     public int score;
     public int shift;
     public int roomsCleaned;
-
-    public override string ToString()
-    {
-        return $"{name} - {score} (Shift {shift})";
-    }
+    public int MVP;
 
     public void SaveToFile(string filePath)
     {
         System.IO.File.WriteAllText(filePath, JsonUtility.ToJson(this, true));
     }
 
-    public static LeaderBoardData LoadFromFile(string filePath)
+    public static PlayerScoreData LoadFromFile(string filePath)
     {
         if (!System.IO.File.Exists(filePath))
         {
@@ -461,6 +458,6 @@ public record LeaderBoardData
             return default;
         }
         string json = System.IO.File.ReadAllText(filePath);
-        return JsonUtility.FromJson<LeaderBoardData>(json);
+        return JsonUtility.FromJson<PlayerScoreData>(json);
     }
 }

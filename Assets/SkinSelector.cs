@@ -51,6 +51,16 @@ public class SkinSelector : MonoBehaviour
         rend.sharedMesh = Skins[skinIndex].mesh;
     }
 
+    public static int GetSkinIndex(int playerIndex) 
+        => PlayerPrefs.GetInt("Player " + playerIndex + " CurrentSkinIndex", 9);
+
+    public static void SetSkin(SkinnedMeshRenderer rend, int skinIndex)
+    {
+        skinIndex = (skinIndex + Skins.Length) % Skins.Length;
+        rend.material = Skins[skinIndex].material;
+        rend.sharedMesh = Skins[skinIndex].mesh;
+    }
+
     void OnEnable()
     {
         GetComponent<PlayerInput>().onActionTriggered += HandleInput;

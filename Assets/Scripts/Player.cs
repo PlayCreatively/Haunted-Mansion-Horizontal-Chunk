@@ -136,7 +136,6 @@ public class Player : MonoBehaviour
     {
         if (ctx.phase == InputActionPhase.Canceled)
         {
-            Debug.Log("stopped");
             moveInput = Vector3.zero;
             animator.SetFloat("Speed", 0);
             return;
@@ -223,7 +222,7 @@ public class Player : MonoBehaviour
         float lowValue = low ? value : 0;
         float highValue = high ? value : 0;
 
-        StartCoroutine(new Timer(duration).GetRoutine(a => gamepad?.SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
+        StartCoroutine(new Timer(duration).GetRoutine(a => playerInput.GetDevice<Gamepad>().SetMotorSpeeds(lowValue * (1f - (a * a)), highValue * (1f - (a * a)))));
     }
 
     public void LandingVibrate() => Vibrate(.3f, .1f, true, true);
@@ -234,6 +233,8 @@ public class Player : MonoBehaviour
 
         //gamepad.ResumeHaptics();
         Vibrate(1f);
+
+        moveInput = Vector3.zero;
 
         var dir = transform.position - other.transform.position;
         dir.y = 0;

@@ -45,6 +45,7 @@ public struct Timer
             action.Invoke(Normal);
             yield return null;
         }
+        action.Invoke(Normal);
     }
 
     public readonly IEnumerator GetMoveRoutine(Vector3 fromPos, Vector3 toPos, Action<Vector3> action)

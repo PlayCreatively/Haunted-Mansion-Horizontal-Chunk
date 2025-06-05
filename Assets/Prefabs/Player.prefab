@@ -5269,6 +5269,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4079575504180677640, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 7717505733673945393, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5276,6 +5280,10 @@ PrefabInstance:
     - target: {fileID: 9028769281574132737, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: m_Name
       value: Walk Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 9028769281574132737, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5295,6 +5303,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5036976535808988095}
     m_Modifications:
+    - target: {fileID: 3777494443208251738, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140593656526803709, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5338,6 +5354,10 @@ PrefabInstance:
     - target: {fileID: 9143096532008183833, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_Name
       value: Circular Dust Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143096532008183833, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5470,6 +5490,14 @@ PrefabInstance:
       propertyPath: moveWithTransform
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1441816958020132722, guid: 8904c845661262642b3a980a09ffc881, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872475343523358705, guid: 8904c845661262642b3a980a09ffc881, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5397017289530747834, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5513,6 +5541,10 @@ PrefabInstance:
     - target: {fileID: 6256328754987325046, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_Name
       value: Dash Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 6256328754987325046, guid: 8904c845661262642b3a980a09ffc881, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8032319211079545202, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: looping
@@ -5597,6 +5629,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fa9e23f36caca0a43b95895d70a3c089, type: 2}
+    - target: {fileID: 6869106228138122310, guid: b178776e2a83e7f40b9f3ddd1103b13a, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

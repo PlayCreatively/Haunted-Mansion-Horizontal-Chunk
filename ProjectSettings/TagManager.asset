@@ -21,7 +21,7 @@ TagManager:
   - EnemyBlocker
   - Interactive
   - ScanTarget
-  - 
+  - RenderOnTop
   - 
   - 
   - 

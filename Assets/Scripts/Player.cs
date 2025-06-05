@@ -392,7 +392,7 @@ public class Player : MonoBehaviour
                 float squash = boostRunEnergy - time;
                 squash /= (1f - time);
                 squash *= squash;
-                visuals.Squash(1f - squash);
+                visuals.Squash(1f - Mathf.Min(squash, .9f));
             }
 
             boostRunEnergy -= Time.deltaTime;

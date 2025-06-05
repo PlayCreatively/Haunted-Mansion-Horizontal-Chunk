@@ -30,11 +30,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: d8c0262a1b2f7b647add293a0f72b909, type: 3}
+        m_Texture: {fileID: 2800000, guid: 702c7b5606b462a4193c755b6ab81a7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 54c47128e9b6b304f814ee3c17ce5dc2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 016698d2ca33b534ebe1d8ac7eb77d12, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -54,19 +54,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d8c0262a1b2f7b647add293a0f72b909, type: 3}
+        m_Texture: {fileID: 2800000, guid: 702c7b5606b462a4193c755b6ab81a7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 2a14bb5b78c6cf843a16d63b55a25599, type: 3}
+        m_Texture: {fileID: 2800000, guid: cefe76b5867ea80428b8c08cfc0b8034, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 17260b1d9ac0dc14383642fd350974ed, type: 3}
+        m_Texture: {fileID: 2800000, guid: dcd9bc645be09704f9f0b560ad620c6d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: f2c4607d233748b47ac6dc6ab39babe2, type: 3}
+        m_Texture: {fileID: 2800000, guid: b3e5f3171bac28a478cfe1341226963d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -106,11 +106,11 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _OcclusionStrength: 1
+    - _OcclusionStrength: 0.722
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.5
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

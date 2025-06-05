@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5cf974fcf55e574092461f4a63dc114, type: 3}
-  m_Name: Crying
+  m_Name: Barbie
   m_EditorClassIdentifier: 
-  mesh: {fileID: -6748422895735917630, guid: 6937d42102a98db45aca1f751fc80335, type: 3}
-  material: {fileID: 2100000, guid: 67fe84d4e8aa7884caa980d7fd615def, type: 2}
+  mesh: {fileID: -6562289310958753237, guid: 710120b05be6dec4991b5cd60ab7d14d, type: 3}
+  material: {fileID: 2100000, guid: 00beb024e36ac9a4bb5c507c37cd93aa, type: 2}

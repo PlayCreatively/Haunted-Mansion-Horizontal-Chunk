@@ -97,11 +97,12 @@ namespace GameManagers
 
             SceneTransition(() =>
             {
+                var hubCorner = GameObject.FindAnyObjectByType<HubCornerSingleton>();
                 // destroy all not destroy on load
-                GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
+                if(hubCorner != null)
+                    GameObject.Destroy(hubCorner.gameObject);
                 SceneManager.LoadScene(0);
             }, 1f, GameSettings.Instance.transitionSprite);
-
         }
 
         public static async void ToNightShift(float delay)
@@ -328,7 +329,9 @@ namespace GameManagers
                    throw new ArgumentOutOfRangeException(nameof(T), typeof(T), null);
         }
 
-    #if UNITY_EDITOR
+        public static void ToMainMenu() => Game.ToMainMenu();
+
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("Game/Settings/" + nameof(GameSettings))]
         public static void CreateAndShow()
         {

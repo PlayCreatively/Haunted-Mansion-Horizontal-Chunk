@@ -376,22 +376,91 @@ namespace GameManagers
     #endif
 }
 
-public struct LeaderBoardData
+public static class LeaderBoardManager
+{
+    public static List<LeaderBoardData> leaderBoardDatas = new(10);
+    public const string LeaderBoardFile = "LeaderBoardData.json";
+    public static string LeaderBoardFilePath => Application.dataPath + "/" + LeaderBoardFile;
+
+    public static void AddLeaderBoardData(LeaderBoardData data)
+    {
+        if(leaderBoardDatas.Contains(data))
+        {
+            Debug.LogWarning("LeaderBoardData already exists: " + data);
+            return;
+        }
+
+        leaderBoardDatas.Add(data);
+        leaderBoardDatas = leaderBoardDatas.OrderByDescending(d => d.score).ToList();
+
+        SaveLeaderBoardData();
+    }
+
+    public static void SaveLeaderBoardData()
+    {
+        if (leaderBoardDatas.Count == 0)
+        {
+            Debug.LogWarning("No LeaderBoardData to save.");
+            return;
+        }
+        var storedData = leaderBoardDatas.Take(10).ToArray(); // Limit to top 10
+        string json = JsonUtility.ToJson(new { storedData }, true);
+        System.IO.File.WriteAllText(LeaderBoardFilePath, json);
+
+        Debug.Log("LeaderBoardData saved to " + LeaderBoardFilePath);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    public static void LoadLeaderBoardData()
+    {
+        AddLeaderBoardData(new LeaderBoardData
+        {
+            name = new char[] { 'T', 'e', 's', 't' },
+            skinID = 0,
+            score = 1000,
+            shift = 1,
+            roomsCleaned = 5
+        });
+
+        if (!System.IO.File.Exists(LeaderBoardFilePath))
+        {
+            Debug.LogWarning("LeaderBoardData file not found: " + LeaderBoardFilePath);
+            return;
+        }
+        string json = System.IO.File.ReadAllText(LeaderBoardFilePath);
+        var data = JsonUtility.FromJson<List<LeaderBoardData>>(json);
+        leaderBoardDatas = new List<LeaderBoardData>(data);
+        leaderBoardDatas = leaderBoardDatas.OrderByDescending(d => d.score).ToList();
+        Debug.Log("LeaderBoardData loaded from " + LeaderBoardFilePath);
+    }
+}
+
+public record LeaderBoardData
 {
     public char[] name;
+    public int skinID;
     public int score;
     public int shift;
     public int roomsCleaned;
 
-    public LeaderBoardData(char[] name, int score, int shift, int roomsCLeaned)
-    {
-        this.name = name;
-        this.score = score;
-        this.shift = shift;
-        this.roomsCleaned = roomsCLeaned;
-    }
-    public override readonly string ToString()
+    public override string ToString()
     {
         return $"{name} - {score} (Shift {shift})";
+    }
+
+    public void SaveToFile(string filePath)
+    {
+        System.IO.File.WriteAllText(filePath, JsonUtility.ToJson(this, true));
+    }
+
+    public static LeaderBoardData LoadFromFile(string filePath)
+    {
+        if (!System.IO.File.Exists(filePath))
+        {
+            Debug.LogError($"File not found: {filePath}");
+            return default;
+        }
+        string json = System.IO.File.ReadAllText(filePath);
+        return JsonUtility.FromJson<LeaderBoardData>(json);
     }
 }

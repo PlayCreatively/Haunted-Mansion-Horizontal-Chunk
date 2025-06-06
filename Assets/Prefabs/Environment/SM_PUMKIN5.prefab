@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.902049
+      value: -0.058377862
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.02731848
+      value: 0.027318599
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.902483
+      value: -0.48331213
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 13aaf7a7e0109f045b7c2479105a3ae6, type: 2}
+      objectReference: {fileID: 2100000, guid: 1053af9deab3a7c439f4e2eed3a4f834, type: 2}
     - target: {fileID: 919132149155446097, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
       propertyPath: m_Name
       value: SM_PUMKIN5
@@ -59,34 +59,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2124549190689386848}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
---- !u!1 &5768176768217042282 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6f8577ffe2924a940af85364f04d7be7, type: 3}
-  m_PrefabInstance: {fileID: 6687220804908871739}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &2124549190689386848
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5768176768217042282}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.2330066
-  m_Center: {x: 0.0000013783574, y: 0.16469675, z: -0.0008853376}

@@ -36,11 +36,11 @@ public class BootstrapPlayers : MonoBehaviour
     {
         const float offsetAmount = .65f;
 
-        Vector3 offset = new(0, 0, (player.playerIndex == 0 ? 1f : -1f) * offsetAmount); // offset the player position
+        Vector3 offset = new((player.playerIndex == 0 ? 1f : -1f) * offsetAmount, 0, 0); // offset the player position
         player.transform.SetParent(transform, false);
         var rb = player.GetComponent<Rigidbody>();
         rb.position = transform.TransformPoint(offset);
-        rb.rotation = Quaternion.Euler(0, -90f, 0);
+        rb.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         player.gameObject.name = "Player " + (player.playerIndex + 1); // rename the player object
         SkinSelector.ReassignDefaultSkin(player.GetComponent<Player>());
         //player.uiInputModule = FindAnyObjectByType<InputSystemUIInputModule>();

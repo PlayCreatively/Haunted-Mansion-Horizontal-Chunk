@@ -4457,6 +4457,7 @@ MonoBehaviour:
   nameInput: {fileID: 931176721}
   playerMesh: {fileID: 271026062}
   scoreData: {fileID: 471563259}
+  date: {fileID: 1005176148}
 --- !u!224 &2139414693
 RectTransform:
   m_ObjectHideFlags: 0

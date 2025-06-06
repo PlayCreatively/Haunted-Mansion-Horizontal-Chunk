@@ -1,4 +1,5 @@
 using GameManagers;
+using TMPro;
 using UnityEngine;
 
 public class YoureFiredManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class YoureFiredManager : MonoBehaviour
     SkinnedMeshRenderer playerMesh;
     [SerializeField]
     TextTemplate scoreData;
+    [SerializeField]
+    TextMeshProUGUI date;
 
     ShiftData ShiftData;
 
@@ -18,6 +21,10 @@ public class YoureFiredManager : MonoBehaviour
         var playerSoreData = ShiftData.Instance.playerScoreData;
         SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(playerSoreData.MVP + 1));
         scoreData.SetText(playerSoreData.shift, playerSoreData.score);
+        // get current date and time
+        var currentTime = System.DateTime.Now;
+        // format the date and time as a string
+        date.text = currentTime.ToString("dd/MM/yy");
     }
 
     public void OnSubmit()

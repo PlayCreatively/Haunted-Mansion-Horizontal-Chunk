@@ -7,13 +7,17 @@ public class YoureFiredManager : MonoBehaviour
     NameInput nameInput;
     [SerializeField]
     SkinnedMeshRenderer playerMesh;
+    [SerializeField]
+    TextTemplate scoreData;
 
     ShiftData ShiftData;
 
     void Start()
     {
         ShiftData = ShiftData.Instance;
-        SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(ShiftData.playerScoreData.MVP + 1));
+        var playerSoreData = ShiftData.Instance.playerScoreData;
+        SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(playerSoreData.MVP + 1));
+        scoreData.SetText(playerSoreData.shift, playerSoreData.score);
     }
 
     public void OnSubmit()

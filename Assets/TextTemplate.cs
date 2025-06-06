@@ -19,4 +19,9 @@ public class TextTemplate : MonoBehaviour
     {
         textMeshPro.text = string.Format(template, message.Split(','));
     }
+
+    internal void SetText(params object[] args)
+    {
+        textMeshPro.text = string.Format(template, args);
+    }
 }

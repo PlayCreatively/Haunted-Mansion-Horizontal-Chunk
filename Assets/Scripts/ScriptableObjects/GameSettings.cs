@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -102,6 +103,8 @@ namespace GameManagers
                 if(hubCorner != null)
                     GameObject.Destroy(hubCorner.gameObject);
                 SceneManager.LoadScene(0);
+                FMODAudioManager.Instance.StopMainTheme();
+                FMODAudioManager.Instance.StopLoseMenuTheme();
                 FMODAudioManager.Instance.StartMenuLeaderboardTheme();
             }, 1f, GameSettings.Instance.transitionSprite);
         }
@@ -117,6 +120,8 @@ namespace GameManagers
                 if(hubCorner != null)
                     GameObject.Destroy(hubCorner.gameObject);
                 SceneManager.LoadScene("GameOver");
+
+                FMODAudioManager.Instance.StopMainTheme();
                 FMODAudioManager.Instance.StartLoseMenuTheme();
             }, 1f, GameSettings.Instance.transitionSprite);
         }
@@ -136,6 +141,7 @@ namespace GameManagers
                 // destroy all not destroy on load
                 GameObject.Destroy(GameObject.FindAnyObjectByType<HubCornerSingleton>().gameObject);
                 SceneManager.LoadScene("NightShiftMode");
+                FMODAudioManager.Instance.StopMainTheme();
             }, 1f, GameSettings.Instance.transitionSprite);
 
         }
@@ -333,6 +339,37 @@ namespace GameManagers
         }
 
         public static void ToMainMenu() => Game.ToMainMenu();
+
+        public static async void ToMainGameScene()
+        {
+            FMODAudioManager.Instance.StopMenuLeaderboardTheme();
+            FMODAudioManager.Instance.StartMainTheme();
+            var playersObj = GameObject.Find("Players");
+            await SceneManager.LoadSceneAsync(1);
+            foreach (var player in playersObj.GetComponentsInChildren<Player>())
+            {
+                player.enabled = true;
+                player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
+                GameObject.Destroy(player.GetComponent<SkinSelector>());
+            }
+            playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
+        }
+
+        public static async void ToTutorial()
+        {
+            FMODAudioManager.Instance.StopMenuLeaderboardTheme();
+            FMODAudioManager.Instance.StartMainTheme();
+            await SceneManager.LoadSceneAsync(2);
+            var playersObj = GameObject.Find("Players");
+            foreach (var player in playersObj.GetComponentsInChildren<Player>())
+            {
+                player.enabled = true;
+                player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
+                GameObject.Destroy(player.GetComponent<SkinSelector>());
+            }
+            playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
+        }
+
 
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("Game/Settings/" + nameof(GameSettings))]

@@ -203,7 +203,9 @@ public class FMODAudioManager : MonoBehaviour
     public void StartMainTheme() => bgMusicInstance.start();
     public void StopMainTheme() => bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
+    public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartLoseMenuTheme() => loseMenuInstance.start();
+    public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
     
 
     //Plays a laundry done SFX. No parameter

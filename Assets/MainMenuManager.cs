@@ -1,3 +1,4 @@
+using GameManagers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,27 +33,5 @@ public class MainMenuManager : MonoBehaviour
 
         var player = input.GetComponent<Player>();
         player.enabled = false;
-    }
-
-    public void MainMenu() => LoadScene(0);
-
-    public void StartGame() => LoadScene(1);
-
-    public void StartTutorial() => LoadScene(2);
-
-    public void Leaderboard() => LoadScene(3);
-
-    async void LoadScene(int i)
-    {
-        var playersObj = GameObject.Find("Players");
-        await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(i);
-        foreach (var player in playersObj.GetComponentsInChildren<Player>())
-        {
-            player.enabled = true;
-            player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
-            Destroy(player.GetComponent<SkinSelector>());
-        }
-        playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
-
     }
 }

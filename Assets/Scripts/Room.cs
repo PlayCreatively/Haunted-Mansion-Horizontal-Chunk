@@ -25,6 +25,7 @@ public class Room : MonoBehaviour, IRoom
 {
     float stayTime;
     float _bookedTime;
+
     float BookedTime
     {
         get => _bookedTime;
@@ -53,6 +54,7 @@ public class Room : MonoBehaviour, IRoom
 
     public event Action<RoomState> OnStateChange;
     public event Action<Requirements> OnRequirementsChange;
+    DoorAnimationController doorAnimationController;
     Animator shineAnimator;
     LockableRoom lockableRoom;
 
@@ -74,6 +76,7 @@ public class Room : MonoBehaviour, IRoom
 
         var roomUIObj = Resources.Load<GameObject>("RoomUI");
         shineAnimator = GetComponent<Animator>();
+        doorAnimationController = GetComponentInChildren<DoorAnimationController>();
         lockableRoom = GetComponent<LockableRoom>();
         Assert.IsNotNull(roomUIObj, "RoomUI prefab not found in Resources folder");
 
@@ -141,6 +144,7 @@ public class Room : MonoBehaviour, IRoom
         FMODAudioManager.Instance.TriggerRoomCleanedSfx();
         Debug.Log($"{gameObject.name} cleaned", gameObject);
         shineAnimator.Play("GlassAnimation", 0, 0f);
+        doorAnimationController.CheckIn();
 
         isDirty = false;
 
@@ -170,6 +174,7 @@ public class Room : MonoBehaviour, IRoom
 
         Debug.Log($"{gameObject.name} booked", gameObject);
 
+        doorAnimationController.CheckOut();
         FMODAudioManager.Instance.TriggerRoomBookedSfx();
         lockableRoom.SetFogCeilingActive(false);
         OnStateChange?.Invoke(state);
@@ -189,6 +194,7 @@ public class Room : MonoBehaviour, IRoom
             enabled = false;
             return;
         }
+
         FMODAudioManager.Instance.TriggerRoomCheckInSfx();
         state = RoomState.Occupied;
         lockableRoom.SetFogCeilingActive(true);

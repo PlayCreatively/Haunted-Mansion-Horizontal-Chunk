@@ -35,6 +35,11 @@ public class RoomUI : MonoBehaviour
         room.OnRequirementsChange += UpdateRequirementsUI;
     }
 
+    void OnDisable()
+    {
+        FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(false);
+    }
+
     void Update()
     {
         (transform as RectTransform).position = GetRoomPosInScreenSpace();

@@ -105,6 +105,20 @@ namespace GameManagers
             }, 1f, GameSettings.Instance.transitionSprite);
         }
 
+        public static void ToGameOverScene()
+        {
+            Time.timeScale = 1f;
+
+            SceneTransition(() =>
+            {
+                var hubCorner = GameObject.FindAnyObjectByType<HubCornerSingleton>();
+                // destroy all not destroy on load
+                if(hubCorner != null)
+                    GameObject.Destroy(hubCorner.gameObject);
+                SceneManager.LoadScene("GameOver");
+            }, 1f, GameSettings.Instance.transitionSprite);
+        }
+
         public static async void ToNightShift(float delay)
         {
             while(delay > 0f)
@@ -135,26 +149,13 @@ namespace GameManagers
             }
             Time.timeScale = 0f;
 
-            yield return PanCamera(failedRoom.transform.position, 5f);
-            yield return new WaitForSecondsRealtime(5f);
-            var gameOverScreen = GameLoopManager.Instance.canvas.transform.Find("GameOverOverlay").GetComponent<Image>();
-            gameOverScreen.gameObject.SetActive(true);
-            gameOverScreen.color = new Color(1, 1, 1, 0);
-            float t = 0f;
-            while (t < 1f)
-            {
-                t += Time.unscaledDeltaTime;
-                gameOverScreen.color = new Color(1, 1, 1, t);
-                yield return null;
-            }
-            gameOverScreen.color = Color.white;
-
-            yield return new WaitForSecondsRealtime(8f);
-
+            yield return PanCamera(failedRoom.GetCenter, 5f);
+            yield return new WaitForSecondsRealtime(6f);
+            
             // clean
             ShiftData.Instance.ResetData();
 
-            ToMainMenu();
+            ToGameOverScene();
         }
 
         static IEnumerator PanCamera(Vector3 target, float time)

@@ -112,9 +112,6 @@
             "m_Id": "30905aa23ea341c7930338024beea4a9"
         },
         {
-            "m_Id": "1a60b61545bc4f0db6ab23d495ff787d"
-        },
-        {
             "m_Id": "dec2a56451c943d5a1ed3eca8d3901e2"
         },
         {
@@ -1146,9 +1143,6 @@
         "m_Blocks": [
             {
                 "m_Id": "f12e82f4eb2f4440a358c92ebeb01d85"
-            },
-            {
-                "m_Id": "1a60b61545bc4f0db6ab23d495ff787d"
             }
         ]
     },
@@ -1742,40 +1736,6 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "1a60b61545bc4f0db6ab23d495ff787d",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "SurfaceDescription.Alpha",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 0.0,
-            "height": 0.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "88777e8e5e1d447ab808001a7a714eb5"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedDescriptor": "SurfaceDescription.Alpha"
 }
 
 {
@@ -5227,21 +5187,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "88777e8e5e1d447ab808001a7a714eb5",
-    "m_Id": 0,
-    "m_DisplayName": "Alpha",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Alpha",
-    "m_StageCapability": 2,
-    "m_Value": 1.0,
-    "m_DefaultValue": 1.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "8d320bd2b6d241f2803e02e77b309b8e",
     "m_Id": 3,
@@ -7525,7 +7470,7 @@
         "m_Id": "d34bec50a5994dcbb72c8c0daf4062db"
     },
     "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 1,
+    "m_SurfaceType": 0,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,

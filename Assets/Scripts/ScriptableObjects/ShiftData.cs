@@ -14,6 +14,7 @@ namespace GameManagers
         //// GAME SETTINGS ////
         [Header("Shift Settings")]
         public float shiftDuration = 60 * 4;
+        public float maxTimeForResource = 60f, minTimeForResource = 30f;
         public int minBookings = 1, maxBookings = 7;
         //public int minResourcesPerBooking = 1, maxResourcesPerBooking = 3;
         const int addedResourcesPerShift = 2;
@@ -83,7 +84,7 @@ namespace GameManagers
 
             shiftScore += deltaScore;
 
-            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
+            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }
 
         public void AddResourceDelivered(Room room, CarriableType resourceType)
@@ -91,7 +92,7 @@ namespace GameManagers
             int deltaScore = CalculatePerResourceBonus(resourceType);
             shiftScore += deltaScore;
             
-            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position);
+            ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }
 
         public float GetBookingTime(int bookingIndex) => (float)(GetRoomTimeAlpha(GetAlpha(currentShift), GetBookingCount(currentShift), bookingIndex) * shiftDuration);
@@ -113,12 +114,18 @@ namespace GameManagers
             AddResourceAndBooking(ref bookingRequirementCountPerShift, CurrentShift);
             currentShiftBookingRequirements = GetRequirementsForShift(bookingRequirementCountPerShift);
             int bookingCount = currentShiftBookingRequirements.Length;
-            { // debug
+            {
+                static float Lerp(float a, float b, float t) => a + (b - a) * t;
+
                 int resourcesCount = 0;
                 for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
                     resourcesCount += bookingRequirementCountPerShift[i] * (i+1);
                 Debug.Log(bookingCount + $" bookings with {resourcesCount} resources: 1): {bookingRequirementCountPerShift[0]}, 2): {bookingRequirementCountPerShift[1]}, 3): {bookingRequirementCountPerShift[2]}");
+
+                float curTimeForResource = Lerp(maxTimeForResource, minTimeForResource, (float)currentShift / (maxBookings - minBookings));
+                shiftDuration = curTimeForResource * resourcesCount;
             }
+
             var roomSequence = GetRandomSequenceOfUnlockedRooms(bookingCount);
 
             bookingShiftSequence = new (Room room, Room.Requirements requirements, bool done)[bookingCount];
@@ -188,15 +195,19 @@ namespace GameManagers
             return rooms;
         }
 
+        bool shiftEnded = false;
         internal void UpdateShiftTime(float deltaTime)
         {
+            if(shiftEnded || bookingShiftSequence == null || bookingShiftSequence.Length == 0)
+                return;
+
             currentTimeIntoShift += deltaTime;
-            if ((currentTimeIntoShift >= shiftDuration || AreAllBookingsCompleted))
+            if (AreAllBookingsCompleted)
             {
+                shiftEnded = true;
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
                 Game.ToNightShift(4);
-                GameLoopManager.Instance.gameObject.SetActive(false);
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);

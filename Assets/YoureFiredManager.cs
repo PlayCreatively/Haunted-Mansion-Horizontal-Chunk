@@ -13,7 +13,7 @@ public class YoureFiredManager : MonoBehaviour
     void Start()
     {
         ShiftData = ShiftData.Instance;
-        SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(ShiftData.playerScoreData.MVP));
+        SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(ShiftData.playerScoreData.MVP + 1));
     }
 
     public void OnSubmit()

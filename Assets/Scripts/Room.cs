@@ -50,6 +50,7 @@ public class Room : MonoBehaviour, IRoom
 
     RoomUI roomUI;
     public Vector2 UIOffset;
+    public Vector3 GetCenter => transform.position + UIOffset.XZ();
 
     public event Action<RoomState> OnStateChange;
     public event Action<Requirements> OnRequirementsChange;

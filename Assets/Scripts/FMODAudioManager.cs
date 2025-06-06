@@ -20,6 +20,8 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance itemDroppedInstance;
     EventInstance stunnedInstance;
     EventInstance itemSelectionInTheBagInstance;
+    EventInstance uiHoverInstance;
+    EventInstance uiSelectInstance;
     #endregion
     #region NewEnemySpawnsSFXInstances
     EventInstance newGhostSpawnedInstance;
@@ -75,6 +77,8 @@ public class FMODAudioManager : MonoBehaviour
         itemDroppedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item dropped");
         stunnedInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/stunned");
         itemSelectionInTheBagInstance = RuntimeManager.CreateInstance("event:/Character SFX Events/item selection in the bag");
+        uiHoverInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ui hover");
+        uiSelectInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ui select");
         #endregion
         #region EnvironmentAndRoomsPaths
         bgMusicInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/bg music");
@@ -154,6 +158,8 @@ public class FMODAudioManager : MonoBehaviour
     public void TriggerStunnedSfx() => stunnedInstance.start();
     //Plays an item selection in the bag SFX. No parameter
     public void TriggerItemSelectionInTheBagSfx() => itemSelectionInTheBagInstance.start();
+    public void TriggerUIHoverSfx() => uiHoverInstance.start();
+    public void TriggerUISelectSfx() => uiSelectInstance.start();
     #endregion
     #region ROOMSFX
     //Plays room cleaned SFX. No parameter
@@ -255,6 +261,10 @@ public class FMODAudioManager : MonoBehaviour
         stunnedInstance.release();
         itemSelectionInTheBagInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         itemSelectionInTheBagInstance.release();
+        uiHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        uiHoverInstance.release();
+        uiSelectInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        uiSelectInstance.release();
         #endregion
         #region NewMonsterSpawnsDestroy
         newMummySpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

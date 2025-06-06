@@ -102,6 +102,7 @@ namespace GameManagers
                 if(hubCorner != null)
                     GameObject.Destroy(hubCorner.gameObject);
                 SceneManager.LoadScene(0);
+                FMODAudioManager.Instance.StartMenuLeaderboardTheme();
             }, 1f, GameSettings.Instance.transitionSprite);
         }
 

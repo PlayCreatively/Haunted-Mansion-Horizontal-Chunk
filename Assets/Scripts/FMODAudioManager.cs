@@ -197,6 +197,10 @@ public class FMODAudioManager : MonoBehaviour
 
     }
 
+    public void StartMainTheme() => bgMusicInstance.start();
+    public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
+    
+
     //Plays a laundry done SFX. No parameter
     public void TriggerLaundryDoneSfx() => laundryDoneInstance.start();
     public void TriggerLaundryStartSfx() => laundryStartInstance.start();

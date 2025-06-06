@@ -117,6 +117,7 @@ namespace GameManagers
                 if(hubCorner != null)
                     GameObject.Destroy(hubCorner.gameObject);
                 SceneManager.LoadScene("GameOver");
+                FMODAudioManager.Instance.StartLoseMenuTheme();
             }, 1f, GameSettings.Instance.transitionSprite);
         }
 

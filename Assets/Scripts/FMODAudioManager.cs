@@ -32,6 +32,7 @@ public class FMODAudioManager : MonoBehaviour
     #region EnvironmentSFXInstances
     EventInstance bgMusicInstance;
     EventInstance mainMenuLeaderboardInstance;
+    EventInstance loseMenuInstance;
     EventInstance gameOverInstance; //Rename where needed!
     EventInstance runningOutOfTimeInstance;
     EventInstance laundryDoneInstance;
@@ -51,6 +52,7 @@ public class FMODAudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            
             //DontDestroyOnLoad(gameObject);
         }
         else
@@ -84,6 +86,7 @@ public class FMODAudioManager : MonoBehaviour
         #region EnvironmentAndRoomsPaths
         bgMusicInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/bg music");
         mainMenuLeaderboardInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/menu and leaderboard");
+        loseMenuInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/fail menu");
         gameOverInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/game over");
         roomCheckInInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room check in");
         roomBookedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room booked");
@@ -198,7 +201,9 @@ public class FMODAudioManager : MonoBehaviour
     }
 
     public void StartMainTheme() => bgMusicInstance.start();
+    public void StopMainTheme() => bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
+    public void StartLoseMenuTheme() => loseMenuInstance.start();
     
 
     //Plays a laundry done SFX. No parameter
@@ -241,6 +246,10 @@ public class FMODAudioManager : MonoBehaviour
         roomCleanedInstance.release();
         bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         bgMusicInstance.release();
+        mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        mainMenuLeaderboardInstance.release();
+        loseMenuInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        loseMenuInstance.release();
         gameOverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         gameOverInstance.release();
         runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

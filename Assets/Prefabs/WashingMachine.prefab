@@ -40,8 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 64381421257023189}
-  - component: {fileID: 8824289243150555790}
-  - component: {fileID: 6944515900158985410}
+  - component: {fileID: 4489592162666903246}
   m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
@@ -67,16 +66,8 @@ Transform:
   - {fileID: 1863480939254805242}
   m_Father: {fileID: 4040203468629397606}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!33 &8824289243150555790
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2131607860479687226}
-  m_Mesh: {fileID: -6638688476697721557, guid: df7a57282ef831248ac8cd5c106698a2, type: 3}
---- !u!23 &6944515900158985410
-MeshRenderer:
+--- !u!137 &4489592162666903246
+SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,7 +81,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
+  m_RayTracingMode: 3
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -119,7 +110,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: -6638688476697721557, guid: 3cf870b5054b8498b85e084754659aec, type: 3}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 0}
+  m_AABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_DirtyAABB: 0
 --- !u!1 &3972123327276769727
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,8 +236,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -38.94, y: -0.9999996, z: 30.76}
-  m_LocalScale: {x: 1.7818041, y: 1.7818041, z: 1.4314657}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 0.80338}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 64381421257023189}
   m_Father: {fileID: 0}

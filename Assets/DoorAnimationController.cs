@@ -5,6 +5,11 @@ public class DoorAnimationController : MonoBehaviour
     [SerializeField]
     Animator doorAnimator, ghostAnimator;
 
+    void Start()
+    {
+        ghostAnimator.gameObject.SetActive(false);
+    }
+
     public void CheckIn()
     {
         if (doorAnimator != null)
@@ -13,6 +18,7 @@ public class DoorAnimationController : MonoBehaviour
         }
         if (ghostAnimator != null)
         {
+            ghostAnimator.gameObject.SetActive(true);
             ghostAnimator.SetTrigger("CheckIn");
         }
     }
@@ -21,6 +27,7 @@ public class DoorAnimationController : MonoBehaviour
     {
         if (doorAnimator != null)
         {
+            ghostAnimator.gameObject.SetActive(false);
             doorAnimator.SetTrigger("CheckOut");
         }
     }

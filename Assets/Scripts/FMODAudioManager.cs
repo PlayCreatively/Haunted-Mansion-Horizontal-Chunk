@@ -31,6 +31,7 @@ public class FMODAudioManager : MonoBehaviour
     #endregion
     #region EnvironmentSFXInstances
     EventInstance bgMusicInstance;
+    EventInstance mainMenuLeaderboardInstance;
     EventInstance gameOverInstance; //Rename where needed!
     EventInstance runningOutOfTimeInstance;
     EventInstance laundryDoneInstance;
@@ -82,6 +83,7 @@ public class FMODAudioManager : MonoBehaviour
         #endregion
         #region EnvironmentAndRoomsPaths
         bgMusicInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/bg music");
+        mainMenuLeaderboardInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/menu and leaderboard");
         gameOverInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/game over");
         roomCheckInInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room check in");
         roomBookedInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/room booked");
@@ -96,7 +98,7 @@ public class FMODAudioManager : MonoBehaviour
     }
     void Start()
     {
-        bgMusicInstance.start();
+        mainMenuLeaderboardInstance.start();
     }
 
     #region GHOST
@@ -181,9 +183,17 @@ public class FMODAudioManager : MonoBehaviour
     public void UpdateRunningOutOfTimeSfx(bool active) //Plays a SFX based on how much time is left.
     {
         if (active)
+        {
             runningOutOfTimeInstance.start();
+            bgMusicInstance.setParameterByName("Music Speed Up", 1);
+        }
+
         else
+        {
             runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            bgMusicInstance.setParameterByName("Music Speed Up", 0);
+
+        }
 
     }
 

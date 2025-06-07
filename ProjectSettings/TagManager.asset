@@ -22,7 +22,7 @@ TagManager:
   - Interactive
   - ScanTarget
   - RenderOnTop
-  - 
+  - IgnoreRenderOnTop
   - 
   - 
   - 

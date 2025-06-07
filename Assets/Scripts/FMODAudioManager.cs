@@ -37,6 +37,7 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance runningOutOfTimeInstance;
     EventInstance laundryDoneInstance;
     EventInstance laundryStartInstance;
+    EventInstance totalCalculationInstance;
     #endregion
     #region RoomSFXInstances
     EventInstance roomCleanedInstance;
@@ -98,6 +99,7 @@ public class FMODAudioManager : MonoBehaviour
         runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ticktack");
         laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
         laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
+        totalCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/total calculation");
 
         #endregion
 
@@ -209,6 +211,7 @@ public class FMODAudioManager : MonoBehaviour
     public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartLoseMenuTheme() => loseMenuInstance.start();
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
+    public void TriggerTotalCalculationSfx() => totalCalculationInstance.start();
     
 
     //Plays a laundry done SFX. No parameter

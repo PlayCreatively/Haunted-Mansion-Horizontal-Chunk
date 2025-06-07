@@ -12,9 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf9ae36b10311b42860e2d301d41359, type: 3}
   m_Name: ShiftData
   m_EditorClassIdentifier: 
-  shiftDuration: 180
+  shiftDuration: 10
+  maxTimeForResource: 60
+  minTimeForResource: 45
   minBookings: 1
   maxBookings: 7
   maxAlpha: 0.315
   scorePerCleanedRoom: 10
   scorePerResource: 5
+  playerScoreData:
+    name: 
+    skinID: 0
+    score: 0
+    shift: 0
+    roomsCleaned: 0
+    MVP: 0

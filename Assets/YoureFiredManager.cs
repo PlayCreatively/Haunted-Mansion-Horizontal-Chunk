@@ -29,7 +29,7 @@ public class YoureFiredManager : MonoBehaviour
 
     public void OnSubmit()
     {
-        ShiftData.playerScoreData.name = nameInput.GetName();
+        ShiftData.playerScoreData.name = nameInput.GetName().Replace('.', ' ');
         LeaderBoardManager.AddLeaderBoardData(ShiftData.playerScoreData);
         Debug.Log($"You're Fired! {ShiftData.playerScoreData.name} has been added to the leaderboard with a score of {ShiftData.playerScoreData.score}.");
     }

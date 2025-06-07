@@ -392,7 +392,7 @@ public static class LeaderBoardManager
 {
     public static List<PlayerScoreData> leaderBoardDatas = new(10);
     public const string LeaderBoardFile = "LeaderBoardData.json";
-    public static string LeaderBoardFilePath => Application.dataPath + "/" + LeaderBoardFile;
+    public static string LeaderBoardFilePath => Application.persistentDataPath + "/" + LeaderBoardFile;
 
     public static void AddLeaderBoardData(PlayerScoreData data)
     {
@@ -415,38 +415,43 @@ public static class LeaderBoardManager
             Debug.LogWarning("No LeaderBoardData to save.");
             return;
         }
-        var storedData = leaderBoardDatas.Take(10).ToArray(); // Limit to top 10
-        string json = JsonUtility.ToJson(new { storedData }, true);
+        string json = JsonUtility.ToJson(new LeaderBoardList(leaderBoardDatas), true);
+        Debug.Log(json);
         System.IO.File.WriteAllText(LeaderBoardFilePath, json);
-
-        Debug.Log("LeaderBoardData saved to " + LeaderBoardFilePath);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
     public static void LoadLeaderBoardData()
     {
-        AddLeaderBoardData(new PlayerScoreData
-        {
-            name = "Test",
-            skinID = 0,
-            score = 1000,
-            shift = 1,
-            roomsCleaned = 5
-        });
-
         if (!System.IO.File.Exists(LeaderBoardFilePath))
         {
             Debug.LogWarning("LeaderBoardData file not found: " + LeaderBoardFilePath);
             return;
         }
         string json = System.IO.File.ReadAllText(LeaderBoardFilePath);
-        var data = JsonUtility.FromJson<List<PlayerScoreData>>(json);
-        leaderBoardDatas = new List<PlayerScoreData>(data);
+        var data = JsonUtility.FromJson<LeaderBoardList>(json);
+        leaderBoardDatas = new List<PlayerScoreData>(data.leaderBoardDatas);
         leaderBoardDatas = leaderBoardDatas.OrderByDescending(d => d.score).ToList();
         Debug.Log("LeaderBoardData loaded from " + LeaderBoardFilePath);
     }
 }
 
+[Serializable]
+public struct LeaderBoardList
+{
+    public PlayerScoreData[] leaderBoardDatas;
+    public LeaderBoardList(PlayerScoreData[] leaderBoardDatas)
+    {
+        this.leaderBoardDatas = leaderBoardDatas;
+    }
+    public LeaderBoardList(ICollection<PlayerScoreData> leaderBoardDatas)
+    {
+        this.leaderBoardDatas = leaderBoardDatas.ToArray();
+    }
+    public static implicit operator PlayerScoreData[](LeaderBoardList list) => list.leaderBoardDatas;
+}
+
+[Serializable]
 public record PlayerScoreData
 {
     public string name;

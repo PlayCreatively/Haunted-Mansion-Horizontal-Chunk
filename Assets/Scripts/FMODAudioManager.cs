@@ -38,6 +38,7 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance laundryDoneInstance;
     EventInstance laundryStartInstance;
     EventInstance totalCalculationInstance;
+    EventInstance anotherCalculationInstance;
     #endregion
     #region RoomSFXInstances
     EventInstance roomCleanedInstance;
@@ -100,6 +101,7 @@ public class FMODAudioManager : MonoBehaviour
         laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
         laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
         totalCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/total calculation");
+        anotherCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/other calculation");
 
         #endregion
 
@@ -213,11 +215,17 @@ public class FMODAudioManager : MonoBehaviour
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
 
     public void TriggerTotalCalculationSfx(float pitch)
-    { 
+    {
         totalCalculationInstance.setParameterByName("Pitch", pitch);
-        totalCalculationInstance.start(); 
+        totalCalculationInstance.start();
     }
-    
+
+    public void TriggerAnotherCalculationSfx(float pitch)
+    {
+        anotherCalculationInstance.setParameterByName("Pitch 2", pitch);
+        anotherCalculationInstance.start();   
+    }
+
 
     //Plays a laundry done SFX. No parameter
     public void TriggerLaundryDoneSfx() => laundryDoneInstance.start();

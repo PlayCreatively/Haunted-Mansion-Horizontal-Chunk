@@ -435,6 +435,22 @@ public static class LeaderBoardManager
         leaderBoardDatas = leaderBoardDatas.OrderByDescending(d => d.score).ToList();
         Debug.Log("LeaderBoardData loaded from " + LeaderBoardFilePath);
     }
+
+    public static int GetPlaceInLeaderBoard(int score)
+    {
+        Debug.Assert(leaderBoardDatas.Count != 0);
+
+        for (int i = 0; i < leaderBoardDatas.Count; i++)
+            if (leaderBoardDatas[i].score < score)
+                return i + 1; // +1 because places are 1-indexed
+
+        return leaderBoardDatas.Count + 1; // If score is lower than all, return last place
+    }
+
+    public static PlayerScoreData GetLeadingUpPlayer(int totalScore)
+    {
+        return leaderBoardDatas.FirstOrDefault(data => data.score < totalScore);
+    }
 }
 
 [Serializable]

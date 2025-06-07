@@ -52,16 +52,18 @@ public class FMODAudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            
+
             //DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        else return;
 
-        #region LandingOnMonstersPaths
-        landingOnTheGhostInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GHOST/land on ghost");
+            #region LandingOnMonstersPaths
+            landingOnTheGhostInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GHOST/land on ghost");
         landingOnTheGreenGooInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/GOO/land on green goo");
         landingOnTheMummyInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/MUMMY/land on mummy");
         landingOnTheWormMonsterInstance = RuntimeManager.CreateInstance("event:/Monsters SFX Events/WORM/land on worm");
@@ -98,10 +100,11 @@ public class FMODAudioManager : MonoBehaviour
         laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
 
         #endregion
+
+        mainMenuLeaderboardInstance.start();
     }
     void Start()
     {
-        mainMenuLeaderboardInstance.start();
     }
 
     #region GHOST

@@ -75,11 +75,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
         CreateNewBackpack();
     }
 
-    void OnDestroy()
-    {
-        Destroy(BackpackUI);
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) SetSelection(0);

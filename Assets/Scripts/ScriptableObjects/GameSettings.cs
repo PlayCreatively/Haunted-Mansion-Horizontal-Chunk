@@ -88,6 +88,7 @@ namespace GameManagers
 
         public static void GameOver(Room failedRoom)
         {
+            FMODAudioManager.Instance.UpdateRunningOutOfTimeSfx(false);
             FMODAudioManager.Instance.TriggerGameOver();
             GameLoopManager.Instance.StartCoroutine(GameOverRoutine(failedRoom));
         }

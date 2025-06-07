@@ -17,6 +17,9 @@ public class YoureFiredManager : MonoBehaviour
 
     void Start()
     {
+        FMODAudioManager.Instance.StopMenuLeaderboardTheme();
+        FMODAudioManager.Instance.StopMainTheme();
+        FMODAudioManager.Instance.StartLoseMenuTheme();
         ShiftData = ShiftData.Instance;
         var playerSoreData = ShiftData.Instance.playerScoreData;
         SkinSelector.SetSkin(playerMesh, SkinSelector.GetSkinIndex(playerSoreData.MVP + 1));

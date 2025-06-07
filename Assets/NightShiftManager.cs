@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class NightShiftManager : MonoBehaviour
 {
     [SerializeField]
-    TextTemplate shiftComplete, shiftScore, pointsFromX;
+    TextTemplate shiftComplete, shiftScoreUI, totalScoreUI, pointsFromX;
     [SerializeField]
     TextMeshProUGUI countDown;
 
@@ -18,7 +18,8 @@ public class NightShiftManager : MonoBehaviour
         dynamicCamera.enabled = false;
 
         shiftComplete.gameObject.SetActive(false);
-        shiftScore.gameObject.SetActive(false);
+        shiftScoreUI.gameObject.SetActive(false);
+        totalScoreUI.gameObject.SetActive(false);
         pointsFromX.gameObject.SetActive(false);
         var clock = countDown.transform.parent as RectTransform;
         clock.gameObject.SetActive(false);
@@ -26,9 +27,34 @@ public class NightShiftManager : MonoBehaviour
         const float panTime = 1.5f, duration = .5f;
         var shiftData = ShiftData.Instance;
 
+        int totalScore = shiftData.playerScoreData.score;
+        int shiftScore = shiftData.ShiftScore;
+
         yield return ShowText(shiftComplete, shiftData.CurrentShift.ToString(), panTime, duration);
-        yield return ShowText(shiftScore, shiftData.ShiftScore.ToString(), panTime, duration);
-        yield return ShowText(pointsFromX, "x,x", panTime, duration);
+        yield return ShowText(shiftScoreUI, shiftScore.ToString(), panTime, duration);
+        yield return ShowText(totalScoreUI, totalScore.ToString(), panTime, duration);
+
+        yield return new Timer(.05f * shiftScore).GetRoutine(a =>
+        {
+            shiftScoreUI.SetText((shiftScore * (1f - a)).ToString("0"));
+            totalScoreUI.SetText((totalScore + shiftScore * a).ToString("0"));
+        });
+
+        static string GetPlaceText(int place) => place switch
+        {
+            1 => "1st",
+            2 => "2nd",
+            3 => "3rd",
+            _ => $"{place}th"
+        };
+
+        totalScore += shiftScore;
+        int getPlace = LeaderBoardManager.GetPlaceInLeaderBoard(totalScore);
+        PlayerScoreData leadingUpPlayer = LeaderBoardManager.GetLeadingUpPlayer(totalScore);
+        if (getPlace == 1)
+            yield return ShowOverwriteText(pointsFromX, $"You're in 1st place!", panTime, duration);
+        else
+            yield return ShowText(pointsFromX, $"{totalScore - leadingUpPlayer.score},{leadingUpPlayer.name + $"({GetPlaceText(getPlace - 2)})"}", panTime, duration);
 
         const int countDownDuration = 5;
 
@@ -64,6 +90,20 @@ public class NightShiftManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
     }
 
+    IEnumerator ShowOverwriteText(TextTemplate textTemplate, string message, float panTime, float duration)
+    {
+        textTemplate.gameObject.SetActive(true);
+        textTemplate.GetComponent<TextMeshProUGUI>().text = message;
+        var rect = textTemplate.GetComponent<RectTransform>();
+        yield return new Timer(panTime).GetRoutine(a =>
+        {
+            float aInverse = 1f - a;
+            aInverse *= aInverse; // Squaring to ease out
+            rect.anchoredPosition = new Vector2(-1000f * aInverse, rect.anchoredPosition.y);
+        });
+        yield return new WaitForSeconds(duration);
+    }
+
     IEnumerator CountDown(int duration)
     {
         while (duration >= 0)
@@ -73,7 +113,7 @@ public class NightShiftManager : MonoBehaviour
                 countDown.transform.parent.localEulerAngles = new Vector3(0, 0, a * 45);
             }, 0, 0, 15));
 
-            if(duration != 0)
+            if (duration != 0)
                 countDown.text = duration.ToString();
             else
                 countDown.text = "GO!";

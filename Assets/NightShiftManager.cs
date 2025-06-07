@@ -3,7 +3,6 @@ using MotionUtils;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NightShiftManager : MonoBehaviour
 {
@@ -27,8 +26,8 @@ public class NightShiftManager : MonoBehaviour
         const float panTime = 1.5f, duration = .5f;
         var shiftData = ShiftData.Instance;
 
-        int totalScore = shiftData.playerScoreData.score;
         int shiftScore = shiftData.ShiftScore;
+        int totalScore = shiftData.playerScoreData.score - shiftScore;
 
         yield return ShowText(shiftComplete, shiftData.CurrentShift.ToString(), panTime, duration);
         yield return ShowText(shiftScoreUI, shiftScore.ToString(), panTime, duration);
@@ -49,6 +48,7 @@ public class NightShiftManager : MonoBehaviour
         };
 
         totalScore += shiftScore;
+        Debug.Assert(totalScore == shiftData.playerScoreData.score, "Total score calculation is incorrect!");
         int getPlace = LeaderBoardManager.GetPlaceInLeaderBoard(totalScore);
         PlayerScoreData leadingUpPlayer = LeaderBoardManager.GetLeadingUpPlayer(totalScore);
         if (getPlace == 1)
@@ -73,7 +73,7 @@ public class NightShiftManager : MonoBehaviour
 
         dynamicCamera.enabled = true;
 
-        SceneManager.LoadScene(1);
+        GameSettings.ToMainGameScene();
     }
 
     IEnumerator ShowText(TextTemplate textTemplate, string message, float panTime, float duration)

@@ -83,6 +83,7 @@ namespace GameManagers
             deltaScore += CalculatePerResourceBonus(lastResource);
 
             shiftScore += deltaScore;
+            playerScoreData.score += deltaScore;
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }
@@ -91,7 +92,8 @@ namespace GameManagers
         {
             int deltaScore = CalculatePerResourceBonus(resourceType);
             shiftScore += deltaScore;
-            
+            playerScoreData.score += deltaScore;
+
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }
 
@@ -106,7 +108,6 @@ namespace GameManagers
         (Room room, Room.Requirements requirements, bool done)[] bookingShiftSequence;
         internal void StartNewShift()
         {
-            playerScoreData.score += shiftScore;
             shiftScore = 0;
             shiftEnded = false;
 
@@ -208,7 +209,7 @@ namespace GameManagers
                 shiftEnded = true;
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
-                Game.ToNightShift(4);
+                Game.ToNightShift(3);
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);

@@ -211,7 +211,12 @@ public class FMODAudioManager : MonoBehaviour
     public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartLoseMenuTheme() => loseMenuInstance.start();
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
-    public void TriggerTotalCalculationSfx() => totalCalculationInstance.start();
+
+    public void TriggerTotalCalculationSfx(float pitch)
+    { 
+        totalCalculationInstance.setParameterByName("Pitch", pitch);
+        totalCalculationInstance.start(); 
+    }
     
 
     //Plays a laundry done SFX. No parameter

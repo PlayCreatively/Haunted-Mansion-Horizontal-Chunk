@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 8622193243403369555}
   - component: {fileID: 1387711984912030493}
   - component: {fileID: 1287361366803324955}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sparks (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5271,7 +5271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4079575504180677640, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7717505733673945393, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5283,7 +5283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9028769281574132737, guid: 0f719312ef2e2b041a6d1a20082dde21, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5305,11 +5305,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3777494443208251738, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8140593656526803709, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8242754195682808184, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5357,7 +5357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9143096532008183833, guid: 63d9106134dd77740a53ca7dd6352887, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5417,6 +5417,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4144677809121917496, guid: 635bc1daee5b5784890241498f3c1e84, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 4361324244057567432, guid: 635bc1daee5b5784890241498f3c1e84, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.123
@@ -5452,6 +5456,10 @@ PrefabInstance:
     - target: {fileID: 4508655061621429422, guid: 635bc1daee5b5784890241498f3c1e84, type: 3}
       propertyPath: m_Name
       value: Sparks Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508655061621429422, guid: 635bc1daee5b5784890241498f3c1e84, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8256847625800054139, guid: 635bc1daee5b5784890241498f3c1e84, type: 3}
       propertyPath: looping
@@ -5524,11 +5532,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1441816958020132722, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3872475343523358705, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5397017289530747834, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5576,7 +5584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6256328754987325046, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8032319211079545202, guid: 8904c845661262642b3a980a09ffc881, type: 3}
       propertyPath: looping

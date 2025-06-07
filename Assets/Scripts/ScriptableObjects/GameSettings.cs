@@ -97,6 +97,8 @@ namespace GameManagers
         {
             Time.timeScale = 1f;
 
+            ShiftData.Instance.ResetData();
+
             SceneTransition(() =>
             {
                 var hubCorner = GameObject.FindAnyObjectByType<HubCornerSingleton>();
@@ -161,9 +163,6 @@ namespace GameManagers
             yield return PanCamera(failedRoom.GetCenter, 5f);
             yield return new WaitForSecondsRealtime(6f);
             
-            // clean
-            ShiftData.Instance.ResetData();
-
             ToGameOverScene();
         }
 

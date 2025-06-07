@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf9ae36b10311b42860e2d301d41359, type: 3}
   m_Name: ShiftData
   m_EditorClassIdentifier: 
-  shiftDuration: 10
+  shiftDuration: 120
   maxTimeForResource: 60
   minTimeForResource: 45
   minBookings: 1

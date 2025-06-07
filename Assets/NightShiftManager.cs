@@ -49,12 +49,14 @@ public class NightShiftManager : MonoBehaviour
 
         totalScore += shiftScore;
         Debug.Assert(totalScore == shiftData.playerScoreData.score, "Total score calculation is incorrect!");
-        int getPlace = LeaderBoardManager.GetPlaceInLeaderBoard(totalScore);
-        PlayerScoreData leadingUpPlayer = LeaderBoardManager.GetLeadingUpPlayer(totalScore);
+        int getPlace = LeaderBoardManager.GetLeadingUpPlaceInLeaderBoard(totalScore);
         if (getPlace == 1)
             yield return ShowOverwriteText(pointsFromX, $"You're in 1st place!", panTime, duration);
         else
-            yield return ShowText(pointsFromX, $"{totalScore - leadingUpPlayer.score},{leadingUpPlayer.name + $"({GetPlaceText(getPlace - 2)})"}", panTime, duration);
+        {
+            PlayerScoreData leadingUpPlayer = LeaderBoardManager.leaderBoardDatas[getPlace - 1];
+            yield return ShowText(pointsFromX, $"{leadingUpPlayer.score - totalScore},{leadingUpPlayer.name + $"({GetPlaceText(getPlace - 1)})"}", panTime, duration);
+        }
 
         const int countDownDuration = 5;
 

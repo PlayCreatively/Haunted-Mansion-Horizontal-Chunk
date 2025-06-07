@@ -108,6 +108,7 @@ namespace GameManagers
         {
             playerScoreData.score += shiftScore;
             shiftScore = 0;
+            shiftEnded = false;
 
             currentTimeIntoShift = 0f;
 
@@ -198,7 +199,7 @@ namespace GameManagers
         bool shiftEnded = false;
         internal void UpdateShiftTime(float deltaTime)
         {
-            if(shiftEnded || bookingShiftSequence == null || bookingShiftSequence.Length == 0)
+            if(shiftEnded || bookingShiftSequence == null)
                 return;
 
             currentTimeIntoShift += deltaTime;

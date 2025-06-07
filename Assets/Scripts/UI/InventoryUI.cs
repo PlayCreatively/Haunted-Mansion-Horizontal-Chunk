@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [DefaultExecutionOrder(ExecutionOrder.UI)]
@@ -18,23 +19,17 @@ public class InventoryUI : MonoBehaviour
 
     public static bool CreateUI(int count, Transform target, out InventoryUI inventoryUI)
     {
-        var canvas = GameObject.Find("Canvas");
-        if (canvas == null)
-        {
-            inventoryUI = null;
-            return false;
-        }
-        Assert.IsNotNull(canvas, "Canvas not found in the scene.");
-        inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"), canvas.transform);
+        var inventoryCanvas = GameObject.FindAnyObjectByType<PlayerInputManager>().GetComponentInChildren<Canvas>();
+
+        Assert.IsNotNull(inventoryCanvas, "Canvas not found in the scene.");
+        inventoryUI = Instantiate(Resources.Load<InventoryUI>("InventoryUI"), inventoryCanvas.transform);
         inventoryUI.icons = new Image[count];
         inventoryUI.target = target;
 
         float rotSteps = 180f / (count - 1);
 
         GameObject slotUI = inventoryUI.transform.GetChild(0).gameObject;
-        inventoryUI.icons[0] = slotUI.transform.GetChild(0).GetComponent<Image>();
-        inventoryUI.icons[0].gameObject.SetActive(false);
-        for (int i = 1; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             GameObject newSlotUI = Instantiate(slotUI, inventoryUI.transform, true);
             inventoryUI.icons[i] = newSlotUI.transform.GetChild(0).GetComponent<Image>();

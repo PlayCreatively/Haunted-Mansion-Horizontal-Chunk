@@ -23,8 +23,8 @@ public class InteractiveHand : MonoBehaviour, IInventory
                 }
 
                 _backpackUI.gameObject.SetActive(false);
-                backpack.Inventory.OnInventoryUpdate += BackpackUI.UpdateSlot;
-                BackpackUI.Setup(backpack.Inventory, backpack.Selected);
+                backpack.Inventory.OnInventoryUpdate += _backpackUI.UpdateSlot;
+                _backpackUI.Setup(backpack.Inventory, backpack.Selected);
             }
             return _backpackUI;
         }
@@ -61,15 +61,6 @@ public class InteractiveHand : MonoBehaviour, IInventory
         
     }
 
-    private void OnEnable()
-    {
-        SceneManager.sceneUnloaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneUnloaded -= OnSceneLoaded;
-    }
 
     void OnSceneLoaded(Scene scene)
     {

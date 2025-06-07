@@ -48,7 +48,7 @@ namespace GameManagers
             }
         }
 
-        static void SceneTransition(Action loadScene, float time, Sprite sprite)
+        public static void SceneTransition(Action loadScene, float time, Sprite sprite)
         {
             var image = TransitionImage;
             TransitionImage.StartCoroutine(SceneTransitionRoutine(loadScene, time, sprite, image));
@@ -339,6 +339,25 @@ namespace GameManagers
         }
 
         public static void ToMainMenu() => Game.ToMainMenu();
+        public static void ToLeaderboard()
+        {
+            Time.timeScale = 1f;
+
+            ShiftData.Instance.ResetData();
+
+            Game.SceneTransition(async () =>
+            {
+                var hubCorner = GameObject.FindAnyObjectByType<HubCornerSingleton>();
+                // destroy all not destroy on load
+                if (hubCorner != null)
+                    GameObject.Destroy(hubCorner.gameObject);
+                await SceneManager.LoadSceneAsync(0);
+                GameObject.FindAnyObjectByType<MainMenuManager>().OpenLeaderBoard();
+                FMODAudioManager.Instance.StopMainTheme();
+                FMODAudioManager.Instance.StopLoseMenuTheme();
+                FMODAudioManager.Instance.StartMenuLeaderboardTheme();
+            }, 1f, GameSettings.Instance.transitionSprite);
+        }
 
         public static async void ToMainGameScene()
         {

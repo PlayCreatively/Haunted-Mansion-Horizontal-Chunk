@@ -209,6 +209,7 @@ namespace GameManagers
                 shiftEnded = true;
                 OnShiftEnd?.Invoke(currentShift);
                 currentShift++;
+                playerScoreData.shift = currentShift;
                 Game.ToNightShift(3);
             }
 

@@ -1,10 +1,14 @@
 using GameManagers;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(-10)]
 public class MainMenuManager : MonoBehaviour
 {
+    [SerializeField]
+    UnityEvent OnOpenLeaderBoard, OnCloseLeaderBoard;
+
     PlayerInputManager playerInputManager;
     void Awake()
     {
@@ -17,6 +21,9 @@ public class MainMenuManager : MonoBehaviour
 
         playerInputManager.GetComponentInChildren<DynamicCamera>().followPlayers = false;
     }
+
+    public void OpenLeaderBoard() => OnOpenLeaderBoard?.Invoke();
+    public void CloseLeaderBoard() => OnCloseLeaderBoard?.Invoke();
 
     void OnDestroy()
     {

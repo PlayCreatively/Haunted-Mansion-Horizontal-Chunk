@@ -33,8 +33,15 @@ public class NightShiftManager : MonoBehaviour
         yield return ShowText(shiftScoreUI, shiftScore.ToString(), panTime, duration);
         yield return ShowText(totalScoreUI, totalScore.ToString(), panTime, duration);
 
+        int lastScoreTick = 0;
         yield return new Timer(.05f * shiftScore).GetRoutine(a =>
         {
+            int currentScoreTick = (int)(shiftScore * a);
+
+            if (currentScoreTick == lastScoreTick) return;
+            lastScoreTick = currentScoreTick;
+
+            FMODAudioManager.Instance.TriggerTotalCalculationSfx(a);
             shiftScoreUI.SetText((shiftScore * (1f - a)).ToString("0"));
             totalScoreUI.SetText((totalScore + shiftScore * a).ToString("0"));
         });

@@ -30,7 +30,7 @@ public class ScoreBubbleUI : MonoBehaviour
 
     IEnumerator DisplayRoutine(int score, Vector3 position)
     {
-        Vector3 offset = new Vector3(0, 0, 0);
+        Vector3 offset = new (0, 0, 0);
         void MoveUp()
         {
             offset += Time.deltaTime * Vector3.up;
@@ -43,6 +43,7 @@ public class ScoreBubbleUI : MonoBehaviour
         };
 
         Camera mainCamera = Camera.main;
+        int lastScoreTick = 0;
         yield return new Timer(.3f).GetRoutine(a =>
         {
             if (mainCamera == null)
@@ -62,7 +63,12 @@ public class ScoreBubbleUI : MonoBehaviour
             transform.position = mainCamera.WorldToScreenPoint(position);
             MoveUp();
 
-            textMesh.text = (score * powA).ToString("0");
+            int curScoreTick = (int)(score * powA);
+            if(curScoreTick == lastScoreTick) return;
+            lastScoreTick = curScoreTick;
+
+            textMesh.text = curScoreTick.ToString("0");
+            FMODAudioManager.Instance.TriggerTotalCalculationSfx(powA);
         });
 
 

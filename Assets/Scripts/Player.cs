@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
         landingParticles = visuals.GetChild(4).GetComponentsInChildren<ParticleSystem>();
         sparkParticles = visuals.GetChild(5).GetComponentsInChildren<ParticleSystem>();
         
+        Vibrate(0f); // stop vibration on start
     }
 
     void SetUpController()
@@ -290,7 +291,7 @@ public class Player : MonoBehaviour
         rend.material.SetColor("_Color", value ? Color.red : Color.cyan);
         stunned = value;
         animator.SetBool("IsStunned", value);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
+        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), value);
     }
 
     public void Jump(float force = 1f)

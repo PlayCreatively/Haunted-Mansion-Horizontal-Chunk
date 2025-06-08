@@ -222,8 +222,18 @@ public class FMODAudioManager : MonoBehaviour
 
     public void TriggerAnotherCalculationSfx(float pitch)
     {
-        anotherCalculationInstance.setParameterByName("Pitch 2", pitch);
-        anotherCalculationInstance.start();   
+        anotherCalculationInstance.getPlaybackState(out var state);
+        if (pitch != 1)
+        {
+            if(state != FMOD.Studio.PLAYBACK_STATE.PLAYING)
+                anotherCalculationInstance.start();
+
+            anotherCalculationInstance.setParameterByName("Pitch 2", pitch, ignoreseekspeed: true);
+        }
+        else
+        {
+            anotherCalculationInstance.stop(0);   
+        }
     }
 
 

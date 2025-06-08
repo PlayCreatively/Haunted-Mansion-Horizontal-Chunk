@@ -68,7 +68,7 @@ public class ScoreBubbleUI : MonoBehaviour
             lastScoreTick = curScoreTick;
 
             textMesh.text = curScoreTick.ToString("0");
-            FMODAudioManager.Instance.TriggerTotalCalculationSfx(powA);
+            FMODAudioManager.Instance.TriggerAnotherCalculationSfx(powA);
         });
 
 

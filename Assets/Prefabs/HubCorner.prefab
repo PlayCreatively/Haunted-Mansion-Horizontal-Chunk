@@ -159,7 +159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4583624593504964695, guid: 95a27156d29470747ab677e39a9c74a8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.175
+      value: 0.176
       objectReference: {fileID: 0}
     - target: {fileID: 4583624593504964695, guid: 95a27156d29470747ab677e39a9c74a8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -167,7 +167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4583624593504964695, guid: 95a27156d29470747ab677e39a9c74a8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.287
+      value: -2.215
       objectReference: {fileID: 0}
     - target: {fileID: 4583624593504964695, guid: 95a27156d29470747ab677e39a9c74a8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -418,6 +418,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 938936910167385186, guid: f4dc86629d07e00439f99a5816cce55c, type: 3}
+      propertyPath: m_AllowJoining
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938936910167385186, guid: f4dc86629d07e00439f99a5816cce55c, type: 3}
       propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -483,11 +487,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8149525019579239834, guid: f4dc86629d07e00439f99a5816cce55c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 21.64
+      value: 12.22
       objectReference: {fileID: 0}
     - target: {fileID: 8149525019579239834, guid: f4dc86629d07e00439f99a5816cce55c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 175.361
       objectReference: {fileID: 0}
     - target: {fileID: 8430489537724220671, guid: f4dc86629d07e00439f99a5816cce55c, type: 3}
       propertyPath: m_LocalPosition.x

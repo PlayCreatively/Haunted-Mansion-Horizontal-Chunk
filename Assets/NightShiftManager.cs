@@ -33,15 +33,11 @@ public class NightShiftManager : MonoBehaviour
         yield return ShowText(shiftScoreUI, shiftScore.ToString(), panTime, duration);
         yield return ShowText(totalScoreUI, totalScore.ToString(), panTime, duration);
 
-        int lastScoreTick = 0;
         yield return new Timer(.05f * shiftScore).GetRoutine(a =>
         {
             int currentScoreTick = (int)(shiftScore * a);
 
-            if (currentScoreTick == lastScoreTick) return;
-            lastScoreTick = currentScoreTick;
-
-            FMODAudioManager.Instance.TriggerTotalCalculationSfx(a);
+            FMODAudioManager.Instance.TriggerAnotherCalculationSfx(a);
             shiftScoreUI.SetText((shiftScore * (1f - a)).ToString("0"));
             totalScoreUI.SetText((totalScore + shiftScore * a).ToString("0"));
         });
@@ -62,7 +58,7 @@ public class NightShiftManager : MonoBehaviour
         else
         {
             PlayerScoreData leadingUpPlayer = LeaderBoardManager.leaderBoardDatas[getPlace - 1];
-            yield return ShowText(pointsFromX, $"{leadingUpPlayer.score - totalScore},{leadingUpPlayer.name + $"({GetPlaceText(getPlace - 1)})"}", panTime, duration);
+            yield return ShowText(pointsFromX, $"{leadingUpPlayer.score - totalScore},{leadingUpPlayer.name + $"({GetPlaceText(getPlace)})"}", panTime, duration);
         }
 
         const int countDownDuration = 5;

@@ -69,8 +69,8 @@ Material:
     m_Floats:
     - Vector1_21A90898: 0
     - Vector1_6E5AA9CB: 0.46
-    - Vector1_EDD429AC: 34.07
-    - _Alpha: 1
+    - Vector1_EDD429AC: 1000
+    - _Alpha: 0.94
     - _DarknessOffset: 2.71
     - _PanSpeed: 0.005
     - _ParalaxOffset: 0
@@ -84,6 +84,7 @@ Material:
     - Vector2_402BFE03: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _Color: {r: 1, g: 0.0470588, b: 0, a: 1}
     - _Color_1: {r: 0, g: 1, b: 0.10293556, a: 1}
+    - _UnderlayingColor: {r: 0.1803922, g: 0.2039216, b: 0.2509804, a: 1}
     - _Vector2: {r: 4, g: 4, b: 0, a: 0}
     - _change_size_for_down: {r: 3, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []

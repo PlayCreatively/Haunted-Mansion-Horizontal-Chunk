@@ -40,6 +40,8 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance scoreFlyInstance;
     EventInstance anotherCalculationInstance;
     EventInstance windingInstance;
+    EventInstance nightShiftAlarmInstance;
+    
     #endregion
     #region RoomSFXInstances
     EventInstance roomCleanedInstance;
@@ -104,6 +106,7 @@ public class FMODAudioManager : MonoBehaviour
         scoreFlyInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/score fly");
         anotherCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/other calculation");
         windingInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/corner clock time plus");
+        nightShiftAlarmInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/alarm in the night shift");
 
         #endregion
 
@@ -210,6 +213,11 @@ public class FMODAudioManager : MonoBehaviour
     }
 
     public void StartMainTheme() => bgMusicInstance.start();
+    public void TriggerNightShiftAlarm(int pitch)
+    {
+        nightShiftAlarmInstance.setParameterByName("Pitch 3", pitch);
+        nightShiftAlarmInstance.start();
+    }
     public void StopMainTheme() => bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
     public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -267,6 +275,8 @@ public class FMODAudioManager : MonoBehaviour
     private void OnDestroy()
     {
     #region EnvironmentAndRoomsDestroys
+    nightShiftAlarmInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    nightShiftAlarmInstance.release();
     roomCheckInInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     roomCheckInInstance.release();
     roomBookedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

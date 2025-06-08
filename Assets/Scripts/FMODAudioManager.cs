@@ -39,6 +39,7 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance laundryStartInstance;
     EventInstance scoreFlyInstance;
     EventInstance anotherCalculationInstance;
+    EventInstance windingInstance;
     #endregion
     #region RoomSFXInstances
     EventInstance roomCleanedInstance;
@@ -102,6 +103,7 @@ public class FMODAudioManager : MonoBehaviour
         laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
         scoreFlyInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/score fly");
         anotherCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/other calculation");
+        windingInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/corner clock time plus");
 
         #endregion
 
@@ -212,7 +214,9 @@ public class FMODAudioManager : MonoBehaviour
     public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
     public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartLoseMenuTheme() => loseMenuInstance.start();
+    public void TriggerWindingSfx() => windingInstance.start();
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
+    
 
     public void TriggerScoreFlySfx() => scoreFlyInstance.start();
 

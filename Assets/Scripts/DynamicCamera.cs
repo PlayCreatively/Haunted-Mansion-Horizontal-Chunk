@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameManagers;
+using System;
 using UnityEngine;
 
 [ExecuteAlways, DefaultExecutionOrder(+500)]
@@ -81,7 +82,7 @@ public class DynamicCamera : MonoBehaviour
             Vector3 targetPos;
             float targetZoom;
 
-            if (zoomOut)
+            if (zoomOut || Game.IsPaused)
             {
                 _smoothing = .1f;
                 Time.timeScale = 0f;

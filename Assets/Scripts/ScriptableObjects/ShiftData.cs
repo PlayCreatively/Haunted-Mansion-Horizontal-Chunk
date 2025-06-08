@@ -86,7 +86,7 @@ namespace GameManagers
 
             shiftScore += deltaScore;
             playerScoreData.score += deltaScore;
-            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(resourceScoreBonus * 2));
+            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(resourceScoreBonus));
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }
@@ -109,7 +109,7 @@ namespace GameManagers
             shiftScore += deltaScore;
             playerScoreData.score += deltaScore;
 
-            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(deltaScore * 2));
+            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(deltaScore));
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }

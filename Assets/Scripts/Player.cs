@@ -99,7 +99,7 @@ public class Player : MonoBehaviour
                 case "Dash": DashInput(); break;
                 //case "Jump": Jump(); break;
                 case "Throw": Throw(); break;
-                case "Pause": Game.ToMainMenu(); break;
+                case "Pause": Game.IsPaused = !Game.IsPaused; break;
             }
 
         switch (ctx.action.name)
@@ -125,7 +125,7 @@ public class Player : MonoBehaviour
 
     void OnDisable()
     {
-        gamepad.SetMotorSpeeds(0f, 0f); // stop vibration on disable
+        gamepad?.SetMotorSpeeds(0f, 0f); // stop vibration on disable
         hand.enabled = false;
         playerInput.DeactivateInput();
         playerInput.onActionTriggered -= OnActionTriggered;

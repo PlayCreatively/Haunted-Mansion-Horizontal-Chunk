@@ -120,9 +120,9 @@ public class Room : MonoBehaviour, IRoom
     {
         if (state == RoomState.Booked)
         {
-            roomUI.UpdateBookingTimeUI(BookedTime);
+            roomUI.UpdateBookingTimeUI(Mathf.Max(BookedTime, 0f));
 
-            if (BookedTime <= 0) CheckIn();
+            if (BookedTime - 1 <= 0) CheckIn();
         }
 
     }

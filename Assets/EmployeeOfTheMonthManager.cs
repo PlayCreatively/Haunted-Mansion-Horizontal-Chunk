@@ -15,7 +15,7 @@ public class EmployeeOfTheMonthManager : MonoBehaviour
         var leaderBoardData = LeaderBoardManager.leaderBoardDatas;
         for (int i = 0; i < leaderBoardData.Count && i < 10; i++)
         {
-            leaderBoard[i].text = leaderBoardData[i].name + "\n" + leaderBoardData[i].score.ToString();
+            leaderBoard[i].text = $"{leaderBoardData[i].name}\n{leaderBoardData[i].score}";
         }
     }
 }

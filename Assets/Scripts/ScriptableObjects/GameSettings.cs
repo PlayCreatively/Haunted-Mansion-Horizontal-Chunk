@@ -12,6 +12,8 @@ namespace GameManagers
         public static Canvas Canvas => GameLoopManager.Instance.canvas;
 
         static Image _transitionImage;
+        public static bool IsPaused { get; internal set; }
+
         public static Image TransitionImage
         {
             get
@@ -47,6 +49,7 @@ namespace GameManagers
                 return _transitionImage;
             }
         }
+
 
         public static void SceneTransition(Action loadScene, float time, Sprite sprite)
         {
@@ -161,7 +164,7 @@ namespace GameManagers
             Time.timeScale = 0f;
 
             yield return PanCamera(failedRoom.GetCenter, 5f);
-            yield return new WaitForSecondsRealtime(6f);
+            yield return new WaitForSecondsRealtime(4f);
             
             ToGameOverScene();
         }
@@ -173,11 +176,14 @@ namespace GameManagers
             dynamicCam.enabled = false;
             var startPos = cam.transform.position;
             var endPos = target - cam.transform.forward * 30f;
+            var startZoom = cam.orthographicSize;
+            const float endZoom = 3f;
             float t = 0f;
             while (t < 1f)
             {
                 t += Time.unscaledDeltaTime / time;
                 cam.transform.position = Smoothing(startPos, endPos, t * t);
+                cam.orthographicSize = Mathf.SmoothStep(startZoom, endZoom, t * t);
                 yield return null;
             }
         
@@ -371,6 +377,7 @@ namespace GameManagers
                 player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
                 GameObject.Destroy(player.GetComponent<SkinSelector>());
             }
+            await System.Threading.Tasks.Task.Delay(500);
             playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
         }
 

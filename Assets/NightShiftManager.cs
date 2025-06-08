@@ -23,7 +23,7 @@ public class NightShiftManager : MonoBehaviour
         var clock = countDown.transform.parent as RectTransform;
         clock.gameObject.SetActive(false);
 
-        const float panTime = 1.5f, duration = .5f;
+        const float panTime = 1.2f, duration = .5f;
         var shiftData = ShiftData.Instance;
 
         int shiftScore = shiftData.ShiftScore;
@@ -66,7 +66,7 @@ public class NightShiftManager : MonoBehaviour
         const int countDownDuration = 5;
 
         var directionalLight = GameObject.Find("Directional Light").GetComponent<Light>();
-        var sunsetRoutine = new Timer(countDownDuration).GetRoutine(a => directionalLight.colorTemperature = Mathf.Lerp(20000, 1500f, a));
+        var sunsetRoutine = new Timer(countDownDuration).GetRoutine(a => directionalLight.colorTemperature = Mathf.Lerp(20000, 5000, a));
         StartCoroutine(sunsetRoutine);
 
         clock.gameObject.SetActive(true);
@@ -76,7 +76,6 @@ public class NightShiftManager : MonoBehaviour
         yield return CountDown(countDownDuration);
 
         yield return new Timer(panTime).GetMoveRoutine(clock.anchoredPosition, new Vector3(clock.anchoredPosition.x, -1000), pos => clock.anchoredPosition = pos);
-
 
         dynamicCamera.enabled = true;
 
@@ -121,9 +120,15 @@ public class NightShiftManager : MonoBehaviour
             }, 0, 0, 15));
 
             if (duration != 0)
+            {
                 countDown.text = duration.ToString();
+                FMODAudioManager.Instance.TriggerNightShiftAlarm(0);
+            }
             else
+            {
                 countDown.text = "GO!";
+                FMODAudioManager.Instance.TriggerNightShiftAlarm(1);
+            }
 
             yield return new WaitForSeconds(1f);
             duration--;

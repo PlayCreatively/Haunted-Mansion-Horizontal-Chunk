@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameManagers
 {
-    [DefaultExecutionOrder(ExecutionOrder.Singleton-1)]
+    [DefaultExecutionOrder(ExecutionOrder.Singleton - 1)]
     [CreateAssetMenu(fileName = nameof(ShiftData), menuName = "ScriptableObjects/" + nameof(ShiftData), order = 1)]
     public class ShiftData : ScriptableObject
     {
@@ -35,7 +35,7 @@ namespace GameManagers
         int shiftScore;
         int roomsCleanedCount = 0;
         //// SCORING DATA - GLOBAL ////
-        public PlayerScoreData playerScoreData = new ();
+        public PlayerScoreData playerScoreData = new();
 
         void OnEnable()
         {
@@ -121,7 +121,7 @@ namespace GameManagers
 
                 int resourcesCount = 0;
                 for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
-                    resourcesCount += bookingRequirementCountPerShift[i] * (i+1);
+                    resourcesCount += bookingRequirementCountPerShift[i] * (i + 1);
                 Debug.Log(bookingCount + $" bookings with {resourcesCount} resources: 1): {bookingRequirementCountPerShift[0]}, 2): {bookingRequirementCountPerShift[1]}, 3): {bookingRequirementCountPerShift[2]}");
 
                 float curTimeForResource = Lerp(maxTimeForResource, minTimeForResource, (float)currentShift / (maxBookings - minBookings));
@@ -200,7 +200,7 @@ namespace GameManagers
         bool shiftEnded = false;
         internal void UpdateShiftTime(float deltaTime)
         {
-            if(shiftEnded || bookingShiftSequence == null)
+            if (shiftEnded || bookingShiftSequence == null)
                 return;
 
             currentTimeIntoShift += deltaTime;
@@ -214,7 +214,7 @@ namespace GameManagers
             }
 
             int nextBookingIndex() => bookingShiftSequence.FirstIndex(b => !b.done && !b.room.IsBooked);
-            int bookedRoomsCount () => bookingShiftSequence.Where(b => !b.done && b.room.IsBooked).Count();
+            int bookedRoomsCount() => bookingShiftSequence.Where(b => !b.done && b.room.IsBooked).Count();
             if (bookedRoomsCount() < MaxConsecutiveBookings)
             {
                 int nextBooking = nextBookingIndex();
@@ -270,7 +270,7 @@ namespace GameManagers
             for (int i = 0; i < bookingCount; i++)
             {
                 int randomIndex;
-                do  randomIndex = UnityEngine.Random.Range(0, copy.Length);
+                do randomIndex = UnityEngine.Random.Range(0, copy.Length);
                 while (copy[randomIndex] <= 0);
 
                 copy[randomIndex]--;
@@ -288,7 +288,7 @@ namespace GameManagers
         {
             for (int i = 0; i < bookingRequirementCountPerShift.Length; i++)
                 bookingRequirementCountPerShift[i] = 0;
-            
+
             int shiftI = 0;
 
             while (shiftI <= shiftIndex)
@@ -296,12 +296,12 @@ namespace GameManagers
                 if (shiftI < maxBookings - minBookings)
                     bookingRequirementCountPerShift[0] += 1;
 
-                if(bookingRequirementCountPerShift[0] > 0 && (shiftI & 1) == 0)
+                if (bookingRequirementCountPerShift[0] > 0 && (shiftI & 1) == 0)
                 {
                     bookingRequirementCountPerShift[0]--;
                     bookingRequirementCountPerShift[1]++;
                 }
-                else if(bookingRequirementCountPerShift[1] > 0 && (shiftI & 1) == 1)
+                else if (bookingRequirementCountPerShift[1] > 0 && (shiftI & 1) == 1)
                 {
                     bookingRequirementCountPerShift[1]--;
                     bookingRequirementCountPerShift[2]++;
@@ -310,7 +310,7 @@ namespace GameManagers
                 shiftI++;
             }
         }
-        
+
         internal int GetBookingCount(int shiftIndex)
         {
             return Math.Min(minBookings + shiftIndex, maxBookings);
@@ -349,7 +349,7 @@ namespace GameManagers
             }
         }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("Game/Settings/" + nameof(ShiftData))]
         public static void CreateAndShow()
         {
@@ -366,7 +366,7 @@ namespace GameManagers
 #endif
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
 
     [UnityEditor.CustomEditor(typeof(ShiftData))]
@@ -388,7 +388,7 @@ namespace GameManagers
     }
 
 
-    #endif
+#endif
 }
 
 public static class LeaderBoardManager
@@ -399,7 +399,7 @@ public static class LeaderBoardManager
 
     public static void AddLeaderBoardData(PlayerScoreData data)
     {
-        if(leaderBoardDatas.Contains(data))
+        if (leaderBoardDatas.Contains(data))
         {
             Debug.LogWarning("LeaderBoardData already exists: " + data);
             return;
@@ -429,6 +429,17 @@ public static class LeaderBoardManager
         if (!System.IO.File.Exists(LeaderBoardFilePath))
         {
             Debug.LogWarning("LeaderBoardData file not found: " + LeaderBoardFilePath);
+
+            leaderBoardDatas = new List<PlayerScoreData>(10)
+            {
+                new() { name = "Ksa",   skinID = 4, score = 114, shift = 1, roomsCleaned = 3, },
+                new() { name = "Lisa",  skinID = 2, score = 112, shift = 1, roomsCleaned = 3, },
+                new() { name = "APV",   skinID = 1, score = 102, shift = 1, roomsCleaned = 3, },
+                new() { name = "Alex",  skinID = 0, score = 101, shift = 1, roomsCleaned = 3, },
+                new() { name = "Kevn",  skinID = 3, score = 100, shift = 1, roomsCleaned = 3, },
+            };
+            SaveLeaderBoardData();
+
             return;
         }
         string json = System.IO.File.ReadAllText(LeaderBoardFilePath);

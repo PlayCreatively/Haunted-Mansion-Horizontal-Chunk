@@ -125,10 +125,10 @@ public class Player : MonoBehaviour
 
     void OnDisable()
     {
+        gamepad.SetMotorSpeeds(0f, 0f); // stop vibration on disable
         hand.enabled = false;
         playerInput.DeactivateInput();
         playerInput.onActionTriggered -= OnActionTriggered;
-        Vibrate(0f); // stop vibration on disable
         gamepad = null;
     }
 
@@ -140,11 +140,14 @@ public class Player : MonoBehaviour
         {
             moveInput = Vector3.zero;
             animator.SetFloat("Speed", 0);
-            col.material.dynamicFriction = 0.5f; // reset friction
+            col.material.dynamicFriction = 1f; // reset friction
+            col.material.staticFriction = 1f;
             return;
         }
 
         col.material.dynamicFriction = 0; // set friction to 0 when moving
+        col.material.staticFriction = 0f;
+
 
         moveInput = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up) * ctx.ReadValue<Vector2>().XZ();
         animator.SetFloat("Speed", moveInput.magnitude);

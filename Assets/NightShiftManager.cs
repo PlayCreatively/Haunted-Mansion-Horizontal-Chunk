@@ -33,14 +33,16 @@ public class NightShiftManager : MonoBehaviour
         yield return ShowText(shiftScoreUI, shiftScore.ToString(), panTime, duration);
         yield return ShowText(totalScoreUI, totalScore.ToString(), panTime, duration);
 
+        FMODAudioManager.Instance.ActivateCalculationSfx(true);
         yield return new Timer(.05f * shiftScore).GetRoutine(a =>
         {
             int currentScoreTick = (int)(shiftScore * a);
 
-            FMODAudioManager.Instance.TriggerAnotherCalculationSfx(a);
+            FMODAudioManager.Instance.UpdateCalculationSfx(a);
             shiftScoreUI.SetText((shiftScore * (1f - a)).ToString("0"));
             totalScoreUI.SetText((totalScore + shiftScore * a).ToString("0"));
         });
+        FMODAudioManager.Instance.ActivateCalculationSfx(false);
 
         static string GetPlaceText(int place) => place switch
         {

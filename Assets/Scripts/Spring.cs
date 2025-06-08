@@ -36,7 +36,7 @@ namespace MotionUtils
         public float angularFrequency; // The natural frequency of the spring
         public float dampingRatio; // The damping ratio of the spring
 
-        public Spring(float equilibrium = 0f, float angularFrequency = 1f, float dampingRatio = 0f)
+        public Spring(float equilibrium = 0f, float angularFrequency = 6f, float dampingRatio = .1f)
         {
             this.equilibrium = equilibrium;
             this.angularFrequency = angularFrequency;
@@ -64,7 +64,7 @@ namespace MotionUtils
             Vector2 velocity = initVelocity + (equilibrium - position) * .1f;
 
             float a = 0f;
-            while (a < .95f)
+            while (a < .9f)
             {
                 // Calculate coefficients for the current step
                 var coefficients = DampedSpring.CalcCoefficients(Time.deltaTime, angularFrequency, dampingRatio);

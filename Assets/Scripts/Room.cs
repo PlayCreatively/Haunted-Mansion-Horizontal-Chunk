@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using static UnityEngine.Rendering.DebugUI;
 using Random = UnityEngine.Random;
 
 public enum RoomState
@@ -27,16 +28,16 @@ public class Room : MonoBehaviour, IRoom
     float _bookedTime;
     float BookedTime
     {
-        get => _bookedTime;
+        get => _bookedTime - ShiftData.Instance.TimeIntoShift;
         set
         {
-            _bookedTime = value;
+            _bookedTime = value + ShiftData.Instance.TimeIntoShift;
             //if(UrgencyState < 2 && _bookedTime < 15f)
             //    UrgencyState = 2;
             //else if(UrgencyState < 1 && _bookedTime < 30f)
             //    UrgencyState = 1;
 
-            roomUI.UpdateBookingTimeUI(_bookedTime);
+            roomUI.UpdateBookingTimeUI(BookedTime);
         }
     }
     int urgencyState = 0;
@@ -119,7 +120,8 @@ public class Room : MonoBehaviour, IRoom
     {
         if (state == RoomState.Booked)
         {
-            BookedTime -= Time.deltaTime;
+            roomUI.UpdateBookingTimeUI(BookedTime);
+
             if (BookedTime <= 0) CheckIn();
         }
 
@@ -209,7 +211,7 @@ public class Room : MonoBehaviour, IRoom
 
             if (requirements.IsFulfilled())
             {
-                ShiftData.Instance.AddCleanedRoom(this, _bookedTime, requirements, type);
+                ShiftData.Instance.AddCleanedRoom(this, BookedTime, requirements, type);
 
                 //Debug.Log($"{gameObject.name} requirements fulfilled. Cleaned!", gameObject);
                 Clean();

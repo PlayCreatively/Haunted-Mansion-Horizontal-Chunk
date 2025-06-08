@@ -18,7 +18,7 @@ public class RoomUI : MonoBehaviour
     //public GameObject bookedIconUI;
     int priority = 0;
     bool isUrgent = false;
-    const int UrgentTime = 15;
+    const int UrgentTime = 30;
 
     void Awake()
     {

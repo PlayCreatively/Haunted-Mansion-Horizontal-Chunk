@@ -1,4 +1,5 @@
 using GameManagers;
+using MotionUtils;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,10 +20,13 @@ public class ShiftTimerUI : MonoBehaviour
         clockHandUI = transform.Find("ClockHand");
     }
 
+    readonly Spring clockHandSpring = new(-90, 14f, .1f);
     void Update()
     {
         float angle = startAngle + ShiftData.Instance.TimeIntoShiftAlpha * angleWidth;
-        clockHandUI.transform.localRotation = Quaternion.Euler(0, 0, angle - 90);
+        clockHandSpring.equilibrium = angle - 90;
+        clockHandSpring.Step(Time.deltaTime);
+        clockHandUI.transform.localRotation = Quaternion.Euler(0, 0, clockHandSpring.position);
     }
 
     void OnEnable()
@@ -50,7 +54,6 @@ public class ShiftTimerUI : MonoBehaviour
     {
         var shiftData = ShiftData.Instance;
         bookingBookmarksUI = new Image[shiftData.CurrentBookingCount];
-
 
         for (int i = 0; i < shiftData.CurrentBookingCount; i++)
         {

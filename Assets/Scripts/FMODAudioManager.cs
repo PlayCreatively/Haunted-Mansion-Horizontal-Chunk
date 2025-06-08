@@ -214,23 +214,20 @@ public class FMODAudioManager : MonoBehaviour
     public void StartLoseMenuTheme() => loseMenuInstance.start();
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
 
-    public void TriggerTotalCalculationSfx() => scoreFlyInstance.start();
+    public void TriggerScoreFlySfx() => scoreFlyInstance.start();
 
-    public void TriggerAnotherCalculationSfx(float pitch)
+    public void UpdateCalculationSfx(float pitch)
     {
-        anotherCalculationInstance.getPlaybackState(out var state);
-        if (pitch != 1)
-        {
-            if(state != FMOD.Studio.PLAYBACK_STATE.PLAYING)
-                anotherCalculationInstance.start();
-
-            anotherCalculationInstance.setParameterByName("Pitch 2", pitch, ignoreseekspeed: true);
-        }
-        else
-        {
-            anotherCalculationInstance.stop(0);   
-        }
+        anotherCalculationInstance.setParameterByName("Pitch 2", pitch, ignoreseekspeed: true);
     }
+    public void ActivateCalculationSfx(bool activate)
+    {
+        if (activate)
+            anotherCalculationInstance.start();
+        else
+            anotherCalculationInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
 
 
     //Plays a laundry done SFX. No parameter

@@ -44,6 +44,7 @@ public class ScoreBubbleUI : MonoBehaviour
 
         Camera mainCamera = Camera.main;
         int lastScoreTick = 0;
+        FMODAudioManager.Instance.ActivateCalculationSfx(true);
         yield return new Timer(.3f).GetRoutine(a =>
         {
             if (mainCamera == null)
@@ -68,8 +69,9 @@ public class ScoreBubbleUI : MonoBehaviour
             lastScoreTick = curScoreTick;
 
             textMesh.text = curScoreTick.ToString("0");
-            FMODAudioManager.Instance.TriggerAnotherCalculationSfx(powA);
+            FMODAudioManager.Instance.UpdateCalculationSfx(powA);
         });
+        FMODAudioManager.Instance.ActivateCalculationSfx(false);
 
 
         yield return new Timer(.4f).GetRoutine(a =>
@@ -131,6 +133,7 @@ public class ScoreBubbleUI : MonoBehaviour
             transform.Squash(Mathf.Lerp(vel.magnitude, 1f, .3f));
             transform.localScale *= (1f - a);
         });
+        FMODAudioManager.Instance.TriggerScoreFlySfx();
 
         float prevScore = ShiftData.Instance.ShiftScore - score;
         Debug.Log($"{GameLoopManager.Instance.shiftScoreUI}", GameLoopManager.Instance.shiftScoreUI);

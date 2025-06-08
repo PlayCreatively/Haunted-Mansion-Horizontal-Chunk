@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -80,12 +81,26 @@ namespace GameManagers
             int deltaScore = 0;
             deltaScore += CalculateTimeBonus(timeLeft);
             deltaScore += CalculateCumulativeRequirementsBonus(requirements);
-            deltaScore += CalculatePerResourceBonus(lastResource);
+            int resourceScoreBonus = CalculatePerResourceBonus(lastResource);
+            deltaScore += resourceScoreBonus;
 
             shiftScore += deltaScore;
             playerScoreData.score += deltaScore;
+            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(resourceScoreBonus * 2));
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
+        }
+
+        IEnumerator RewingTimeRoutine(float amount)
+        {
+            float lastA = 0;
+
+            yield return new Timer(.3f).GetRoutine(a =>
+            {
+                float deltaA = a - lastA;
+                currentTimeIntoShift -= deltaA * amount;
+                lastA = a;
+            });
         }
 
         public void AddResourceDelivered(Room room, CarriableType resourceType)
@@ -93,6 +108,8 @@ namespace GameManagers
             int deltaScore = CalculatePerResourceBonus(resourceType);
             shiftScore += deltaScore;
             playerScoreData.score += deltaScore;
+
+            GameLoopManager.Instance.StartCoroutine(RewingTimeRoutine(deltaScore * 2));
 
             ScoreBubbleUI.SpawnScore(deltaScore, room.transform.position + room.UIOffset.XZ());
         }

@@ -214,7 +214,12 @@ public class FMODAudioManager : MonoBehaviour
     public void StartMenuLeaderboardTheme() => mainMenuLeaderboardInstance.start();
     public void StopMenuLeaderboardTheme() => mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     public void StartLoseMenuTheme() => loseMenuInstance.start();
-    public void TriggerWindingSfx() => windingInstance.start();
+
+    public void TriggerWindingSfx(float volume)
+    {
+        windingInstance.setParameterByName("Volume", volume);
+        windingInstance.start();
+    }
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
     
 

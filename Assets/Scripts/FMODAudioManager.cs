@@ -266,71 +266,80 @@ public class FMODAudioManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        #region EnvironmentAndRoomsDestroys
-        roomCheckInInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        roomCheckInInstance.release();
-        roomBookedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        roomBookedInstance.release();
-        resourcePlacedInRoomInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        resourcePlacedInRoomInstance.release();
-        resourcePlacedInMachineInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        resourcePlacedInMachineInstance.release();
-        roomCleanedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        roomCleanedInstance.release();
-        bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        bgMusicInstance.release();
-        mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        mainMenuLeaderboardInstance.release();
-        loseMenuInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        loseMenuInstance.release();
-        gameOverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        gameOverInstance.release();
-        runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        runningOutOfTimeInstance.release();
-        laundryDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        laundryDoneInstance.release();
-        laundryStartInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        laundryStartInstance.release();
-        #endregion
-        #region LandingOnEnemiesDestroys
-        landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        landingOnTheGhostInstance.release();
-        landingOnTheMummyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        landingOnTheMummyInstance.release();
-        landingOnTheGreenGooInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        landingOnTheGreenGooInstance.release();
-        landingOnTheWormMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        landingOnTheWormMonsterInstance.release();
-        #endregion
-        #region CharacterDestroys
-        onDashStartsInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        onDashStartsInstance.release();
-        jumpingOffTheBalconyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        jumpingOffTheBalconyInstance.release();
-        itemDroppedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        itemDroppedInstance.release();
-        itemThrownInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        itemThrownInstance.release();
-        itemPickedUpInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        itemPickedUpInstance.release();
-        stunnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        stunnedInstance.release();
-        itemSelectionInTheBagInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        itemSelectionInTheBagInstance.release();
-        uiHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        uiHoverInstance.release();
-        uiSelectInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        uiSelectInstance.release();
-        #endregion
-        #region NewMonsterSpawnsDestroy
-        newMummySpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        newMummySpawnedInstance.release();
-        newGhostSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        newGhostSpawnedInstance.release();
-        newGreenGooSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        newGreenGooSpawnedInstance.release();
-        newWormMonsterSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        newWormMonsterSpawnedInstance.release();
-        #endregion
+    #region EnvironmentAndRoomsDestroys
+    roomCheckInInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    roomCheckInInstance.release();
+    roomBookedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    roomBookedInstance.release();
+    resourcePlacedInRoomInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    resourcePlacedInRoomInstance.release();
+    resourcePlacedInMachineInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    resourcePlacedInMachineInstance.release();
+    roomCleanedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    roomCleanedInstance.release();
+    bgMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    bgMusicInstance.release();
+    mainMenuLeaderboardInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    mainMenuLeaderboardInstance.release();
+    loseMenuInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    loseMenuInstance.release();
+    gameOverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    gameOverInstance.release();
+    runningOutOfTimeInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    runningOutOfTimeInstance.release();
+    laundryDoneInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    laundryDoneInstance.release();
+    laundryStartInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    laundryStartInstance.release();
+    scoreFlyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    scoreFlyInstance.release();
+    anotherCalculationInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    anotherCalculationInstance.release();
+    windingInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    windingInstance.release();
+    #endregion
+
+    #region LandingOnEnemiesDestroys
+    landingOnTheGhostInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    landingOnTheGhostInstance.release();
+    landingOnTheMummyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    landingOnTheMummyInstance.release();
+    landingOnTheGreenGooInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    landingOnTheGreenGooInstance.release();
+    landingOnTheWormMonsterInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    landingOnTheWormMonsterInstance.release();
+    #endregion
+
+    #region CharacterDestroys
+    onDashStartsInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    onDashStartsInstance.release();
+    jumpingOffTheBalconyInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    jumpingOffTheBalconyInstance.release();
+    itemDroppedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    itemDroppedInstance.release();
+    itemThrownInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    itemThrownInstance.release();
+    itemPickedUpInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    itemPickedUpInstance.release();
+    stunnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    stunnedInstance.release();
+    itemSelectionInTheBagInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    itemSelectionInTheBagInstance.release();
+    uiHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    uiHoverInstance.release();
+    uiSelectInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    uiSelectInstance.release();
+    #endregion
+
+    #region NewMonsterSpawnsDestroy
+    newMummySpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    newMummySpawnedInstance.release();
+    newGhostSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    newGhostSpawnedInstance.release();
+    newGreenGooSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    newGreenGooSpawnedInstance.release();
+    newWormMonsterSpawnedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    newWormMonsterSpawnedInstance.release();
+    #endregion
     }
 }

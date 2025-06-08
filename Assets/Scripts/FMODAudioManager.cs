@@ -37,7 +37,7 @@ public class FMODAudioManager : MonoBehaviour
     EventInstance runningOutOfTimeInstance;
     EventInstance laundryDoneInstance;
     EventInstance laundryStartInstance;
-    EventInstance totalCalculationInstance;
+    EventInstance scoreFlyInstance;
     EventInstance anotherCalculationInstance;
     #endregion
     #region RoomSFXInstances
@@ -100,7 +100,7 @@ public class FMODAudioManager : MonoBehaviour
         runningOutOfTimeInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/ticktack");
         laundryDoneInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry done");
         laundryStartInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/laundry start");
-        totalCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/total calculation");
+        scoreFlyInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/score fly");
         anotherCalculationInstance = RuntimeManager.CreateInstance("event:/Environment SFX Events/other calculation");
 
         #endregion
@@ -214,11 +214,7 @@ public class FMODAudioManager : MonoBehaviour
     public void StartLoseMenuTheme() => loseMenuInstance.start();
     public void StopLoseMenuTheme() => loseMenuInstance.stop(0);
 
-    public void TriggerTotalCalculationSfx(float pitch)
-    {
-        totalCalculationInstance.setParameterByName("Pitch", pitch);
-        totalCalculationInstance.start();
-    }
+    public void TriggerTotalCalculationSfx() => scoreFlyInstance.start();
 
     public void TriggerAnotherCalculationSfx(float pitch)
     {

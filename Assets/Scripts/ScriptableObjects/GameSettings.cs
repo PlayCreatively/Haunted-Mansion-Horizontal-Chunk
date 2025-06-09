@@ -377,7 +377,7 @@ namespace GameManagers
                 player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
                 GameObject.Destroy(player.GetComponent<SkinSelector>());
             }
-            await System.Threading.Tasks.Task.Delay(500);
+            await System.Threading.Tasks.Task.Delay(1000);
             playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
         }
 
@@ -393,6 +393,7 @@ namespace GameManagers
                 player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
                 GameObject.Destroy(player.GetComponent<SkinSelector>());
             }
+            await System.Threading.Tasks.Task.Delay(1000);
             playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
         }
 

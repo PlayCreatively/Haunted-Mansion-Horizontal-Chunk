@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ShiftData
   m_EditorClassIdentifier: 
   shiftDuration: 120
-  maxTimeForResource: 60
-  minTimeForResource: 45
+  maxTimeForResource: 70
+  minTimeForResource: 30
   minBookings: 1
   maxBookings: 7
   maxAlpha: 0.315

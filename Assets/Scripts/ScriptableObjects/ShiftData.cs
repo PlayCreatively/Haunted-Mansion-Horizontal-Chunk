@@ -141,7 +141,7 @@ namespace GameManagers
                     resourcesCount += bookingRequirementCountPerShift[i] * (i + 1);
                 Debug.Log(bookingCount + $" bookings with {resourcesCount} resources: 1): {bookingRequirementCountPerShift[0]}, 2): {bookingRequirementCountPerShift[1]}, 3): {bookingRequirementCountPerShift[2]}");
 
-                float curTimeForResource = Lerp(maxTimeForResource, minTimeForResource, (float)currentShift / (maxBookings - minBookings));
+                float curTimeForResource = Lerp(maxTimeForResource, minTimeForResource, (float)currentShift / (maxBookings - minBookings - 2));
                 shiftDuration = curTimeForResource * resourcesCount;
             }
 

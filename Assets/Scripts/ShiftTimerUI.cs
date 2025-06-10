@@ -66,6 +66,10 @@ public class ShiftTimerUI : MonoBehaviour
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
         RectTransform rectTransform = transform as RectTransform;
+        // add additional padding
+        screenPos.x += rectTransform.rect.width * 0.2f;
+        screenPos.y += rectTransform.rect.height * 0.2f;
+
         return RectTransformUtility.RectangleContainsScreenPoint(rectTransform, screenPos);
     }
 

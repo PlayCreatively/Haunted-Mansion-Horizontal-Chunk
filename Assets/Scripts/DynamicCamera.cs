@@ -98,8 +98,9 @@ public class DynamicCamera : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.Euler(45, 45, 0);
             
-            transform.SetPositionAndRotation(Vector3.Lerp(transform.position, targetPos, _smoothing), Quaternion.Lerp(transform.rotation, targetRotation, _smoothing * .15f));
-            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetZoom, _smoothing * .5f);
+            float deltaTime = Time.deltaTime * 60f;
+            transform.SetPositionAndRotation(Vector3.Lerp(transform.position, targetPos, _smoothing * deltaTime), Quaternion.Lerp(transform.rotation, targetRotation, _smoothing * .3f * deltaTime));
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetZoom, _smoothing * .5f * deltaTime);
 
             return;
         }

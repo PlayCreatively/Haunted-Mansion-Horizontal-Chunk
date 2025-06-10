@@ -77,7 +77,6 @@ public class NightShiftManager : MonoBehaviour
 
         yield return new Timer(panTime).GetMoveRoutine(clock.anchoredPosition, new Vector3(clock.anchoredPosition.x, -1000), pos => clock.anchoredPosition = pos);
 
-        dynamicCamera.enabled = true;
 
         GameSettings.ToMainGameScene();
     }

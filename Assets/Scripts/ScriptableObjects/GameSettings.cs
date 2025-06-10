@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -382,8 +383,10 @@ namespace GameManagers
                 player.GetComponent<PlayerInput>().currentActionMap = new InputActionMap("Player");
                 GameObject.Destroy(player.GetComponent<SkinSelector>());
             }
-            await System.Threading.Tasks.Task.Delay(1000);
-            playersObj.GetComponentInChildren<DynamicCamera>().followPlayers = true;
+            await Task.Delay(500);
+            DynamicCamera cam = playersObj.GetComponentInChildren<DynamicCamera>();
+            cam.enabled = true;
+            cam.followPlayers = true;
         }
 
         public static async void ToTutorial()

@@ -165,8 +165,13 @@ namespace GameManagers
 
             yield return PanCamera(failedRoom.GetCenter, 5f);
             yield return new WaitForSecondsRealtime(4f);
-            
-            ToGameOverScene();
+
+            int leadingPlayer = LeaderBoardManager.GetLeadingUpPlaceInLeaderBoard(ShiftData.Instance.playerScoreData.score);
+
+            if (leadingPlayer == 10)
+                GameSettings.ToLeaderboard();
+            else
+                ToGameOverScene();
         }
 
         static IEnumerator PanCamera(Vector3 target, float time)

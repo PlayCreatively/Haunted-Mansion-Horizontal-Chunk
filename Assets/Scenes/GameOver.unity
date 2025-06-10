@@ -364,7 +364,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 11400000, guid: f97d7a346e118934ca9870a04a8b2ac8, type: 2}
         m_TargetAssemblyTypeName: GameManagers.GameSettings, Assembly-CSharp
-        m_MethodName: ToMainMenu
+        m_MethodName: ToLeaderboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

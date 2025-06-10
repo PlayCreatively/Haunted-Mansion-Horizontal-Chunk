@@ -55,7 +55,7 @@ public class NightShiftManager : MonoBehaviour
         totalScore += shiftScore;
         Debug.Assert(totalScore == shiftData.playerScoreData.score, "Total score calculation is incorrect!");
         int getPlace = LeaderBoardManager.GetLeadingUpPlaceInLeaderBoard(totalScore);
-        if (getPlace == 1)
+        if (getPlace == 0)
             yield return ShowOverwriteText(pointsFromX, $"You're in 1st place!", panTime, duration);
         else
         {

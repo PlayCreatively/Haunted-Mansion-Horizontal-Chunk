@@ -477,7 +477,7 @@ public static class LeaderBoardManager
         }
 
         if (leaderBoardDatas[0].score < score)
-            return 1;
+            return 0;
         else
             return leaderBoardDatas.Count + 1; // If score is lower than all, return last place
     }

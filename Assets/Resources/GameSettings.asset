@@ -39,7 +39,7 @@ MonoBehaviour:
   Worm:
     hp: 2
     speed: 0.7
-    hurtSpeedMultiplier: 3
+    hurtSpeedMultiplier: 2
   TrashMonster:
     hp: 2
     speed: 0.7

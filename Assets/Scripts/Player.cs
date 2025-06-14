@@ -1,7 +1,6 @@
 using GameManagers;
 using System;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -32,7 +31,7 @@ public class Player : MonoBehaviour
     float dashValue = 0f;
     float jumpSquash = 0f;
     bool stunned;
-    const float boostRunDuration = 1f;
+    const float boostRunDuration = 2f, subBoostRunDuration = boostRunDuration * .5f;
     float boostRunEnergy = 0;
     Gamepad gamepad;
     bool zoomInput = false;
@@ -59,7 +58,7 @@ public class Player : MonoBehaviour
         dashParticles = visuals.GetChild(1).GetComponentsInChildren<ParticleSystem>();
         landingParticles = visuals.GetChild(4).GetComponentsInChildren<ParticleSystem>();
         sparkParticles = visuals.GetChild(5).GetComponentsInChildren<ParticleSystem>();
-        
+
         Vibrate(0f); // stop vibration on start
     }
 
@@ -239,7 +238,6 @@ public class Player : MonoBehaviour
     {
         if (stunned) return;
 
-        //gamepad.ResumeHaptics();
         Vibrate(1f);
 
         moveInput = Vector3.zero;
@@ -285,7 +283,7 @@ public class Player : MonoBehaviour
 
     IEnumerator IgnoreUntilExit(Collider col)
     {
-        if(!col.bounds.Intersects(this.col.bounds)) yield break;
+        if (!col.bounds.Intersects(this.col.bounds)) yield break;
 
         Physics.IgnoreCollision(col, this.col, true);
         yield return new WaitWhile(() => col.bounds.Intersects(this.col.bounds));
@@ -344,6 +342,7 @@ public class Player : MonoBehaviour
 
     }
 
+    bool gotBoostFrame = false;
     void FixedUpdate()
     {
         if (stunned)
@@ -354,23 +353,23 @@ public class Player : MonoBehaviour
 
         visuals.Squash(rb.linearVelocity.y / 15f + 1);
 
-        if (!grounded)
-        {
-            airTime += Time.fixedDeltaTime;
-        }
+        gotBoostFrame = false;
 
         if (grounded)
         {
             if (airTime > .7f)
             {
-                boostRunEnergy = boostRunDuration;
+                gotBoostFrame = true;
+                boostRunEnergy = airTime > .79f ? boostRunDuration : subBoostRunDuration;
                 foreach (var particle in landingParticles)
                     particle.Play();
             }
             airTime = 0;
         }
+        else
+            airTime += Time.fixedDeltaTime;
 
-        var jumpAction = playerInput.actions.FindAction("Jump");
+            var jumpAction = playerInput.actions.FindAction("Jump");
         if (jumpAction.IsPressed())
         {
             if (grounded)
@@ -381,11 +380,11 @@ public class Player : MonoBehaviour
         }
 
         bool isRunBoosting = grounded && boostRunEnergy > 0;
-       
+
 
         if (isRunBoosting)
         {
-            if (boostRunEnergy == boostRunDuration)
+            if (gotBoostFrame)
             {
                 FMODAudioManager.Instance.TriggerJumpingOffTheBalconySfx();
                 LandingVibrate();
@@ -395,36 +394,30 @@ public class Player : MonoBehaviour
                 }
             }
 
-            const float time = .8f;
+            const float time = boostRunDuration * .8f;
             if (boostRunEnergy > time)
             {
                 float squash = boostRunEnergy - time;
-                squash /= (1f - time);
+                squash /= boostRunDuration - (boostRunDuration * .8f);
                 squash *= squash;
-                visuals.Squash(1f - Mathf.Min(squash, .9f));
+                squash = 1f - squash;
+                visuals.Squash(Mathf.Max(squash, .7f));
             }
 
             boostRunEnergy -= Time.deltaTime;
         }
 
-// Handle continuous boost trail emission
-if (isRunBoosting && !wasRunBoosting)
-{
-    
-    foreach (var trail in sparkParticles)
-    {
-        trail.Play();
-    }
-}
-else if (!isRunBoosting && wasRunBoosting)
-{
-    foreach (var trail in sparkParticles)
-    {
-        trail.Stop();
-    }
-}
-    wasRunBoosting = isRunBoosting;
-    
+        // Handle continuous boost trail emission
+        if (boostRunEnergy > subBoostRunDuration && isRunBoosting && !wasRunBoosting)
+            foreach (var trail in sparkParticles)
+                trail.Play();
+
+        else if (!isRunBoosting && wasRunBoosting)
+            foreach (var trail in sparkParticles)
+                trail.Stop();
+
+        wasRunBoosting = isRunBoosting;
+
         float runBoost = isRunBoosting ? 2f : 1f;
 
         foreach (var particle in dashParticles)

@@ -1,5 +1,4 @@
 using GameManagers;
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]

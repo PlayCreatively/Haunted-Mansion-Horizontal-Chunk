@@ -1,4 +1,3 @@
-using GameManagers;
 using UnityEngine;
 
 public class TowelMonster : Enemy

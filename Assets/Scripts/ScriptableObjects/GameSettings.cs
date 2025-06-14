@@ -51,6 +51,14 @@ namespace GameManagers
             }
         }
 
+        // run on application start
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void SettingsInit()
+        {
+            // limit frame rate to screen refresh rate
+            Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.denominator;
+            QualitySettings.vSyncCount = 1;
+        }
 
         public static void SceneTransition(Action loadScene, float time, Sprite sprite)
         {

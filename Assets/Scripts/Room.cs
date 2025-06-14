@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using static UnityEngine.Rendering.DebugUI;
 using Random = UnityEngine.Random;
 
 public enum RoomState

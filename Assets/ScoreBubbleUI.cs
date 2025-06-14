@@ -3,7 +3,6 @@ using MotionUtils;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class ScoreBubbleUI : MonoBehaviour
 {

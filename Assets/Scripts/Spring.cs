@@ -45,6 +45,12 @@ namespace MotionUtils
             velocity = 0f;
         }
 
+        public bool IsAtEquilibrium()
+        {
+            // Check if the spring is at equilibrium by comparing position and velocity
+            return Mathf.Abs(position - equilibrium) < 0.01f && Mathf.Abs(velocity) < 0.01f;
+        }
+
         public void Step(float dt)
         {
             // Calculate coefficients for the current step

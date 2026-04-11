@@ -4994,6 +4994,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   col: {fileID: 0}
   rend: {fileID: 0}
+  damp: 0.15
+  freq: 18
 --- !u!136 &5748842153407262370
 CapsuleCollider:
   m_ObjectHideFlags: 0

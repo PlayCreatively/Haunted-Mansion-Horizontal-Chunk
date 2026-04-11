@@ -1,4 +1,5 @@
 using GameManagers;
+using MotionUtils;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -36,6 +37,8 @@ public class Player : MonoBehaviour
     Gamepad gamepad;
     bool zoomInput = false;
     float airTime = 0;
+    public float damp = .1f, freq = 16;
+    Spring dampedSpring = new (0f, 30f, .1f);
     public bool ZoomInput => zoomInput;
     public bool IsStunned => stunned;
     public SkinnedMeshRenderer MeshRenderer => rend;
@@ -200,7 +203,7 @@ public class Player : MonoBehaviour
             return;
 
         //const float squashAmount = 0.3f;
-        //visuals.Squash(1f - squashAmount * dashValue);
+        //Squash(1f - squashAmount * dashValue);
 
         float dashDelta = Mathf.Min(Time.deltaTime, dashValue);
         dashValue -= dashDelta;
@@ -264,7 +267,7 @@ public class Player : MonoBehaviour
     {
         enabled = false;
         SetStunned(true);
-        visuals.Squash(1f);
+        Squash(1f);
         rb.freezeRotation = false;
         col.enabled = false;
         ballCollider.enabled = true;
@@ -326,12 +329,25 @@ public class Player : MonoBehaviour
             lastGroundedHeight = (int)(rb.position.y + .05f);
     }
 
+    void Squash(float value)
+    {
+        float equalibrium = Mathf.Abs(dampedSpring.velocity * dampedSpring.velocity) + Mathf.Abs(dampedSpring.position * dampedSpring.position);
+        float breathingSquash = moveInput.sqrMagnitude < .1f && dampedSpring.IsAtEquilibrium() ? MathF.Sin(Time.time * 7f) * .06f : 0f;
+        float landBounce = grounded ? dampedSpring.position : 0f;
+        visuals.Squash(landBounce + value + breathingSquash);
+    }
+
     void Update()
     {
+        dampedSpring.angularFrequency = freq;
+        dampedSpring.dampingRatio = damp;
+
+        dampedSpring.Step(Time.deltaTime);
+
         if (jumpSquash > 0)
         {
             jumpSquash = MathF.Max(jumpSquash - Time.deltaTime, 0);
-            visuals.Squash(1f + jumpSquash);
+            Squash(1f + jumpSquash);
         }
         if (!playerInput.actions["Move"].enabled)
             foreach (var item in playerInput.actions)
@@ -351,7 +367,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        visuals.Squash(rb.linearVelocity.y / 15f + 1);
+        Squash(rb.linearVelocity.y / 15f + 1);
 
         gotBoostFrame = false;
 
@@ -363,6 +379,10 @@ public class Player : MonoBehaviour
                 boostRunEnergy = airTime > .79f ? boostRunDuration : subBoostRunDuration;
                 foreach (var particle in landingParticles)
                     particle.Play();
+            }
+            if (airTime > .1f)
+            {
+                dampedSpring.velocity = -airTime * 6;
             }
             airTime = 0;
         }
@@ -401,7 +421,7 @@ public class Player : MonoBehaviour
                 squash /= boostRunDuration - (boostRunDuration * .8f);
                 squash *= squash;
                 squash = 1f - squash;
-                visuals.Squash(Mathf.Max(squash, .7f));
+                Squash(Mathf.Max(squash, .7f));
             }
 
             boostRunEnergy -= Time.deltaTime;
@@ -490,10 +510,6 @@ public class Player : MonoBehaviour
         foreach (var contact in collision.contacts)
         {
             grounded |= contact.normal.y > .8f && Physics.Raycast(transform.position + Vector3.up * .2f, Vector3.down, 1);
-        }
-        if (grounded)
-        {
-            //Debug.Log(collision.impulse.y);
         }
     }
 }

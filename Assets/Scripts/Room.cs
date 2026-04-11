@@ -184,8 +184,8 @@ public class Room : MonoBehaviour, IRoom
 
         if (isDirty)
         {
-            //Clean(); // REMOVE FOR PLAYTEST
-            //return;
+            Clean(); // REMOVE FOR PLAYTEST
+            return;
             roomUI.UpdateBookingTimeUI(0);
             Game.GameOver(this);
             enabled = false;
